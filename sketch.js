@@ -7,7 +7,7 @@ function setup() {
   angleMode(DEGREES);
 
   shuffle(posca, true);
-  matoCount = 40; //posca.length
+  matoCount = 3; //posca.length
   for (let i = 0; i < matoCount; i++) {
     madot[i] = new mato(width / 2, height / 2, posca[i], 360 / matoCount * i)
   }
@@ -48,7 +48,7 @@ class mato {
     }
     if (keyIsDown(RIGHT_ARROW)) {
       this.vel.rotate(this.rotateAMT)
-    } 
+    }
     if (keyIsDown(UP_ARROW)) {
       this.size++;
       //this.rotateAMT--;
