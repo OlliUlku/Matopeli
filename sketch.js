@@ -1,4 +1,4 @@
-let matoCount = 5;
+let matoCount = 5; // 12 hyvä 125%zoom || 5 hyvä 500%zoom
 let speedMod = .5;
 let rotSpeedMod = 1;
 
@@ -13,6 +13,7 @@ let points = 0;
 let pointsText;
 
 let wormsText;
+let suddenDeathText = '';
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -56,11 +57,12 @@ function draw() {
   let pointsINC = (wormsCounter * wormsCounter) + timefactor;
   points = points + pointsINC;
   pointsText.html('POINTS: ' + floor(points / 100) + '    ' + '(x' + pointsINC + ')');
-  wormsText.html('worms: ' + wormsCounter);
+  wormsText.html('worms: ' + wormsCounter + suddenDeathText);
 
-  if (wormsCounter <= 3) {
+  if (wormsCounter <= matoCount * 0.6) {
     for (let i = 0; i < madot.length; i++) {
       madot[i].speedUP();
+      suddenDeathText = ' -> panic mode';
     }
   }
 }
@@ -134,7 +136,9 @@ class mato {
 
   speedUP() {
     this.vel.add(this.acc);
-    this.rotateAMT = this.rotateAMT + (this.rotateAMT*0.0008)
+    this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0007);
+    this.rotateAMT = constrain(this.rotateAMT, 0, 10);
+    print('rotateAMT: ' + round(this.rotateAMT));
   }
 
   update() {
@@ -163,7 +167,7 @@ class mato {
       //show
       fill(this.color);
       noStroke();
-      rect(round(this.pos.x), round(this.pos.y),this.size);
+      rect(round(this.pos.x), round(this.pos.y), this.size);
     } else { // POINTS SYSTEM
       if (this.toggle) {
         wormsCounter--;
