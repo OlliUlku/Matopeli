@@ -1,4 +1,4 @@
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
-    background(Beige);
-  }
+// function windowResized() {
+//     resizeCanvas(windowWidth, windowHeight);
+//     background(Beige);
+//   }
