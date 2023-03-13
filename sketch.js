@@ -1,7 +1,8 @@
-let matoCount = 3; 
+let matoCount = 5;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
-let speedMod = .5;
+let spawnBorder = 50; // PX (Base 50?)
+let speedMod = .5; // BASE .5
 let rotSpeedMod = 1;
 let panicMode = false;
 let panicCount = 1500;
@@ -38,7 +39,7 @@ function setup() {
 
   shuffle(posca, true);
   for (let i = 0; i < matoCount; i++) {
-    madot[i] = new mato(random(50, width - 50), random(50, height - 50), posca[i], random(360));
+    madot[i] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[i], random(360));
     wormsCounter++;
   }
 
@@ -55,6 +56,7 @@ function setup() {
 
 function draw() {
   controllerUsed(); //checks all buttons and updates values
+  //_SPEED_UP_TEST();
   _GAME_UPDATE();
   _PANIC_MODE();
   _POINTS();
@@ -65,6 +67,12 @@ function _GAME_UPDATE() {
     madot[i].update();
   }
   updateBoardState();
+}
+
+function _SPEED_UP_TEST() {
+  for (let i = 0; i < madot.length; i++) {
+    madot[i].speedUP();
+  }
 }
 
 function _POINTS() {
@@ -87,7 +95,7 @@ function _PANIC_MODE() {
   if (panicMode) {
 
     for (let i = 0; i < madot.length; i++) {
-      madot[i].speedUP();
+      madot[i].speedUP_PANIC();
     }
 
     panicModeText = ' -> panic mode';
@@ -124,11 +132,14 @@ function setBorderToFalse() {
 
 function updateBoardState() {
   for (let i = 0; i < matoCount; i++) {
-    if (array2d[round(madot[i].pos.x)][round(madot[i].pos.y)]) {
-      setTimeout(set2dArrayFalse, 500 + panicCount, madot[i].pos.x, madot[i].pos.y);
-    } else {
-      madot[i].stop = true;
-      //print('hit wall');
+    // CHECK IF WITHIN BOUNDS
+    if (madot[i].pos.x > 0 && madot[i].pos.x < width && madot[i].pos.y > 0 && madot[i].pos.y < height) {
+      if (array2d[round(madot[i].pos.x)][round(madot[i].pos.y)]) {
+        setTimeout(set2dArrayFalse, 500 + panicCount, madot[i].pos.x, madot[i].pos.y);
+      } else {
+        madot[i].stop = true;
+        //print('hit wall');
+      }
     }
   }
 }
@@ -158,6 +169,9 @@ class mato {
     this.acc = createVector(0, -0.0005);
     this.acc.rotate(rot);
 
+    this.acc_normal = createVector(0, -0.0005 / 10);
+
+
     this.color = _color;
     this.rotateAMT = 3 * rotSpeedMod;
     this.size = 1.5;
@@ -165,10 +179,14 @@ class mato {
     this.deathToggler = true; //POINTS SYSTEM
   }
 
-  speedUP() {
+  speedUP_PANIC() {
     this.vel.add(this.acc);
     this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0007);
     this.rotateAMT = constrain(this.rotateAMT, 0, 10);
+  }
+
+  speedUP() {
+    this.vel.add(this.acc_normal);
   }
 
   update() {
@@ -191,13 +209,17 @@ class mato {
       //   this.size--;
       // }
 
-      this.pos.add(this.vel);
+      if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
+        this.pos.add(this.vel);
+      } else {
+        this.stop = true;
+      }
 
       //show
       fill(this.color);
       noStroke();
       rect(round(this.pos.x), round(this.pos.y), this.size);
-    } else { // POINTS SYSTEM
+    } else { // kill worm
       if (this.deathToggler) {
         wormsCounter--;
         this.deathToggler = !this.deathToggler;
