@@ -1,8 +1,13 @@
-let matoCount = 5; // 12 hyvä 125%zoom || 5 hyvä 500%zoom
+let matoCount = 40; 
+// 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
+
 let speedMod = .5;
 let rotSpeedMod = 1;
+let panicMode = false;
+let panicCount = 1500;
 
-
+//controllers
+let controllers = [];
 
 let madot = [];
 let array2d = [];
@@ -13,7 +18,7 @@ let points = 0;
 let pointsText;
 
 let wormsText;
-let suddenDeathText = '';
+let panicModeText = '';
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -22,6 +27,10 @@ function setup() {
   rectMode(CENTER);
   strokeCap(SQUARE);
 
+  //controllers
+  addConnection();
+
+  // array that checks whether a (x,y) location has been 'used'
   create2dArray();
   setBorderToFalse();
 
@@ -43,26 +52,45 @@ function setup() {
 }
 
 function draw() {
+  controllerUsed(); //checks all buttons and updates values
+  _GAME_UPDATE();
+  _PANIC_MODE();
+  _POINTS();
+}
+
+function _GAME_UPDATE() {
   for (let i = 0; i < madot.length; i++) {
     madot[i].update();
-    updateBoardState();
   }
+  updateBoardState();
+}
 
-  // POINTS SYSTEM
-
+function _POINTS() {
   let timefactor = floor(millis() / 1000 / 5);
   if (wormsCounter < 1) {
     timefactor = 0;
   }
+
   let pointsINC = (wormsCounter * wormsCounter) + timefactor;
   points = points + pointsINC;
   pointsText.html('POINTS: ' + floor(points / 100) + '    ' + '(x' + pointsINC + ')');
-  wormsText.html('worms: ' + wormsCounter + suddenDeathText);
+  wormsText.html('worms: ' + wormsCounter + panicModeText);
+}
 
+function _PANIC_MODE() {
   if (wormsCounter <= matoCount * 0.6) {
+    panicMode = true;
+  }
+
+  if (panicMode) {
+
     for (let i = 0; i < madot.length; i++) {
       madot[i].speedUP();
-      suddenDeathText = ' -> panic mode';
+    }
+
+    panicModeText = ' -> panic mode';
+    if (panicCount > 0) {
+      panicCount = panicCount - 0.46;
     }
   }
 }
@@ -94,7 +122,7 @@ function setBorderToFalse() {
 function updateBoardState() {
   for (let i = 0; i < matoCount; i++) {
     if (array2d[round(madot[i].pos.x)][round(madot[i].pos.y)]) {
-      setTimeout(set2dArrayFalse, 2000, madot[i].pos.x, madot[i].pos.y);
+      setTimeout(set2dArrayFalse, 500 + panicCount, madot[i].pos.x, madot[i].pos.y);
     } else {
       madot[i].stop = true;
       //print('hit wall');
