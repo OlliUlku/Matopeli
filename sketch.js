@@ -1,4 +1,4 @@
-let matoCount = 5; 
+let matoCount = 3; 
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let speedMod = .5;
@@ -162,7 +162,7 @@ class mato {
     this.rotateAMT = 3 * rotSpeedMod;
     this.size = 1.5;
     this.stop = false;
-    this.toggle = true; //POINTS SYSTEM
+    this.deathToggler = true; //POINTS SYSTEM
   }
 
   speedUP() {
@@ -174,11 +174,11 @@ class mato {
   update() {
     if (!this.stop) {
 
-      if (leftPressed) {
+      if (leftPressed || keyIsDown(LEFT_ARROW)) {
         this.vel.rotate(-this.rotateAMT);
         this.acc.rotate(-this.rotateAMT);
       }
-      if (rightPressed) {
+      if (rightPressed || keyIsDown(RIGHT_ARROW)) {
         this.vel.rotate(this.rotateAMT);
         this.acc.rotate(this.rotateAMT);
       }
@@ -198,9 +198,9 @@ class mato {
       noStroke();
       rect(round(this.pos.x), round(this.pos.y), this.size);
     } else { // POINTS SYSTEM
-      if (this.toggle) {
+      if (this.deathToggler) {
         wormsCounter--;
-        this.toggle = !this.toggle;
+        this.deathToggler = !this.deathToggler;
       }
     }
   }
