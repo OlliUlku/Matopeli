@@ -1,4 +1,4 @@
-let matoCount = 40; 
+let matoCount = 5; 
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let speedMod = .5;
@@ -8,6 +8,8 @@ let panicCount = 1500;
 
 //controllers
 let controllers = [];
+let leftPressed = false;
+let rightPressed = false;
 
 let madot = [];
 let array2d = [];
@@ -95,13 +97,14 @@ function _PANIC_MODE() {
   }
 }
 
-function keyPressed() {
-  if (keyCode === 32) {
-    for (let i = 0; i < matoCount; i++) {
-      madot[i].stop = !madot[i].stop;
-    }
-  }
-}
+// // OLDIE STOP ON SPACEBAR
+// function keyPressed() {
+//   if (keyCode === 32) {
+//     for (let i = 0; i < matoCount; i++) {
+//       madot[i].stop = !madot[i].stop;
+//     }
+//   }
+// }
 
 function create2dArray() {
   for (let _x = 0; _x < width; _x++) {
@@ -166,23 +169,21 @@ class mato {
     this.vel.add(this.acc);
     this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0007);
     this.rotateAMT = constrain(this.rotateAMT, 0, 10);
-    print('rotateAMT: ' + round(this.rotateAMT));
   }
 
   update() {
-    // add acc?
-    // this.vel.add(this.acc);
-
     if (!this.stop) {
 
-      if (keyIsDown(LEFT_ARROW)) {
+      if (leftPressed) {
         this.vel.rotate(-this.rotateAMT);
         this.acc.rotate(-this.rotateAMT);
       }
-      if (keyIsDown(RIGHT_ARROW)) {
+      if (rightPressed) {
         this.vel.rotate(this.rotateAMT);
         this.acc.rotate(this.rotateAMT);
       }
+
+      //OLDIE
       // if (keyIsDown(UP_ARROW)) {
       //   this.size++;
       // }
