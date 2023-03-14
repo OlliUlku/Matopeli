@@ -8,7 +8,7 @@ let panicMode = false;
 let panicCount = 1500;
 
 //controllers
-let controllers = [];
+let ohjaimet = [];
 let leftPressed = false;
 let rightPressed = false;
 

@@ -96,3 +96,21 @@ function buttonPressed(b) {
     }
     return b > 0.9; // analog value
 }
+
+// Need to create global ohjaimet[] in sketch.
+class Controller_8BitDoZero2 {
+    constructor() {
+        this.A = false;
+        this.B = false;
+        this.Y = false;
+        this.X = false;
+        this.L = false;
+        this.R = false;
+        this.LEFT = false;
+        this.RIGHT = false;
+        this.UP = false;
+        this.DOWN = false;
+        this.SELECT = false;
+        this.START = false;
+    }
+}
