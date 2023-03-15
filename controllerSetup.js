@@ -44,7 +44,7 @@ function controllerUsed() {
                 let val = controller.buttons[btn];
                 if (controller.buttons[btn])
                     if (buttonPressed(controller.buttons[btn])) {
-                        print(controller, "button pressed =", btn);
+                        //print(controller, "button pressed =", btn);
 
                         //OLDIE
                         //players[controller.index].buttonPainettu(btn);
@@ -60,16 +60,19 @@ function controllerUsed() {
                 let val = controller.axes[axis];
                 if (axis === 0) {
                     if (val < -0.5) { // <- HOX
+                        ohjaimet[controller.index].LEFT = true;
                         //print(controller, 'Left pressed');
-                        leftPressed = true;
+
                     } else {
-                        leftPressed = false;
+                        ohjaimet[controller.index].LEFT = false;
+
                     }
                     if (val > 0.5) { // <- HOX
+                        ohjaimet[controller.index].RIGHT = true;
+
                         //print(controller, 'Right pressed');
-                        rightPressed = true;
                     } else {
-                        rightPressed = false;
+                        ohjaimet[controller.index].RIGHT = false;
                     }
                 }
                 //OLDIE
@@ -81,8 +84,6 @@ function controllerUsed() {
                     if (val > 0.5) { // <- HOX
                         //print(controller, 'Down pressed');
                     }
-                    //OLDIE
-                    //players[controller.index].setYlosAlas(val);
                 }
             }
 

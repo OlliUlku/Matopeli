@@ -24,7 +24,7 @@ function _GAME_UPDATE() {
   }
   
   function _PANIC_MODE() {
-    if (wormsCounter <= matoCount * 0.6) {
+    if (wormsCounter <= matoCount * 0.9) {
       panicMode = true;
     }
   
@@ -36,7 +36,7 @@ function _GAME_UPDATE() {
   
       panicModeText = ' -> panic mode';
       if (panicCount > 0) {
-        panicCount = panicCount - 0.46;
+        panicCount = panicCount - 0.8;
       }
     }
   }
@@ -71,7 +71,7 @@ function _GAME_UPDATE() {
       // CHECK IF WITHIN BOUNDS
       if (madot[i].pos.x > 0 && madot[i].pos.x < width && madot[i].pos.y > 0 && madot[i].pos.y < height) {
         if (array2d[round(madot[i].pos.x)][round(madot[i].pos.y)]) {
-          setTimeout(set2dArrayFalse, 500 + panicCount, madot[i].pos.x, madot[i].pos.y);
+          setTimeout(set2dArrayFalse, 100 + panicCount, madot[i].pos.x, madot[i].pos.y);
         } else {
           madot[i].stop = true;
           //print('hit wall');
@@ -94,3 +94,5 @@ function _GAME_UPDATE() {
     noStroke();
     rect(_x, _y, 1.8);
   }
+
+  

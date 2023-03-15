@@ -1,18 +1,25 @@
 class mato {
-  constructor(x, y, _color, rot) {
+  constructor(x, y, _color, rot, controllerIndex) {
     this.pos = createVector(x, y);
     this.vel = createVector(0, -0.5 * speedMod);
     this.vel.rotate(rot);
     this.acc = createVector(0, -0.0005);
     this.acc.rotate(rot);
 
+    // TEST CONSTANT ACCELERATION
     this.acc_normal = createVector(0, -0.0005 / 10);
-
 
     this.color = _color;
     this.rotateAMT = 3 * rotSpeedMod;
     this.size = 1.5;
     this.stop = false;
+
+    //CONTROLS
+    this.index = controllerIndex
+
+    this.LEFT = false;
+    this.RIGHT = false;
+
     this.deathToggler = true; //POINTS SYSTEM
   }
 
@@ -29,11 +36,11 @@ class mato {
   update() {
     if (!this.stop) {
 
-      if (keyIsDown(LEFT_ARROW)) {
+      if (this.LEFT) {
         this.vel.rotate(-this.rotateAMT);
         this.acc.rotate(-this.rotateAMT);
       }
-      if (keyIsDown(RIGHT_ARROW)) {
+      if (this.RIGHT) {
         this.vel.rotate(this.rotateAMT);
         this.acc.rotate(this.rotateAMT);
       }
