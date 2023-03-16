@@ -7,7 +7,9 @@ class mato {
     this.acc.rotate(rot);
 
     // TEST CONSTANT ACCELERATION
-    this.acc_normal = createVector(0, -0.0005 / 10);
+    this.acc_normal = createVector(0, -0.00005);
+    this.acc_normal.rotate(rot);
+
 
     this.color = _color;
     this.rotateAMT = 3 * rotSpeedMod;
@@ -15,8 +17,8 @@ class mato {
     this.stop = false;
 
     //underground dive feature
-
     this.underground = false;
+    this.uGTimer = new Timer(9500,true)
 
     //CONTROLS
     this.index = controllerIndex;
@@ -40,22 +42,18 @@ class mato {
   update() {
     if (!this.stop) {
 
+      // UPDATE POSITION
       if (this.LEFT) {
         this.vel.rotate(-this.rotateAMT);
         this.acc.rotate(-this.rotateAMT);
+        this.acc_normal.rotate(-this.rotateAMT);
       }
       if (this.RIGHT) {
         this.vel.rotate(this.rotateAMT);
         this.acc.rotate(this.rotateAMT);
+        this.acc_normal.rotate(this.rotateAMT);
       }
 
-      //OLDIE
-      // if (keyIsDown(UP_ARROW)) {
-      //   this.size++;
-      // }
-      // if (keyIsDown(DOWN_ARROW)) {
-      //   this.size--;
-      // }
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
         this.pos.add(this.vel);
       } else {
@@ -63,7 +61,24 @@ class mato {
         this.stop = true;
       }
 
-      //show
+      // UPDATE DIVE
+      if (this.uGTimer.getRemainingTime() < 2500) {
+        this.underground = true;
+      } else {
+        this.underground = false;
+      }
+
+      if (this.uGTimer.expired()) {
+        this.uGTimer.start();
+      }
+      
+      // if (this.uGTimer.expired()) {
+      //   this.underground = false;
+      //   this.oGTimer.start();
+      // }
+
+      // SHOW
+
       fill(this.color);
       noStroke();
       if (!this.underground) {
@@ -77,8 +92,9 @@ class mato {
         } else {
           fill(this.color);
         }
-        rect(round(this.pos.x) + random(-this.r, this.r), round(this.pos.y) + random(-this.r, this.r), this.size / 4 + random(0.2));
+        rect(round(this.pos.x) + random(-this.r, this.r), round(this.pos.y) + random(-this.r, this.r), this.size / 4 + random(0.5));
       }
+
     } else { // kill worm
       if (this.deathToggler) {
         wormsCounter--;

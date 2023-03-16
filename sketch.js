@@ -21,6 +21,8 @@ let pointsText;
 
 let wormsText;
 let panicModeText = '';
+let fontSize; // varies with width and height
+let fontSizeString
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -49,20 +51,26 @@ function setup() {
   }
 
   //POINTS SYSTEM
+
+  fontSize = round((width + height) * 0.1);
+  print('fontsize', fontSize)
+  fontSizeString = '\'' + fontSize + 'px\'';
+  print(fontSizeString)
+
   pointsText = createP();
   pointsText.style('font-size', '16px');
+  pointsText.style('font-family', 'Arial');
   pointsText.position(3, -15);
 
   wormsText = createP();
   wormsText.style('font-size', '16px');
   wormsText.position(3, 0);
-
 }
 
 function draw() {
   controllerUsed(); //checks all buttons and updates values
   _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
-  //_SPEED_UP_TEST();
+  //_SPEED_UP_TEST(); //constant acceleration from the beginning
   _GAME_UPDATE();
   _PANIC_MODE();
   _POINTS();
@@ -82,12 +90,11 @@ function _OHJAIMET() {
       madot[i].RIGHT = false;
     }
 
-    if (ohjaimet[i].B) {
-      madot[i].underground = true;
-      ohjaimet[i].B = false; // turns button OFF
+  //   if (ohjaimet[i].B) {
+  //     madot[i].dive(); // dive underground!!
+  //     ohjaimet[i].B = false; // turns button OFF
 
-    } else {
-      madot[i].underground = false;
-    }
+  //   } else {
+  //   }
   }
 }
