@@ -14,8 +14,12 @@ class mato {
     this.size = 1.5;
     this.stop = false;
 
+    //underground dive feature
+
+    this.underground = false;
+
     //CONTROLS
-    this.index = controllerIndex
+    this.index = controllerIndex;
 
     this.LEFT = false;
     this.RIGHT = false;
@@ -26,7 +30,7 @@ class mato {
   speedUP_PANIC() {
     this.vel.add(this.acc);
     this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0007);
-    this.rotateAMT = constrain(this.rotateAMT, 0, 10);
+    this.rotateAMT = constrain(this.rotateAMT, 0, 8);
   }
 
   speedUP() {
@@ -55,13 +59,26 @@ class mato {
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
         this.pos.add(this.vel);
       } else {
+        this.pos.add(this.vel);
         this.stop = true;
       }
 
       //show
       fill(this.color);
       noStroke();
-      rect(round(this.pos.x), round(this.pos.y), this.size);
+      if (!this.underground) {
+        rect(round(this.pos.x), round(this.pos.y), this.size);
+      } else if (random() < 0.1) {
+        this.r = 0.5;
+        if (random() < 0.5) {
+          fill(Ivory);
+        } else if (random() < 0.5) {
+          fill(Brown);
+        } else {
+          fill(this.color);
+        }
+        rect(round(this.pos.x) + random(-this.r, this.r), round(this.pos.y) + random(-this.r, this.r), this.size / 4 + random(0.2));
+      }
     } else { // kill worm
       if (this.deathToggler) {
         wormsCounter--;

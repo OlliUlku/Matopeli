@@ -44,14 +44,17 @@ function controllerUsed() {
                 let val = controller.buttons[btn];
                 if (controller.buttons[btn])
                     if (buttonPressed(controller.buttons[btn])) {
-                        //print(controller, "button pressed =", btn);
-
+                        print(controller, "button pressed =", btn);
+                        if (btn === 0) {
+                            ohjaimet[controller.index].B = true;
+                        }
                         //OLDIE
                         //players[controller.index].buttonPainettu(btn);
                     }
                 if (buttonPressed(val)) {
                 } else {
                 }
+
             }
         }
         if (controller.axes) {

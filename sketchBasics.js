@@ -24,7 +24,7 @@ function _GAME_UPDATE() {
   }
   
   function _PANIC_MODE() {
-    if (wormsCounter <= matoCount * 0.9) {
+    if (wormsCounter <= matoCount * 0.6 || matoCount === 3 && wormsCounter <= matoCount * 0.9) {
       panicMode = true;
     }
   
@@ -36,7 +36,7 @@ function _GAME_UPDATE() {
   
       panicModeText = ' -> panic mode';
       if (panicCount > 0) {
-        panicCount = panicCount - 0.8;
+        panicCount = panicCount - 1.5;
       }
     }
   }
@@ -69,10 +69,12 @@ function _GAME_UPDATE() {
   function updateBoardState() {
     for (let i = 0; i < matoCount; i++) {
       // CHECK IF WITHIN BOUNDS
-      if (madot[i].pos.x > 0 && madot[i].pos.x < width && madot[i].pos.y > 0 && madot[i].pos.y < height) {
-        if (array2d[round(madot[i].pos.x)][round(madot[i].pos.y)]) {
-          setTimeout(set2dArrayFalse, 100 + panicCount, madot[i].pos.x, madot[i].pos.y);
-        } else {
+      let __x = round(madot[i].pos.x);
+      let __y = round(madot[i].pos.y);
+      if (__x > 0 && __x < width && __y > 0 && __y < height) {
+        if (array2d[__x][__y] && !madot[i].underground) {
+          setTimeout(set2dArrayFalse, 1000 + panicCount, madot[i].pos.x, madot[i].pos.y);
+        } else if (!madot[i].underground) {
           madot[i].stop = true;
           //print('hit wall');
         }
@@ -84,15 +86,20 @@ function _GAME_UPDATE() {
     //ristin muotoisessa kuviossa kaikki pois päältä!
     _x = round(_x);
     _y = round(_y);
+    // simplify sometime??? 3x3 grid gets turned 'false'
     array2d[_x][_y] = false;
     array2d[_x - 1][_y] = false;
+    array2d[_x - 1][_y - 1] = false;
+    array2d[_x + 1][_y + 1] = false;
+    array2d[_x - 1][_y + 1] = false;
+    array2d[_x + 1][_y - 1] = false;
     array2d[_x][_y + 1] = false;
     array2d[_x + 1][_y] = false;
     array2d[_x][_y - 1] = false;
   
     fill(100);
     noStroke();
-    rect(_x, _y, 1.8);
+    rect(_x, _y, 2);
   }
 
   
