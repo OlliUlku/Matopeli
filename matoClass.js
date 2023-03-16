@@ -19,6 +19,8 @@ class mato {
     //underground dive feature
     this.underground = false;
     this.uGTimer = new Timer(9500,true)
+    this.uGSize;
+    this.uGR = 0.1;
 
     //CONTROLS
     this.index = controllerIndex;
@@ -32,7 +34,7 @@ class mato {
   speedUP_PANIC() {
     this.vel.add(this.acc);
     this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0007);
-    this.rotateAMT = constrain(this.rotateAMT, 0, 8);
+    this.rotateAMT = constrain(this.rotateAMT, 0, 5);
   }
 
   speedUP() {
@@ -83,8 +85,8 @@ class mato {
       noStroke();
       if (!this.underground) {
         rect(round(this.pos.x), round(this.pos.y), this.size);
-      } else if (random() < 0.1) {
-        this.r = 0.5;
+
+      } else if (random() < this.uGR) {
         if (random() < 0.5) {
           fill(Ivory);
         } else if (random() < 0.5) {
@@ -92,7 +94,15 @@ class mato {
         } else {
           fill(this.color);
         }
-        rect(round(this.pos.x) + random(-this.r, this.r), round(this.pos.y) + random(-this.r, this.r), this.size / 4 + random(0.5));
+
+        if (!panicMode) {
+          this.uGSize = random(0.5);
+        } else {
+          this.uGSize = random(0.5, 1.5);
+          this.uGR = 0.16;
+        }
+        this.r = 0.5;
+        rect(round(this.pos.x) + random(-this.r, this.r), round(this.pos.y) + random(-this.r, this.r), this.size / 4 + this.uGSize);
       }
 
     } else { // kill worm

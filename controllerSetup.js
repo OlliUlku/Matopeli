@@ -48,6 +48,13 @@ function controllerUsed() {
                         if (btn === 0) {
                             ohjaimet[controller.index].B = true;
                         }
+                        if (btn === 14) { // NOT ON ZERO 2
+                            ohjaimet[controller.index].LEFT2 = true;
+                        }
+                        if (btn === 15) { // NOT ON ZERO 2
+                            ohjaimet[controller.index].RIGHT2 = true;
+                        }
+
                         //OLDIE
                         //players[controller.index].buttonPainettu(btn);
                     }
@@ -101,7 +108,7 @@ function buttonPressed(b) {
     return b > 0.9; // analog value
 }
 
-// Need to create global ohjaimet[] in sketch.
+// Controlled by ohjaimet[] array in sketch.js
 class Controller_8BitDoZero2 {
     constructor() {
         this.A = false;
@@ -116,5 +123,9 @@ class Controller_8BitDoZero2 {
         this.DOWN = false;
         this.SELECT = false;
         this.START = false;
+
+        // NON ZERO 2 === COMPABILITY /W OTHER GAMEPADS
+        this.LEFT2 = false;
+        this.RIGHT2 = false;
     }
 }

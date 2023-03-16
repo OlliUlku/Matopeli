@@ -1,4 +1,4 @@
-let matoCount = 2;
+let matoCount = 3;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let spawnBorder = 50; // PX (Base 50?)
@@ -42,7 +42,6 @@ function setup() {
   create2dArray();
   setBorderToFalse(); //safeguard...
 
-  print(posca[14]);
   posca.splice(14, 1); // removes Beige (#dbc48e) which is background color, from array
   shuffle(posca, true);
   for (let i = 0; i < matoCount; i++) {
@@ -52,10 +51,11 @@ function setup() {
 
   //POINTS SYSTEM
 
-  fontSize = round((width + height) * 0.1);
-  print('fontsize', fontSize)
-  fontSizeString = '\'' + fontSize + 'px\'';
-  print(fontSizeString)
+  // html text formatting hohhoijaa
+  // fontSize = round((width + height) * 0.1);
+  // print('fontsize', fontSize)
+  // fontSizeString = '\'' + fontSize + 'px\'';
+  // print(fontSizeString)
 
   pointsText = createP();
   pointsText.style('font-size', '16px');
@@ -78,14 +78,16 @@ function draw() {
 
 function _OHJAIMET() {
   for (let i = 0; i < matoCount; i++) {
-    if (ohjaimet[i].LEFT) {
+    if (ohjaimet[i].LEFT || ohjaimet[i].LEFT2) {
       madot[i].LEFT = true;
+      ohjaimet[i].LEFT2 = false //Turn button off
     } else {
       madot[i].LEFT = false;
     }
 
-    if (ohjaimet[i].RIGHT) {
+    if (ohjaimet[i].RIGHT || ohjaimet[i].RIGHT2) {
       madot[i].RIGHT = true;
+      ohjaimet[i].RIGHT2 = false //Turn button off
     } else {
       madot[i].RIGHT = false;
     }
