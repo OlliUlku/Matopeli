@@ -3,17 +3,17 @@ class mato {
     this.pos = createVector(x, y);
     this.vel = createVector(0, -0.5 * speedMod);
     this.vel.rotate(rot);
-    this.acc = createVector(0, -0.00005);
+    this.acc = createVector(0, -0.00005 * speedMod);
     this.acc.rotate(rot);
 
     // TEST CONSTANT ACCELERATION
-    this.acc_normal = createVector(0, -0.00005);
+    this.acc_normal = createVector(0, -0.00005 * speedMod);
     this.acc_normal.rotate(rot);
 
 
     this.color = _color;
     this.rotateAMT = 3 * rotSpeedMod;
-    this.size = 1.5;
+    this.size = 3; // hox 3x3 pixels is the size of stone check...
     this.stop = false;
 
     //underground dive feature
@@ -97,12 +97,12 @@ class mato {
         }
 
         if (!panicMode) {
-          this.uGSize = random(0.5);
+          this.uGSize = random(0.3, 0.7);
         } else {
           this.uGSize = random(0.5, 1.5);
           this.uGR = 0.16;
         }
-        this.r = 0.5;
+        this.r = 0.7;
         rect(round(this.pos.x) + random(-this.r, this.r), round(this.pos.y) + random(-this.r, this.r), this.size / 4 + this.uGSize);
       }
 

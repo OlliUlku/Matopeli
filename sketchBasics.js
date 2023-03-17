@@ -3,6 +3,7 @@ function _GAME_UPDATE() {
     madot[i].update();
   }
   updateBoardState();
+  //drawStone();
 }
 
 function _SPEED_UP_TEST() {
@@ -39,7 +40,7 @@ function _PANIC_MODE() {
 
     panicModeText = ' -> panic mode';
     if (panicCount > 0) {
-      panicCount = panicCount - 1.5;
+      panicCount = panicCount - 1.5 ;
     }
   }
 }
@@ -75,11 +76,33 @@ function updateBoardState() {
     let __x = round(madot[i].pos.x);
     let __y = round(madot[i].pos.y);
     if (__x > 0 && __x < width && __y > 0 && __y < height) {
-      if (array2d[__x][__y] && !madot[i].underground) {
+      // sorry about this xD
+      if (array2d[__x][__y] 
+        && array2d[__x - 1][__y] 
+        && array2d[__x + 1][__y] 
+        && array2d[__x][__y - 1] 
+        && array2d[__x][__y + 1] 
+        && array2d[__x + 1][__y + 1] 
+        && array2d[__x - 1][__y - 1] 
+        && array2d[__x + 1][__y - 1] 
+        && array2d[__x - 1][__y + 1] 
+        && !madot[i].underground) {
         setTimeout(set2dArrayFalse, 1000 + panicCount, madot[i].pos.x, madot[i].pos.y);
       } else if (!madot[i].underground) {
         madot[i].stop = true;
         //print('hit wall');
+      }
+    }
+  }
+}
+
+function drawStone() {
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < height; y++) {
+      if (!array2d[x][y]) {
+        fill(100);
+        noStroke();
+        rect(x, y, 1);
       }
     }
   }
@@ -100,8 +123,8 @@ function set2dArrayFalse(_x, _y) {
   array2d[_x + 1][_y] = false;
   array2d[_x][_y - 1] = false;
 
-  fill(100);
-  noStroke();
-  rect(_x, _y, 2);
+  // fill(100);
+  // noStroke();
+  // rect(_x, _y, 2);
 }
 

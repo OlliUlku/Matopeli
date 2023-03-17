@@ -2,7 +2,7 @@ let matoCount = 20;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let spawnBorder = 50; // PX (Base 50?)
-let speedMod = .2; // BASE .5
+let speedMod = .4; // BASE .5
 let rotSpeedMod = .8; // .8?
 let panicMode = false;
 let panicCount = 1500;
