@@ -1,4 +1,4 @@
-let matoCount = 30;
+let matoCount = 20;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let spawnBorder = 50; // PX (Base 50?)

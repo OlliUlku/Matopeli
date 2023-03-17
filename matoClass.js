@@ -18,7 +18,7 @@ class mato {
 
     //underground dive feature
     this.underground = false;
-    this.uGTimer = new Timer(9500,true)
+    this.uGTimer = new Timer(random(8500,12500),true)
     this.uGSize;
     this.uGR = 0.1;
 
@@ -71,6 +71,7 @@ class mato {
       }
 
       if (this.uGTimer.expired()) {
+        this.uGTimer.setTimer(9500);
         this.uGTimer.start();
       }
       

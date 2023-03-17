@@ -1,2 +1,2 @@
 # Matopeli
- This might end up becoming a (local + gamepad) multiplayer snake game
+a local + gamepad multiplayer snake game
