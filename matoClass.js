@@ -3,7 +3,7 @@ class mato {
     this.pos = createVector(x, y);
     this.vel = createVector(0, -0.5 * speedMod);
     this.vel.rotate(rot);
-    this.acc = createVector(0, -0.0005);
+    this.acc = createVector(0, -0.00005);
     this.acc.rotate(rot);
 
     // TEST CONSTANT ACCELERATION
@@ -33,7 +33,7 @@ class mato {
 
   speedUP_PANIC() {
     this.vel.add(this.acc);
-    this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0007);
+    this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.00007);
     this.rotateAMT = constrain(this.rotateAMT, 0, 5);
   }
 
