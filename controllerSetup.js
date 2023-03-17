@@ -45,6 +45,15 @@ function controllerUsed() {
                 if (controller.buttons[btn])
                     if (buttonPressed(controller.buttons[btn])) {
                         print(controller, "button pressed =", btn);
+                        if (btn === 0) {
+                            ohjaimet[controller.index].B = true;
+                        }
+                        if (btn === 14) { // NOT ON ZERO 2
+                            ohjaimet[controller.index].LEFT2 = true;
+                        }
+                        if (btn === 15) { // NOT ON ZERO 2
+                            ohjaimet[controller.index].RIGHT2 = true;
+                        }
 
                         //OLDIE
                         //players[controller.index].buttonPainettu(btn);
@@ -52,6 +61,7 @@ function controllerUsed() {
                 if (buttonPressed(val)) {
                 } else {
                 }
+
             }
         }
         if (controller.axes) {
@@ -60,16 +70,19 @@ function controllerUsed() {
                 let val = controller.axes[axis];
                 if (axis === 0) {
                     if (val < -0.5) { // <- HOX
+                        ohjaimet[controller.index].LEFT = true;
                         //print(controller, 'Left pressed');
-                        leftPressed = true;
+
                     } else {
-                        leftPressed = false;
+                        ohjaimet[controller.index].LEFT = false;
+
                     }
                     if (val > 0.5) { // <- HOX
+                        ohjaimet[controller.index].RIGHT = true;
+
                         //print(controller, 'Right pressed');
-                        rightPressed = true;
                     } else {
-                        rightPressed = false;
+                        ohjaimet[controller.index].RIGHT = false;
                     }
                 }
                 //OLDIE
@@ -81,8 +94,6 @@ function controllerUsed() {
                     if (val > 0.5) { // <- HOX
                         //print(controller, 'Down pressed');
                     }
-                    //OLDIE
-                    //players[controller.index].setYlosAlas(val);
                 }
             }
 
@@ -95,4 +106,26 @@ function buttonPressed(b) {
         return b.pressed; // binary
     }
     return b > 0.9; // analog value
+}
+
+// Controlled by ohjaimet[] array in sketch.js
+class Controller_8BitDoZero2 {
+    constructor() {
+        this.A = false;
+        this.B = false;
+        this.Y = false;
+        this.X = false;
+        this.L = false;
+        this.R = false;
+        this.LEFT = false;
+        this.RIGHT = false;
+        this.UP = false;
+        this.DOWN = false;
+        this.SELECT = false;
+        this.START = false;
+
+        // NON ZERO 2 === COMPABILITY /W OTHER GAMEPADS
+        this.LEFT2 = false;
+        this.RIGHT2 = false;
+    }
 }
