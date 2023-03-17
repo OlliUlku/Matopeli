@@ -1,9 +1,10 @@
-let matoCount = 20;
+let matoCount = 2;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let spawnBorder = 50; // PX (Base 50?)
-let speedMod = .4; // BASE .5
-let rotSpeedMod = .8; // .8?
+let MOD = 2.5;
+let speedMod = .4 * MOD; // BASE .5
+let rotSpeedMod = .7 * MOD; // .8?
 let panicMode = false;
 let panicCount = 1500;
 
@@ -22,10 +23,11 @@ let pointsText;
 let wormsText;
 let panicModeText = '';
 let fontSize; // varies with width and height
-let fontSizeString
+let fontSizeString;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  frameRate(24);
   background(Beige);
   angleMode(DEGREES);
   rectMode(CENTER);
@@ -74,29 +76,33 @@ function draw() {
   _GAME_UPDATE();
   _PANIC_MODE();
   _POINTS();
+
+  if (deltaTime > 56) {
+    print(round(deltaTime));
+  }
 }
 
 function _OHJAIMET() {
   for (let i = 0; i < matoCount; i++) {
     if (ohjaimet[i].LEFT || ohjaimet[i].LEFT2) {
       madot[i].LEFT = true;
-      ohjaimet[i].LEFT2 = false //Turn button off
+      ohjaimet[i].LEFT2 = false; //Turn button off
     } else {
       madot[i].LEFT = false;
     }
 
     if (ohjaimet[i].RIGHT || ohjaimet[i].RIGHT2) {
       madot[i].RIGHT = true;
-      ohjaimet[i].RIGHT2 = false //Turn button off
+      ohjaimet[i].RIGHT2 = false; //Turn button off
     } else {
       madot[i].RIGHT = false;
     }
 
-  //   if (ohjaimet[i].B) {
-  //     madot[i].dive(); // dive underground!!
-  //     ohjaimet[i].B = false; // turns button OFF
+    //   if (ohjaimet[i].B) {
+    //     madot[i].dive(); // dive underground!!
+    //     ohjaimet[i].B = false; // turns button OFF
 
-  //   } else {
-  //   }
+    //   } else {
+    //   }
   }
 }

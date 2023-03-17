@@ -40,7 +40,7 @@ function _PANIC_MODE() {
 
     panicModeText = ' -> panic mode';
     if (panicCount > 0) {
-      panicCount = panicCount - 1.5 ;
+      panicCount = panicCount - (1.55 * speedMod);
     }
   }
 }
@@ -123,8 +123,8 @@ function set2dArrayFalse(_x, _y) {
   array2d[_x + 1][_y] = false;
   array2d[_x][_y - 1] = false;
 
-  // fill(100);
-  // noStroke();
-  // rect(_x, _y, 2);
+  fill(100);
+  noStroke();
+  rect(_x, _y, 3);
 }
 

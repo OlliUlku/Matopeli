@@ -3,7 +3,7 @@ class mato {
     this.pos = createVector(x, y);
     this.vel = createVector(0, -0.5 * speedMod);
     this.vel.rotate(rot);
-    this.acc = createVector(0, -0.00005 * speedMod);
+    this.acc = createVector(0, -0.0006 * speedMod); // PANIC ACCELERATION
     this.acc.rotate(rot);
 
     // TEST CONSTANT ACCELERATION
@@ -18,9 +18,10 @@ class mato {
 
     //underground dive feature
     this.underground = false;
-    this.uGTimer = new Timer(random(8500,12500),true)
+    this.uGTimer = new Timer(random(8500, 12500), true);
     this.uGSize;
-    this.uGR = 0.1;
+    this.uGR = 0.26;
+    this.r = 0.6;
 
     //CONTROLS
     this.index = controllerIndex;
@@ -33,8 +34,8 @@ class mato {
 
   speedUP_PANIC() {
     this.vel.add(this.acc);
-    this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.00007);
-    this.rotateAMT = constrain(this.rotateAMT, 0, 5);
+    this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0007 * speedMod); // panic rotate acc
+    this.rotateAMT = constrain(this.rotateAMT, 0, 11);
   }
 
   speedUP() {
@@ -74,19 +75,19 @@ class mato {
         this.uGTimer.setTimer(9500);
         this.uGTimer.start();
       }
-      
+
       // if (this.uGTimer.expired()) {
       //   this.underground = false;
       //   this.oGTimer.start();
       // }
 
       // SHOW
-
       fill(this.color);
       noStroke();
       if (!this.underground) {
-        rect(round(this.pos.x), round(this.pos.y), this.size);
-
+        //if (frameCount % 10 === 0) {
+          rect(round(this.pos.x), round(this.pos.y), this.size);
+        //}
       } else if (random() < this.uGR) {
         if (random() < 0.5) {
           fill(Ivory);
@@ -97,12 +98,11 @@ class mato {
         }
 
         if (!panicMode) {
-          this.uGSize = random(0.3, 0.7);
+          this.uGSize = random(0.5, 0.8);
         } else {
-          this.uGSize = random(0.5, 1.5);
-          this.uGR = 0.16;
+          this.uGSize = random(0.7, 1.5);
+          this.uGR = 0.36;
         }
-        this.r = 0.7;
         rect(round(this.pos.x) + random(-this.r, this.r), round(this.pos.y) + random(-this.r, this.r), this.size / 4 + this.uGSize);
       }
 
@@ -111,19 +111,19 @@ class mato {
 
         // SCORE TABLE 0.01...
         strokeWeight(.5);
-        fill(this.color)
+        fill(this.color);
         stroke(Black);
-        rect(width-8, 11 * wormsCounter -3, 10)
+        rect(width - 8, 11 * wormsCounter - 3, 10);
         textAlign(CENTER, CENTER);
         textSize(6);
         fill(White);
         stroke(Black);
         strokeWeight(1.5);
-        text(wormsCounter, width-8, 11 * wormsCounter -3)
+        text(wormsCounter, width - 8, 11 * wormsCounter - 3);
 
         wormsCounter--;
         this.deathToggler = !this.deathToggler;
-        
+
       }
     }
   }
