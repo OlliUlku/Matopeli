@@ -107,8 +107,22 @@ class mato {
 
     } else { // kill worm
       if (this.deathToggler) {
+
+        // SCORE TABLE 0.01...
+        strokeWeight(.5);
+        fill(this.color)
+        stroke(Black);
+        rect(width-8, 11 * wormsCounter -3, 10)
+        textAlign(CENTER, CENTER);
+        textSize(6);
+        fill(White);
+        stroke(Black);
+        strokeWeight(1.5);
+        text(wormsCounter, width-8, 11 * wormsCounter -3)
+
         wormsCounter--;
         this.deathToggler = !this.deathToggler;
+        
       }
     }
   }
