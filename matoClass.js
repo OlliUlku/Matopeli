@@ -22,6 +22,13 @@ class mato {
     this.uGR = 0.26;
     this.r = 0.6;
 
+    // TURBO
+    this.turbo = false;
+    this.velTurbo = createVector(0, -2.85 * speedMod);
+    this.velTurbo.rotate(rot);
+    this.accTurbo = createVector(0, -0.01 * speedMod);
+    this.accTurbo.rotate(rot);
+
     //CONTROLS
     this.index = controllerIndex;
 
@@ -36,11 +43,12 @@ class mato {
 
   speedUP_PANIC() {
     this.vel.add(this.acc);
+    this.velTurbo.add(this.acc);
     this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0007 * speedMod); // panic rotate acc
     this.rotateAMT = constrain(this.rotateAMT, 0, 11);
   }
 
-  speedUP() {
+  speedUP() { // NEED TO ADD ALL THE NEEDED VECTORS...
     this.vel.add(this.acc_normal);
   }
 
@@ -50,17 +58,25 @@ class mato {
       // UPDATE POSITION
       if (this.LEFT) {
         this.vel.rotate(-this.rotateAMT);
+        this.velTurbo.rotate(-this.rotateAMT);
+        this.accTurbo.rotate(-this.rotateAMT);
         this.acc.rotate(-this.rotateAMT);
         this.acc_normal.rotate(-this.rotateAMT);
       }
       if (this.RIGHT) {
         this.vel.rotate(this.rotateAMT);
+        this.velTurbo.rotate(this.rotateAMT);
+        this.accTurbo.rotate(this.rotateAMT);
         this.acc.rotate(this.rotateAMT);
         this.acc_normal.rotate(this.rotateAMT);
       }
 
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
-        this.pos.add(this.vel);
+        if (!this.turbo || this.underground) {
+          this.pos.add(this.vel);
+        } else {
+          this.pos.add(this.velTurbo);
+        }
       } else {
         this.pos.add(this.vel);
         this.stop = true;
@@ -77,11 +93,6 @@ class mato {
         this.uGTimer.setTimer(9500);
         this.uGTimer.start();
       }
-
-      // if (this.uGTimer.expired()) {
-      //   this.underground = false;
-      //   this.oGTimer.start();
-      // }
 
       // SHOW
       L_mato.fill(this.color);

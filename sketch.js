@@ -1,4 +1,4 @@
-let matoCount = 2;
+let matoCount = 30;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let wormNames = ['Marjatta',
@@ -29,7 +29,9 @@ let wormNames = ['Marjatta',
   'Pomppu',
   'Nieminen',
   'Giselle',
-  'Åke'];
+  'Åke',
+  'Timon sijainen Timo',
+  'Maire'];
 
 let spawnBorder = 50; // PX (Base 50?)
 let MOD = 2.5;
@@ -179,11 +181,11 @@ function _OHJAIMET() {
       madot[i].RIGHT = false;
     }
 
-    //   if (ohjaimet[i].B) {
-    //     madot[i].dive(); // dive underground!!
-    //     ohjaimet[i].B = false; // turns button OFF
-
-    //   } else {
-    //   }
+      if (ohjaimet[i].B) {
+        madot[i].turbo = true;
+        ohjaimet[i].B = false; // turns button OFF
+      } else {
+        madot[i].turbo = false;
+      }
   }
 }
