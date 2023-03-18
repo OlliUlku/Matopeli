@@ -1,4 +1,4 @@
-let matoCount = 2;
+let matoCount = 30;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let spawnBorder = 50; // PX (Base 50?)
@@ -25,6 +25,10 @@ let panicModeText = '';
 let fontSize; // varies with width and height
 let fontSizeString;
 
+//LAYERS
+let L_top;
+let L_stone;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   frameRate(24);
@@ -32,6 +36,16 @@ function setup() {
   angleMode(DEGREES);
   rectMode(CENTER);
   strokeCap(SQUARE);
+
+  // LAYERS
+  let pxDens = pixelDensity();
+  L_top = createGraphics(pxDens * width, pxDens * height);
+  L_top.angleMode(DEGREES);
+  L_top.rectMode(CENTER);
+
+  L_stone = createGraphics(pxDens * width, pxDens * height);
+  L_stone.angleMode(DEGREES);
+  L_stone.rectMode(CENTER);
 
   //controllers
   addConnection();
@@ -77,9 +91,16 @@ function draw() {
   _PANIC_MODE();
   _POINTS();
 
+  // LAYERS
+  image(L_stone,0,0);
+  image(L_top,0,0);
+
+  // DEBUG
+
   if (deltaTime > 56) {
-    print(round(deltaTime));
+    print('long time between frames?', round(deltaTime));
   }
+
 }
 
 function _OHJAIMET() {

@@ -96,17 +96,17 @@ function updateBoardState() {
   }
 }
 
-function drawStone() {
-  for (let x = 0; x < width; x++) {
-    for (let y = 0; y < height; y++) {
-      if (!array2d[x][y]) {
-        fill(100);
-        noStroke();
-        rect(x, y, 1);
-      }
-    }
-  }
-}
+// function drawStone() { // HOXXXX as it is there is too much constant drawing.
+//   for (let x = 0; x < width; x++) {
+//     for (let y = 0; y < height; y++) {
+//       if (!array2d[x][y]) {
+//         fill(100);
+//         noStroke();
+//         rect(x, y, 1);
+//       }
+//     }
+//   }
+// }
 
 function set2dArrayFalse(_x, _y) {
   //ristin muotoisessa kuviossa kaikki pois päältä!
@@ -123,8 +123,8 @@ function set2dArrayFalse(_x, _y) {
   array2d[_x + 1][_y] = false;
   array2d[_x][_y - 1] = false;
 
-  fill(100);
-  noStroke();
-  rect(_x, _y, 3);
+  L_stone.fill(100);
+  L_stone.noStroke();
+  L_stone.rect(_x, _y, 3);
 }
 

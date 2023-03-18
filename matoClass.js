@@ -18,7 +18,7 @@ class mato {
 
     //underground dive feature
     this.underground = false;
-    this.uGTimer = new Timer(random(8500, 12500), true);
+    this.uGTimer = new Timer(random(8500, 9500*2), true);
     this.uGSize;
     this.uGR = 0.26;
     this.r = 0.6;
@@ -110,16 +110,16 @@ class mato {
       if (this.deathToggler) {
 
         // SCORE TABLE 0.01...
-        strokeWeight(.5);
-        fill(this.color);
-        stroke(Black);
-        rect(width - 8, 11 * wormsCounter - 3, 10);
-        textAlign(CENTER, CENTER);
-        textSize(6);
-        fill(White);
-        stroke(Black);
-        strokeWeight(1.5);
-        text(wormsCounter, width - 8, 11 * wormsCounter - 3);
+        L_top.strokeWeight(.5);
+        L_top.fill(this.color);
+        L_top.stroke(Black);
+        L_top.rect(width - 8, 11 * wormsCounter - 3, 10);
+        L_top.textAlign(CENTER, CENTER);
+        L_top.textSize(6);
+        L_top.fill(White);
+        L_top.stroke(Black);
+        L_top.strokeWeight(1.5);
+        L_top.text(wormsCounter, width - 8, 11 * wormsCounter - 3);
 
         wormsCounter--;
         this.deathToggler = !this.deathToggler;
