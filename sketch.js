@@ -1,4 +1,4 @@
-let matoCount = 29;
+let matoCount = 2;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let wormNames = ['Marjatta',
@@ -137,7 +137,7 @@ function setup() {
 function draw() {
   // LAYER CLEAR
   L_HUD.clear(0, 0, 0, 0);
-  clear();
+  //clear();
   background(Beige);
 
   controllerUsed(); //checks all buttons and updates values

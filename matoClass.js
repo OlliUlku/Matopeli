@@ -15,8 +15,6 @@ class mato {
     this.acc_normal.rotate(rot);
 
 
-
-
     //underground dive feature
     this.underground = false;
     this.uGTimer = new Timer(random(8500, 9500 * 2), true);
@@ -131,12 +129,14 @@ class mato {
         L_top.strokeWeight(1.5);
         L_top.text(wormsCounter, width - 8, 11 * wormsCounter - 3);
 
-        L_top.textAlign(RIGHT, CENTER);
         L_top.textSize(6);
         L_top.fill(White);
         L_top.stroke(Black);
         L_top.strokeWeight(1.5);
-        L_top.text(this.name, this.pos.x, this.pos.y - 8);
+        if (this.pos.x < width - 100) { // so it does not jump on top of scoreboard...
+          L_top.text(this.name, this.pos.x, this.pos.y - 8);
+        }
+        L_top.textAlign(RIGHT, CENTER);
         L_top.text(this.name, width - 8 - 7, 11 * wormsCounter - 3);
 
         wormsCounter--;
