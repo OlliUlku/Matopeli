@@ -28,6 +28,9 @@ let fontSizeString;
 //LAYERS
 let L_top;
 let L_stone;
+let L_HUD;
+let L_mato;
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -42,10 +45,23 @@ function setup() {
   L_top = createGraphics(pxDens * width, pxDens * height);
   L_top.angleMode(DEGREES);
   L_top.rectMode(CENTER);
+  L_top.textAlign(CENTER, CENTER);
 
   L_stone = createGraphics(pxDens * width, pxDens * height);
   L_stone.angleMode(DEGREES);
   L_stone.rectMode(CENTER);
+  L_stone.textAlign(CENTER, CENTER);
+
+  L_HUD = createGraphics(pxDens * width, pxDens * height);
+  L_HUD.angleMode(DEGREES);
+  L_HUD.rectMode(CENTER);
+  L_HUD.textAlign(CENTER, CENTER);
+
+  L_mato = createGraphics(pxDens * width, pxDens * height);
+  L_mato.angleMode(DEGREES);
+  L_mato.rectMode(CENTER);
+  L_mato.textAlign(CENTER, CENTER);
+
 
   //controllers
   addConnection();
@@ -84,6 +100,11 @@ function setup() {
 }
 
 function draw() {
+  // LAYER CLEAR
+  L_HUD.clear(0, 0, 0, 0);
+  clear();
+  background(Beige);
+
   controllerUsed(); //checks all buttons and updates values
   _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
   //_SPEED_UP_TEST(); //constant acceleration from the beginning
@@ -92,8 +113,12 @@ function draw() {
   _POINTS();
 
   // LAYERS
-  image(L_stone,0,0);
-  image(L_top,0,0);
+  image(L_mato, 0, 0);
+  image(L_stone, 0, 0);
+  image(L_HUD, 0, 0);
+  image(L_top, 0, 0);
+
+
 
   // DEBUG
 

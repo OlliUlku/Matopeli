@@ -18,7 +18,7 @@ class mato {
 
     //underground dive feature
     this.underground = false;
-    this.uGTimer = new Timer(random(8500, 9500*2), true);
+    this.uGTimer = new Timer(random(8500, 9500 * 2), true);
     this.uGSize;
     this.uGR = 0.26;
     this.r = 0.6;
@@ -82,19 +82,19 @@ class mato {
       // }
 
       // SHOW
-      fill(this.color);
-      noStroke();
+      L_mato.fill(this.color);
+      L_mato.noStroke();
       if (!this.underground) {
         //if (frameCount % 10 === 0) {
-          rect(round(this.pos.x), round(this.pos.y), this.size);
+        L_mato.rect(round(this.pos.x), round(this.pos.y), this.size);
         //}
       } else if (random() < this.uGR) {
         if (random() < 0.5) {
-          fill(Ivory);
+          L_mato.fill(Ivory);
         } else if (random() < 0.5) {
-          fill(Brown);
+          L_mato.fill(Brown);
         } else {
-          fill(this.color);
+          L_mato.fill(this.color);
         }
 
         if (!panicMode) {
@@ -103,8 +103,14 @@ class mato {
           this.uGSize = random(0.7, 1.5);
           this.uGR = 0.36;
         }
-        rect(round(this.pos.x) + random(-this.r, this.r), round(this.pos.y) + random(-this.r, this.r), this.size / 4 + this.uGSize);
+        L_mato.rect(round(this.pos.x) + random(-this.r, this.r), round(this.pos.y) + random(-this.r, this.r), this.size / 4 + this.uGSize);
       }
+
+      L_HUD.textSize(6);
+      L_HUD.fill(White);
+      L_HUD.stroke(Black);
+      L_HUD.strokeWeight(1.5);
+      L_HUD.text('mato ' + (this.index + 1), this.pos.x, this.pos.y - 8);
 
     } else { // kill worm
       if (this.deathToggler) {
@@ -114,12 +120,17 @@ class mato {
         L_top.fill(this.color);
         L_top.stroke(Black);
         L_top.rect(width - 8, 11 * wormsCounter - 3, 10);
-        L_top.textAlign(CENTER, CENTER);
         L_top.textSize(6);
         L_top.fill(White);
         L_top.stroke(Black);
         L_top.strokeWeight(1.5);
         L_top.text(wormsCounter, width - 8, 11 * wormsCounter - 3);
+
+        L_top.textSize(6);
+        L_top.fill(White);
+        L_top.stroke(Black);
+        L_top.strokeWeight(1.5);
+        L_top.text('mato ' + (this.index + 1), this.pos.x, this.pos.y - 8);
 
         wormsCounter--;
         this.deathToggler = !this.deathToggler;
