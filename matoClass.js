@@ -5,16 +5,17 @@ class mato {
     this.vel.rotate(rot);
     this.acc = createVector(0, -0.0006 * speedMod); // PANIC ACCELERATION
     this.acc.rotate(rot);
+    this.color = _color;
+    this.rotateAMT = 3 * rotSpeedMod;
+    this.size = 3; // hox 3x3 pixels is the size of stone check...
+    this.stop = false;
 
     // TEST CONSTANT ACCELERATION
     this.acc_normal = createVector(0, -0.00005 * speedMod);
     this.acc_normal.rotate(rot);
 
 
-    this.color = _color;
-    this.rotateAMT = 3 * rotSpeedMod;
-    this.size = 3; // hox 3x3 pixels is the size of stone check...
-    this.stop = false;
+
 
     //underground dive feature
     this.underground = false;
@@ -30,6 +31,9 @@ class mato {
     this.RIGHT = false;
 
     this.deathToggler = true; //POINTS SYSTEM
+
+    // HUD
+    this.name = wormNames[this.index];
   }
 
   speedUP_PANIC() {
@@ -110,12 +114,13 @@ class mato {
       L_HUD.fill(White);
       L_HUD.stroke(Black);
       L_HUD.strokeWeight(1.5);
-      L_HUD.text('mato ' + (this.index + 1), this.pos.x, this.pos.y - 8);
+      L_HUD.text(this.name, this.pos.x, this.pos.y - 8);
 
     } else { // kill worm
       if (this.deathToggler) {
 
         // SCORE TABLE 0.01...
+        L_top.textAlign(CENTER, CENTER);
         L_top.strokeWeight(.5);
         L_top.fill(this.color);
         L_top.stroke(Black);
@@ -126,11 +131,13 @@ class mato {
         L_top.strokeWeight(1.5);
         L_top.text(wormsCounter, width - 8, 11 * wormsCounter - 3);
 
+        L_top.textAlign(RIGHT, CENTER);
         L_top.textSize(6);
         L_top.fill(White);
         L_top.stroke(Black);
         L_top.strokeWeight(1.5);
-        L_top.text('mato ' + (this.index + 1), this.pos.x, this.pos.y - 8);
+        L_top.text(this.name, this.pos.x, this.pos.y - 8);
+        L_top.text(this.name, width - 8 - 7, 11 * wormsCounter - 3);
 
         wormsCounter--;
         this.deathToggler = !this.deathToggler;

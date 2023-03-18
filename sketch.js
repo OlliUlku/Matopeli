@@ -1,5 +1,35 @@
-let matoCount = 30;
+let matoCount = 29;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
+
+let wormNames = ['Marjatta',
+  'Kalevi',
+  'Mauno',
+  'Pekka',
+  'Reetta',
+  'Kissa',
+  'Koira',
+  'Hevonen',
+  'Raquel',
+  'Miguel',
+  'Mato 19',
+  'Kukkis',
+  'Lost sock',
+  'Crouching tiger',
+  'Hidden dragon',
+  'Shampoo',
+  'postfeminist',
+  'The Concept Of Time',
+  'The Concept Of Space',
+  'Timon sijainen Simo',
+  'Jaana',
+  'Mimi',
+  'Baus',
+  'Cobra',
+  'Ferrari',
+  'Pomppu',
+  'Nieminen',
+  'Giselle',
+  'Åke'];
 
 let spawnBorder = 50; // PX (Base 50?)
 let MOD = 2.5;
@@ -75,7 +105,12 @@ function setup() {
   setBorderToFalse(); //safeguard...
 
   posca.splice(14, 1); // removes Beige (#dbc48e) which is background color, from array
+
   shuffle(posca, true);
+  shuffle(wormNames, true);
+  print('Max colors', posca.length);
+  print('Max Names', wormNames.length);
+
   for (let i = 0; i < matoCount; i++) {
     madot[i] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[i], random(360), i);
     wormsCounter++;
