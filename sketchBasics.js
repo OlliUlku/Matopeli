@@ -33,7 +33,6 @@ function _PANIC_MODE() {
 
     wormsText.style('color', '#8c172a');
 
-
     for (let i = 0; i < madot.length; i++) {
       madot[i].speedUP_PANIC();
     }
@@ -55,9 +54,9 @@ function _PANIC_MODE() {
 // }
 
 function create2dArray() {
-  for (let _x = 0; _x < width; _x++) {
+  for (let _x = 0; _x < width / 2; _x++) {
     array2d[_x] = [];
-    for (let _y = 0; _y < height; _y++) {
+    for (let _y = 0; _y < height / 2; _y++) {
       array2d[_x][_y] = true;
     }
   }
@@ -66,7 +65,7 @@ function create2dArray() {
 function setBorderToFalse() {
   for (let i = 0; i < height; i++) {
     array2d[0][i] = false;
-    array2d[width - 1][i] = false;
+    array2d[widt / 2 - 1][i] = false;
   }
 }
 
