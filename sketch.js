@@ -1,4 +1,4 @@
-let matoCount = 30;
+let matoCount = 40;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let wormNames = ['Marjatta',
@@ -159,9 +159,9 @@ function draw() {
 
   // DEBUG
 
-  if (deltaTime > 56) {
-    print('long time between frames?', round(deltaTime));
-  }
+  // if (deltaTime > 56) {
+  //   print('long time between frames?', round(deltaTime));
+  // }
 
 }
 
