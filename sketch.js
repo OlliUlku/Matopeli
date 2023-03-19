@@ -1,4 +1,4 @@
-let matoCount = 30;
+let matoCount = 15;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let wormNames = ['Marjatta',
@@ -33,7 +33,7 @@ let wormNames = ['Marjatta',
   'Timon sijainen Timo',
   'Maire'];
 
-let spawnBorder = 50; // PX (Base 50?)
+let spawnBorder = 150; // PX (Base 50?)
 let MOD = 2.5;
 let speedMod = .8 * MOD; // BASE .5
 let rotSpeedMod = .5 * MOD; // .7?
@@ -41,7 +41,9 @@ let panicMode = false;
 let panicCount = 1500;
 
 // GRID DIVISION UPDATE
-let GridDivision = 4; // HUOM TÄLLÄ HETKELLÄ NÄYTÖN PIKSELEIDEN MÄÄRÄ TÄYTYY OLLA TÄLLÄ JAOLLINEN... KORJAA?
+let GridDivision = 8; // HUOM TÄLLÄ HETKELLÄ NÄYTÖN PIKSELEIDEN MÄÄRÄ TÄYTYY OLLA TÄLLÄ JAOLLINEN... ehkä... KORJAA?
+let Pixel; //PIXEL SIZE
+let stoneDelay = 0; // 2000 if div is 32 :D
 
 //controllersetup
 let controllers = [];
@@ -75,6 +77,7 @@ function setup() {
   angleMode(DEGREES);
   //rectMode(CENTER);
   strokeCap(SQUARE);
+
 
   // LAYERS
   let pxDens = pixelDensity();
@@ -141,6 +144,11 @@ function setup() {
   wormsText = createP();
   wormsText.style('font-size', '16px');
   wormsText.position(3, 0);
+
+  print('So called Pixels length X', array2d.length);
+  print('So called Pixels length Y', array2d[0].length);
+  Pixel = (width / GridDivision / (array2d.length) * GridDivision);
+  print('Pixel length', Pixel);
 }
 
 function draw() {
@@ -167,6 +175,8 @@ function draw() {
 
   // DEBUG
 
+  fill(Red);
+  noStroke();
   // if (deltaTime > 56) {
   //   print('long time between frames?', round(deltaTime));
   // }

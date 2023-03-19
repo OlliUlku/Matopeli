@@ -65,7 +65,7 @@ function create2dArray() {
 function setBorderToFalse() {
   for (let i = 0; i < height / GridDivision; i++) {
     array2d[0][i] = false;
-    array2d[width / GridDivision - 1][i] = false;
+    array2d[array2d.length-1][i] = false;
   }
 }
 
@@ -85,10 +85,10 @@ function updateBoardState() {
         //&& array2d[__x + 1][__y - 1] 
         //&& array2d[__x - 1][__y + 1] 
         && !madot[i].underground) {
-        setTimeout(set2dArrayFalse, 1000 + panicCount, madot[i].pos.x, madot[i].pos.y);
+        setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y);
       } else if (!madot[i].underground) {
         madot[i].stop = true;
-        setTimeout(set2dArrayFalse, 1000 + panicCount, madot[i].pos.x, madot[i].pos.y); // tehokkuus -> pysäytä tän looppaaminen...
+        setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y); // tehokkuus -> pysäytä tän looppaaminen...
         //print('hit wall');
       }
     }

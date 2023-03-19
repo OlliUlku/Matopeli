@@ -7,8 +7,10 @@ class mato {
     this.acc.rotate(rot);
     this.color = _color;
     this.rotateAMT = 3 * rotSpeedMod;
+    this.UGrotateAMT = 2.5 * rotSpeedMod;
     this.size = 2;
     this.stop = false;
+    this.Rot;
 
     // TEST CONSTANT ACCELERATION
     this.acc_normal = createVector(0, -0.00005 * speedMod);
@@ -28,6 +30,8 @@ class mato {
     this.velTurbo.rotate(rot);
     this.accTurbo = createVector(0, -0.01 * speedMod);
     this.accTurbo.rotate(rot);
+    this.turboRotateAMT = 2.5 * rotSpeedMod;
+
 
     //CONTROLS
     this.index = controllerIndex;
@@ -36,6 +40,9 @@ class mato {
     this.RIGHT = false;
 
     this.deathToggler = true; //POINTS SYSTEM
+    // SCORE TABLE
+    this.SX; // SCORETABLE X
+    this.SY; // SCORETABLE Y
 
     // HUD
     this.name = wormNames[this.index];
@@ -44,7 +51,7 @@ class mato {
   speedUP_PANIC() {
     this.vel.add(this.acc);
     this.velTurbo.add(this.acc);
-    this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0007 * speedMod); // panic rotate acc
+    this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0004 * speedMod); // panic rotate acc
     this.rotateAMT = constrain(this.rotateAMT, 0, 11);
   }
 
@@ -56,19 +63,30 @@ class mato {
     if (!this.stop) { // IF DIDNT HIT STONE... (in array2d -> false)
 
       // UPDATE POSITION
+
+      if (!this.turbo) {
+        if (!this.underground) {
+          this.Rot = this.rotateAMT;
+        } else {
+          this.Rot = this.UGrotateAMT;
+        }
+      } else {
+        this.Rot = this.turboRotateAMT;
+      }
+
       if (this.LEFT) {
-        this.vel.rotate(-this.rotateAMT);
-        this.velTurbo.rotate(-this.rotateAMT);
-        this.accTurbo.rotate(-this.rotateAMT);
-        this.acc.rotate(-this.rotateAMT);
-        this.acc_normal.rotate(-this.rotateAMT);
+        this.vel.rotate(-this.Rot);
+        this.velTurbo.rotate(-this.Rot);
+        this.accTurbo.rotate(-this.Rot);
+        this.acc.rotate(-this.Rot);
+        this.acc_normal.rotate(-this.Rot);
       }
       if (this.RIGHT) {
-        this.vel.rotate(this.rotateAMT);
-        this.velTurbo.rotate(this.rotateAMT);
-        this.accTurbo.rotate(this.rotateAMT);
-        this.acc.rotate(this.rotateAMT);
-        this.acc_normal.rotate(this.rotateAMT);
+        this.vel.rotate(this.Rot);
+        this.velTurbo.rotate(this.Rot);
+        this.accTurbo.rotate(this.Rot);
+        this.acc.rotate(this.Rot);
+        this.acc_normal.rotate(this.Rot);
       }
 
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
@@ -82,15 +100,19 @@ class mato {
         this.stop = true;
       }
 
-      // UPDATE DIVE
-      if (this.uGTimer.getRemainingTime() < 2500) {
-        this.underground = true;
+      // UNDERGROUND
+      if (this.uGTimer.getRemainingTime() < 4500) {
+        //if (!panicMode) {
+          this.underground = true;
+        //} else {
+        //  this.underground = false;
+        //}
       } else {
         this.underground = false;
       }
 
       if (this.uGTimer.expired()) {
-        this.uGTimer.setTimer(9500);
+        this.uGTimer.setTimer(12000);
         this.uGTimer.start();
       }
 
@@ -101,7 +123,7 @@ class mato {
         L_mato.fill(this.color);
         L_mato.noStroke();
         L_mato.rect(round(this.pos.x / GridDivision) * GridDivision, round(this.pos.y / GridDivision) * GridDivision, this.size * GridDivision);
-        //}
+
       } else {
         L_ground.fill(this.color);
         if (random() < this.uGR) {
@@ -114,54 +136,65 @@ class mato {
           }
 
           if (!panicMode) {
-            this.uGSize = random(0.5, 0.8);
+            this.uGSize = random(0.5, 1);
           } else {
             this.uGSize = random(0.7, 1.5);
             this.uGR = 0.36;
           }
           L_ground.noStroke();
-          L_ground.rect(round(this.pos.x / GridDivision) * GridDivision + random(-this.r, this.r), round(this.pos.y / GridDivision) * GridDivision + random(-this.r, this.r), this.size / 4 + this.uGSize * GridDivision * 0.66);
-        }}
-
-        L_HUD.textSize(6 * 1.5);
-        L_HUD.fill(White);
-        L_HUD.stroke(Black);
-        L_HUD.strokeWeight(1.5 * 1.5);
-        L_HUD.text(this.name, this.pos.x + width / GridDivision / array2d.length * 1.5, this.pos.y - 12);
-
-      } else { // DID HIT STONE (or otherwise) -> kill worm
-        if (this.deathToggler) {
-
-          // SCORE TABLE
-          L_top.textAlign(CENTER, CENTER);
-          L_top.strokeWeight(1);
-          L_top.fill(this.color);
-          L_top.stroke(Black);
-          L_top.rectMode(CENTER);
-          L_top.rect(width - 8 - 5, 20 * wormsCounter - 3, 18);
-          L_top.textSize(6 * 1.5);
-          L_top.fill(White);
-          L_top.stroke(Black);
-          L_top.strokeWeight(1.5 * 1.5);
-          //NUMBER TEXT
-          L_top.text(wormsCounter, width - 8 - 5, 20 * wormsCounter - 3);
-
-          L_top.textSize(6 * 1.5);
-          L_top.fill(White);
-          L_top.stroke(Black);
-          L_top.strokeWeight(1.5 * 1.5);
-          if (this.pos.x < width - 100) { // so it does not jump on top of scoreboard...
-            //GRAVE NAME
-            L_top.text(this.name, this.pos.x, this.pos.y - 8);
-          }
-          L_top.textAlign(RIGHT, CENTER);
-          //NAME IN SCORE TABLE
-          L_top.text(this.name, width - 27, 20 * wormsCounter - 3);
-
-          wormsCounter--;
-          this.deathToggler = !this.deathToggler;
-
+          L_ground.rect(round(this.pos.x / GridDivision) * GridDivision + random(-this.r, this.r) + Pixel, round(this.pos.y / GridDivision) * GridDivision + random(-this.r, this.r) + Pixel, this.size / 4 + this.uGSize * GridDivision * 0.8);
         }
+      }
+
+      L_HUD.textSize(Pixel * 1.3);
+      L_HUD.fill(White);
+      L_HUD.stroke(Black);
+      L_HUD.strokeWeight(Pixel * 0.3);
+      L_HUD.textAlign(CENTER, CENTER);
+      // HUD NAME
+      L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - (Pixel * 2));
+
+    } else { // DID HIT STONE (or otherwise) -> kill worm
+      if (this.deathToggler) {
+
+        this.SX = Pixel * 2;
+        this.SY = Pixel * 3;
+
+        // SCORE TABLE 
+        L_top.strokeWeight(Pixel * 0.15);
+        L_top.fill(this.color);
+        L_top.stroke(Black);
+        L_top.rectMode(CENTER);
+        L_top.rect(width - this.SX, this.SY * wormsCounter, this.SX + Pixel * 0.5);
+
+        //NUMBER TEXT
+        L_top.textAlign(CENTER, CENTER);
+        L_top.textSize(Pixel * 1.5);
+        L_top.fill(White);
+        L_top.stroke(Black);
+        L_top.strokeWeight(Pixel * 0.3);
+        L_top.text(wormsCounter, width - this.SX, this.SY * wormsCounter);
+
+        //GRAVE NAME
+        L_top.fill(White);
+        L_top.stroke(Black);
+        L_top.strokeWeight(Pixel * 0.3);
+        if (this.pos.x < width - 100) { // so it does not jump on top of scoreboard...
+          L_top.textSize(Pixel * 1.3);
+          L_top.fill(225);
+          L_top.text(this.name, this.pos.x + Pixel, this.pos.y - (Pixel * 2));
+        }
+
+        //NAME IN SCORE TABLE
+        L_top.textAlign(RIGHT, CENTER);
+        L_top.textSize(Pixel * 1.3);
+        L_top.fill(White);
+        L_top.text(this.name, width - this.SX * 1.9, this.SY * wormsCounter);
+
+        wormsCounter--;
+        this.deathToggler = !this.deathToggler;
+
       }
     }
   }
+}
