@@ -187,7 +187,7 @@ class mato {
 
         //NAME IN SCORE TABLE
         L_top.textAlign(RIGHT, CENTER);
-        L_top.textSize(Pixel * 1.3);
+        L_top.textSize(Pixel * 1.5);
         L_top.fill(White);
         L_top.text(this.name, width - this.SX * 1.9, this.SY * wormsCounter);
 

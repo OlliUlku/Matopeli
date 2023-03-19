@@ -69,6 +69,9 @@ let L_HUD;
 let L_mato;
 let L_ground;
 
+//FONT
+let _font;
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -105,6 +108,12 @@ function setup() {
   L_ground.angleMode(DEGREES);
   L_ground.textAlign(CENTER, CENTER);
 
+  // FONTS
+
+  // _font = loadFont('Heebo-Regular.ttf')
+  // L_top.textFont(_font);
+  // L_HUD.textFont(_font);
+  
   //controllers
   addConnection();
 
