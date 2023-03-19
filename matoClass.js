@@ -116,7 +116,7 @@ class mato {
         this.uGTimer.start();
       }
 
-      // SHOW
+      // SHOW -
 
       if (!this.underground) {
         //if (frameCount % 5 === 0 || this.turbo) {
