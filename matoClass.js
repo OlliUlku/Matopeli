@@ -7,6 +7,7 @@ class mato {
     this.acc.rotate(rot);
     this.color = _color;
     this.rotateAMT = 3 * rotSpeedMod;
+    this.turboRotateAMT = 2 * rotSpeedMod;
     this.size = 2;
     this.stop = false;
 
