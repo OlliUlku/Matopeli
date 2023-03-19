@@ -3,11 +3,11 @@ class mato {
     this.pos = createVector(x, y);
     this.vel = createVector(0, -0.5 * speedMod);
     this.vel.rotate(rot);
-    this.acc = createVector(0, -0.0006 * speedMod); // PANIC ACCELERATION
+    this.acc = createVector(0, -0.001 * speedMod); // PANIC ACCELERATION
     this.acc.rotate(rot);
     this.color = _color;
     this.rotateAMT = 3 * rotSpeedMod;
-    this.size = 3; // hox 3x3 pixels is the size of stone check...
+    this.size = 2;
     this.stop = false;
 
     // TEST CONSTANT ACCELERATION
@@ -20,7 +20,7 @@ class mato {
     this.uGTimer = new Timer(random(8500, 9500 * 2), true);
     this.uGSize;
     this.uGR = 0.26;
-    this.r = 0.6;
+    this.r = 0.6 * GridDivision;
 
     // TURBO
     this.turbo = false;
@@ -53,7 +53,7 @@ class mato {
   }
 
   update() {
-    if (!this.stop) {
+    if (!this.stop) { // IF DIDNT HIT STONE... (in array2d -> false)
 
       // UPDATE POSITION
       if (this.LEFT) {
@@ -95,65 +95,73 @@ class mato {
       }
 
       // SHOW
-      L_mato.fill(this.color);
-      L_mato.noStroke();
+
       if (!this.underground) {
-        //if (frameCount % 10 === 0) {
-        L_mato.rect(round(this.pos.x), round(this.pos.y), this.size);
+        //if (frameCount % 5 === 0 || this.turbo) {
+        L_mato.fill(this.color);
+        L_mato.noStroke();
+        L_mato.rect(round(this.pos.x / GridDivision) * GridDivision, round(this.pos.y / GridDivision) * GridDivision, this.size * GridDivision);
         //}
-      } else if (random() < this.uGR) {
-        if (random() < 0.5) {
-          L_mato.fill(Ivory);
-        } else if (random() < 0.5) {
-          L_mato.fill(Brown);
-        } else {
-          L_mato.fill(this.color);
+      } else {
+        L_ground.fill(this.color);
+        if (random() < this.uGR) {
+          if (random() < 0.5) {
+            L_ground.fill(Ivory);
+          } else if (random() < 0.5) {
+            L_ground.fill(Brown);
+          } else {
+            L_ground.fill(this.color);
+          }
+
+          if (!panicMode) {
+            this.uGSize = random(0.5, 0.8);
+          } else {
+            this.uGSize = random(0.7, 1.5);
+            this.uGR = 0.36;
+          }
+          L_ground.noStroke();
+          L_ground.rect(round(this.pos.x / GridDivision) * GridDivision + random(-this.r, this.r), round(this.pos.y / GridDivision) * GridDivision + random(-this.r, this.r), this.size / 4 + this.uGSize * GridDivision * 0.66);
+        }}
+
+        L_HUD.textSize(6 * 1.5);
+        L_HUD.fill(White);
+        L_HUD.stroke(Black);
+        L_HUD.strokeWeight(1.5 * 1.5);
+        L_HUD.text(this.name, this.pos.x + width / GridDivision / array2d.length * 1.5, this.pos.y - 12);
+
+      } else { // DID HIT STONE (or otherwise) -> kill worm
+        if (this.deathToggler) {
+
+          // SCORE TABLE
+          L_top.textAlign(CENTER, CENTER);
+          L_top.strokeWeight(1);
+          L_top.fill(this.color);
+          L_top.stroke(Black);
+          L_top.rectMode(CENTER);
+          L_top.rect(width - 8 - 5, 20 * wormsCounter - 3, 18);
+          L_top.textSize(6 * 1.5);
+          L_top.fill(White);
+          L_top.stroke(Black);
+          L_top.strokeWeight(1.5 * 1.5);
+          //NUMBER TEXT
+          L_top.text(wormsCounter, width - 8 - 5, 20 * wormsCounter - 3);
+
+          L_top.textSize(6 * 1.5);
+          L_top.fill(White);
+          L_top.stroke(Black);
+          L_top.strokeWeight(1.5 * 1.5);
+          if (this.pos.x < width - 100) { // so it does not jump on top of scoreboard...
+            //GRAVE NAME
+            L_top.text(this.name, this.pos.x, this.pos.y - 8);
+          }
+          L_top.textAlign(RIGHT, CENTER);
+          //NAME IN SCORE TABLE
+          L_top.text(this.name, width - 27, 20 * wormsCounter - 3);
+
+          wormsCounter--;
+          this.deathToggler = !this.deathToggler;
+
         }
-
-        if (!panicMode) {
-          this.uGSize = random(0.5, 0.8);
-        } else {
-          this.uGSize = random(0.7, 1.5);
-          this.uGR = 0.36;
-        }
-        L_mato.rect(round(this.pos.x) + random(-this.r, this.r), round(this.pos.y) + random(-this.r, this.r), this.size / 4 + this.uGSize);
-      }
-
-      L_HUD.textSize(6);
-      L_HUD.fill(White);
-      L_HUD.stroke(Black);
-      L_HUD.strokeWeight(1.5);
-      L_HUD.text(this.name, this.pos.x, this.pos.y - 8);
-
-    } else { // kill worm
-      if (this.deathToggler) {
-
-        // SCORE TABLE 0.01...
-        L_top.textAlign(CENTER, CENTER);
-        L_top.strokeWeight(.5);
-        L_top.fill(this.color);
-        L_top.stroke(Black);
-        L_top.rect(width - 8, 11 * wormsCounter - 3, 10);
-        L_top.textSize(6);
-        L_top.fill(White);
-        L_top.stroke(Black);
-        L_top.strokeWeight(1.5);
-        L_top.text(wormsCounter, width - 8, 11 * wormsCounter - 3);
-
-        L_top.textSize(6);
-        L_top.fill(White);
-        L_top.stroke(Black);
-        L_top.strokeWeight(1.5);
-        if (this.pos.x < width - 100) { // so it does not jump on top of scoreboard...
-          L_top.text(this.name, this.pos.x, this.pos.y - 8);
-        }
-        L_top.textAlign(RIGHT, CENTER);
-        L_top.text(this.name, width - 8 - 7, 11 * wormsCounter - 3);
-
-        wormsCounter--;
-        this.deathToggler = !this.deathToggler;
-
       }
     }
   }
-}

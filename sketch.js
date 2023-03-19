@@ -1,4 +1,4 @@
-let matoCount = 3;
+let matoCount = 30;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let wormNames = ['Marjatta',
@@ -35,10 +35,13 @@ let wormNames = ['Marjatta',
 
 let spawnBorder = 50; // PX (Base 50?)
 let MOD = 2.5;
-let speedMod = .4 * MOD; // BASE .5
-let rotSpeedMod = .7 * MOD; // .8?
+let speedMod = .8 * MOD; // BASE .5
+let rotSpeedMod = .5 * MOD; // .7?
 let panicMode = false;
 let panicCount = 1500;
+
+// GRID DIVISION UPDATE
+let GridDivision = 4; // HUOM TÄLLÄ HETKELLÄ NÄYTÖN PIKSELEIDEN MÄÄRÄ TÄYTYY OLLA TÄLLÄ JAOLLINEN... KORJAA?
 
 //controllersetup
 let controllers = [];
@@ -62,6 +65,7 @@ let L_top;
 let L_stone;
 let L_HUD;
 let L_mato;
+let L_ground;
 
 
 function setup() {
@@ -69,31 +73,34 @@ function setup() {
   frameRate(24);
   background(Beige);
   angleMode(DEGREES);
-  rectMode(CENTER);
+  //rectMode(CENTER);
   strokeCap(SQUARE);
 
   // LAYERS
   let pxDens = pixelDensity();
   L_top = createGraphics(pxDens * width, pxDens * height);
   L_top.angleMode(DEGREES);
-  L_top.rectMode(CENTER);
+  //L_top.rectMode(CENTER);
   L_top.textAlign(CENTER, CENTER);
 
   L_stone = createGraphics(pxDens * width, pxDens * height);
   L_stone.angleMode(DEGREES);
-  L_stone.rectMode(CENTER);
+  //L_stone.rectMode(CENTER);
   L_stone.textAlign(CENTER, CENTER);
 
   L_HUD = createGraphics(pxDens * width, pxDens * height);
   L_HUD.angleMode(DEGREES);
-  L_HUD.rectMode(CENTER);
+  //L_HUD.rectMode(CENTER);
   L_HUD.textAlign(CENTER, CENTER);
 
   L_mato = createGraphics(pxDens * width, pxDens * height);
   L_mato.angleMode(DEGREES);
-  L_mato.rectMode(CENTER);
+  //L_mato.rectMode(CENTER);
   L_mato.textAlign(CENTER, CENTER);
 
+  L_ground = createGraphics(pxDens * width, pxDens * height);
+  L_ground.angleMode(DEGREES);
+  L_ground.textAlign(CENTER, CENTER);
 
   //controllers
   addConnection();
@@ -150,6 +157,7 @@ function draw() {
   _POINTS();
 
   // LAYERS
+  image(L_ground, 0, 0);
   image(L_mato, 0, 0);
   image(L_stone, 0, 0);
   image(L_HUD, 0, 0);
@@ -181,11 +189,11 @@ function _OHJAIMET() {
       madot[i].RIGHT = false;
     }
 
-      if (ohjaimet[i].B) {
-        madot[i].turbo = true;
-        ohjaimet[i].B = false; // turns button OFF
-      } else {
-        madot[i].turbo = false;
-      }
+    if (ohjaimet[i].B) {
+      madot[i].turbo = true;
+      ohjaimet[i].B = false; // turns button OFF
+    } else {
+      madot[i].turbo = false;
+    }
   }
 }

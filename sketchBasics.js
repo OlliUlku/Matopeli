@@ -54,41 +54,41 @@ function _PANIC_MODE() {
 // }
 
 function create2dArray() {
-  for (let _x = 0; _x < width / 2; _x++) {
+  for (let _x = 0; _x < width / GridDivision; _x++) {
     array2d[_x] = [];
-    for (let _y = 0; _y < height / 2; _y++) {
+    for (let _y = 0; _y < height / GridDivision; _y++) {
       array2d[_x][_y] = true;
     }
   }
 }
 
 function setBorderToFalse() {
-  for (let i = 0; i < height; i++) {
+  for (let i = 0; i < height / GridDivision; i++) {
     array2d[0][i] = false;
-    array2d[widt / 2 - 1][i] = false;
+    array2d[width / GridDivision - 1][i] = false;
   }
 }
 
 function updateBoardState() {
   for (let i = 0; i < matoCount; i++) {
     // CHECK IF WITHIN BOUNDS
-    let __x = round(madot[i].pos.x);
-    let __y = round(madot[i].pos.y);
-    if (__x > 0 && __x < width && __y > 0 && __y < height) {
-      // sorry about this xD
-      if (array2d[__x][__y] 
-        && array2d[__x - 1][__y] 
-        && array2d[__x + 1][__y] 
-        && array2d[__x][__y - 1] 
-        && array2d[__x][__y + 1] 
-        && array2d[__x + 1][__y + 1] 
-        && array2d[__x - 1][__y - 1] 
-        && array2d[__x + 1][__y - 1] 
-        && array2d[__x - 1][__y + 1] 
+    let __x = round(madot[i].pos.x / GridDivision);
+    let __y = round(madot[i].pos.y / GridDivision);
+    if (__x > 0 && __x < width / GridDivision && __y > 0 && __y < height / GridDivision) {
+      if (array2d[__x][__y]
+        //&& array2d[__x - 1][__y] 
+        && array2d[__x + 1][__y]
+        //&& array2d[__x][__y - 1] 
+        && array2d[__x][__y + 1]
+        && array2d[__x + 1][__y + 1]
+        //&& array2d[__x - 1][__y - 1] 
+        //&& array2d[__x + 1][__y - 1] 
+        //&& array2d[__x - 1][__y + 1] 
         && !madot[i].underground) {
         setTimeout(set2dArrayFalse, 1000 + panicCount, madot[i].pos.x, madot[i].pos.y);
       } else if (!madot[i].underground) {
         madot[i].stop = true;
+        setTimeout(set2dArrayFalse, 1000 + panicCount, madot[i].pos.x, madot[i].pos.y); // tehokkuus -> pysäytä tän looppaaminen...
         //print('hit wall');
       }
     }
@@ -109,21 +109,21 @@ function updateBoardState() {
 
 function set2dArrayFalse(_x, _y) {
   //ristin muotoisessa kuviossa kaikki pois päältä!
-  _x = round(_x);
-  _y = round(_y);
+  _x = round(_x / GridDivision);
+  _y = round(_y / GridDivision);
   // simplify sometime??? 3x3 grid gets turned 'false'
   array2d[_x][_y] = false;
-  array2d[_x - 1][_y] = false;
-  array2d[_x - 1][_y - 1] = false;
+  //array2d[_x - 1][_y] = false;
+  //array2d[_x - 1][_y - 1] = false;
   array2d[_x + 1][_y + 1] = false;
-  array2d[_x - 1][_y + 1] = false;
-  array2d[_x + 1][_y - 1] = false;
+  //array2d[_x - 1][_y + 1] = false;
+  //array2d[_x + 1][_y - 1] = false;
   array2d[_x][_y + 1] = false;
   array2d[_x + 1][_y] = false;
-  array2d[_x][_y - 1] = false;
+  //array2d[_x][_y - 1] = false;
 
   L_stone.fill(100);
   L_stone.noStroke();
-  L_stone.rect(_x, _y, 3);
+  L_stone.rect(_x * GridDivision, _y * GridDivision, 2 * GridDivision);
 }
 
