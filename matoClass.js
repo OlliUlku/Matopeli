@@ -156,7 +156,7 @@ class mato {
       L_HUD.textSize(Pixel);
       L_HUD.text('P' + (this.index + 1), this.pos.x + Pixel, this.pos.y - (Pixel * 3.2));
       // HUD NAME
-      L_HUD.fill(this.color);
+      L_HUD.fill(White);
       L_HUD.stroke(Black);
       L_HUD.textSize(Pixel * 1.3);
       L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - (Pixel * 2));
