@@ -103,7 +103,7 @@ class mato {
       }
 
       // UNDERGROUND
-      if (this.uGTimer.getRemainingTime() < 1500 + panicCount * 2) {
+      if (this.uGTimer.getRemainingTime() < 4500) {
         //if (!panicMode) {
         this.underground = true;
         //} else {
