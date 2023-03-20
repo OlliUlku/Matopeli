@@ -3,7 +3,7 @@ class mato {
     this.pos = createVector(x, y);
     this.vel = createVector(0, -0.5 * speedMod);
     this.vel.rotate(rot);
-    this.acc = createVector(0, -0.001 * speedMod); // PANIC ACCELERATION
+    this.acc = createVector(0, -0.004 * speedMod); // PANIC ACCELERATION
     this.acc.rotate(rot);
     this.color = _color;
     this.rotateAMT = 3 * rotSpeedMod;
@@ -51,8 +51,10 @@ class mato {
   speedUP_PANIC() {
     this.vel.add(this.acc);
     this.velTurbo.add(this.acc);
-    this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0004 * speedMod); // panic rotate acc
-    this.rotateAMT = constrain(this.rotateAMT, 0, 11);
+    this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0017 * speedMod); // panic rotate acc
+    this.UGrotateAMT = this.UGrotateAMT + (this.UGrotateAMT * 0.0014 * speedMod); // panic rotate acc
+    this.rotateAMT = constrain(this.rotateAMT, 0, 15);
+    this.UGrotateAMT = constrain(this.rotateAMT, 0, 14);
   }
 
   speedUP() { // NEED TO ADD ALL THE NEEDED VECTORS...
@@ -101,9 +103,9 @@ class mato {
       }
 
       // UNDERGROUND
-      if (this.uGTimer.getRemainingTime() < 4500) {
+      if (this.uGTimer.getRemainingTime() < 1500 + panicCount * 2) {
         //if (!panicMode) {
-          this.underground = true;
+        this.underground = true;
         //} else {
         //  this.underground = false;
         //}
@@ -146,12 +148,17 @@ class mato {
         }
       }
 
-      L_HUD.textSize(Pixel * 1.3);
       L_HUD.fill(White);
       L_HUD.stroke(Black);
       L_HUD.strokeWeight(Pixel * 0.3);
       L_HUD.textAlign(CENTER, CENTER);
+      // HUD INDEX
+      L_HUD.textSize(Pixel);
+      L_HUD.text('P' + (this.index + 1), this.pos.x + Pixel, this.pos.y - (Pixel * 3.2));
       // HUD NAME
+      L_HUD.fill(this.color);
+      L_HUD.stroke(Black);
+      L_HUD.textSize(Pixel * 1.3);
       L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - (Pixel * 2));
 
     } else { // DID HIT STONE (or otherwise) -> kill worm
