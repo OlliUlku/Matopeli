@@ -186,6 +186,7 @@ function draw() {
 
   fill(Red);
   noStroke();
+  rect(Pixel,Pixel,Pixel);
   // if (deltaTime > 56) {
   //   print('long time between frames?', round(deltaTime));
   // }
