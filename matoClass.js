@@ -52,8 +52,10 @@ class mato {
     this.vel.add(this.acc);
     this.velTurbo.add(this.acc);
     this.rotateAMT = this.rotateAMT + (this.rotateAMT * 0.0017 * speedMod); // panic rotate acc
+    this.turboRotateAMT = this.turboRotateAMT + (this.turboRotateAMT * 0.0017 * speedMod); // panic rotate acc
     this.UGrotateAMT = this.UGrotateAMT + (this.UGrotateAMT * 0.0014 * speedMod); // panic rotate acc
     this.rotateAMT = constrain(this.rotateAMT, 0, 15);
+    this.turboRotateAMT = constrain(this.rotateAMT, 0, 15);
     this.UGrotateAMT = constrain(this.rotateAMT, 0, 14);
   }
 
