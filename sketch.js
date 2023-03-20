@@ -51,6 +51,6 @@ function _MENU() {
   fill(LightPink);
   text('How many worms?', width / 2, height / 2 - 22);
   textAlign(LEFT, TOP);
-  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Survive the longest! Oh no your tail turns into STONE!! if you touch this stone you lose!! Please touch everything else, even other worms!!  Every 7 seconds or so (Didnt remember exact time!!) your worm DIVES underground for a couple of seconds! This lets you DIVE under the rocks and emerge on the other side!  LEFT to steer your worm left, RIGHT to steer right! B (button name varies per gamepad...) for UNLIMITED TURBO! That might be everything but this text could be outdated!! Good luck love you kisses!!!';
-  text(thisText, 10, 30, width / 2, height / 2);
+  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Survive the longest! Oh no your tail turns into STONE!! if you touch this stone you lose!! Please touch everything else, even other worms!!  Every 7 seconds or so (Didnt remember exact time!!) your worm DIVES underground for a couple of seconds! This lets you DIVE under the rocks and emerge on the other side!  LEFT to steer your worm left, RIGHT to steer right! B (button name varies per gamepad...) for UNLIMITED TURBO! (No TURBO while underground though!!) That might be everything but this text could be outdated!! Good luck love you kisses!!! Oh right when there is only 60% of worms left you enter PANIC mode!!';
+  text(thisText, 10, 30, width / 2 - 100, height);
 }
