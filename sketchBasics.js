@@ -120,7 +120,6 @@ function _GAME_UPDATE() {
     madot[i].update();
   }
   updateBoardState();
-  //drawStone();
 }
 
 function _SPEED_UP_TEST() {
@@ -169,15 +168,6 @@ function _LAYERS() {
   image(L_top, 0, 0);
 }
 
-// // OLDIE STOP ON SPACEBAR
-// function keyPressed() {
-//   if (keyCode === 32) {
-//     for (let i = 0; i < matoCount; i++) {
-//       madot[i].stop = !madot[i].stop;
-//     }
-//   }
-// }
-
 function create2dArray() {
   for (let _x = 0; _x < width / GridDivision; _x++) {
     array2d[_x] = [];
@@ -219,18 +209,6 @@ function updateBoardState() {
     }
   }
 }
-
-// function drawStone() { // HOXXXX as it is there is too much constant drawing.
-//   for (let x = 0; x < width; x++) {
-//     for (let y = 0; y < height; y++) {
-//       if (!array2d[x][y]) {
-//         fill(100);
-//         noStroke();
-//         rect(x, y, 1);
-//       }
-//     }
-//   }
-// }
 
 function set2dArrayFalse(_x, _y) {
   //ristin muotoisessa kuviossa kaikki pois päältä!

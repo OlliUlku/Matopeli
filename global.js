@@ -1,6 +1,3 @@
-let matoCount = 3;
-// 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
-
 let wormNames = ['Marjatta',
   'Kalevi',
   'Mauno',
@@ -74,3 +71,4 @@ let _font;
 
 // MENU
 let SETUP = true;
+let GAMESTATE = 'MENU';

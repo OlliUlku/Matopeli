@@ -1,19 +1,56 @@
+let matoCount = 2;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  let inp = createInput(matoCount);
+  inp.size(18);
+  inp.center();
+  inp.input(InputMatoCount);
+
+  let button = createButton('Start');
+  button.position(width / 2, height / 2 + 20);
+  button.center('horizontal');
+  button.mousePressed(StartButton);
 }
 
+
 function draw() {
-  gameReadySetUp(); // RUNS ONLY ONCE
 
-  // LAYER CLEAR
-  L_HUD.clear(0, 0, 0, 0);
-  background(Beige);
+  if (GAMESTATE === 'MENU') {
+    _MENU();
+  } else if (GAMESTATE === 'GAME') {
+    gameReadySetUp(); // RUNS ONLY ONCE
 
-  // THE BEEF
-  controllerUsed(); //checks all buttons and updates values
-  _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
-  _GAME_UPDATE();
-  _PANIC_MODE();
-  _POINTS();
-  _LAYERS();
+    // LAYER CLEAR
+    L_HUD.clear(0, 0, 0, 0);
+    background(Beige);
+
+    // THE BEEF
+    controllerUsed(); //checks all buttons and updates values
+    _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
+    _GAME_UPDATE();
+    _PANIC_MODE();
+    _POINTS();
+    _LAYERS();
+  }
+}
+
+function InputMatoCount() {
+  matoCount = this.value();
+}
+
+function StartButton() {
+  removeElements();
+  GAMESTATE = 'GAME';
+}
+
+function _MENU() {
+  background(RedWine);
+  textAlign(CENTER, CENTER);
+  fill(LightPink);
+  text('How many worms?', width / 2, height / 2 - 22);
+  textAlign(LEFT, TOP);
+  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Survive the longest! Oh no your tail turns into STONE!! if you touch this stone you lose!! Please touch everything else, even other worms!!  Every 7 seconds or so (Didnt remember exact time!!) your worm DIVES underground for a couple of seconds! This lets you DIVE under the rocks and emerge on the other side!  LEFT to steer your worm left, RIGHT to steer right! B (button name varies per gamepad...) for UNLIMITED TURBO! That might be everything but this text could be outdated!! Good luck love you kisses!!!';
+  text(thisText, 10, 30, width / 2, height / 2);
 }
