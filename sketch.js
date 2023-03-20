@@ -1,4 +1,4 @@
-let matoCount = 15;
+let matoCount = 3;
 // 12mato 125%zoom || 5mato 400%zoom || 40mato 67%zoom
 
 let wormNames = ['Marjatta',
