@@ -72,3 +72,8 @@ let _font;
 // MENU
 let SETUP = true;
 let GAMESTATE = 'MENU';
+
+//ON SCREEN KEYS
+let onScreenKeysAR = [];
+let onScreenMadot = [];
+let onScreenCount = 0;

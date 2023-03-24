@@ -1,9 +1,9 @@
-let matoCount = 2;
+let matoCountBT = 2;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  let inp = createInput(matoCount);
+  let inp = createInput(matoCountBT);
   inp.size(18);
   inp.center();
   inp.input(InputMatoCount);
@@ -19,8 +19,9 @@ function draw() {
 
   if (GAMESTATE === 'MENU') {
     _MENU();
+    
   } else if (GAMESTATE === 'GAME') {
-    gameReadySetUp(); // RUNS ONLY ONCE
+    gameReadySetup(); // RUNS ONLY ONCE
 
     // LAYER CLEAR
     L_HUD.clear(0, 0, 0, 0);
@@ -31,13 +32,14 @@ function draw() {
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
     _GAME_UPDATE();
     _PANIC_MODE();
+    _ONSCREENKEYS();
     _POINTS();
     _LAYERS();
   }
 }
 
 function InputMatoCount() {
-  matoCount = this.value();
+  matoCountBT = this.value();
 }
 
 function StartButton() {
@@ -49,7 +51,7 @@ function _MENU() {
   background(RedWine);
   textAlign(CENTER, CENTER);
   fill(LightPink);
-  text('How many worms?', width / 2, height / 2 - 22);
+  text('How many worms? (Bluetooth)', width / 2, height / 2 - 22);
   textAlign(LEFT, TOP);
   let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Survive the longest! Oh no your tail turns into STONE!! if you touch this stone you lose!! Please touch everything else, even other worms!!  Every 7 seconds or so (Didnt remember exact time!!) your worm DIVES underground for a couple of seconds! This lets you DIVE under the rocks and emerge on the other side!  LEFT to steer your worm left, RIGHT to steer right! B (button name varies per gamepad...) for UNLIMITED TURBO! (No TURBO while underground though!!) That might be everything but this text could be outdated!! Good luck love you kisses!!! Oh right when there is only 60% of worms left you enter PANIC mode!!';
   text(thisText, 10, 30, width / 2 - 100, height);
