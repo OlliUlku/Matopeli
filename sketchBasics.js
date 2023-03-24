@@ -40,7 +40,11 @@ function gameReadySetup() {
     // L_top.textFont(_font);
     // L_HUD.textFont(_font);
 
-    //controllers
+    //ONSCREENKEYS CLASS
+    // onScreen1 = new onScreenKeys(width/2,height/2, 0,posca[poscaIndex],0);
+    // onScreen2 = new onScreenKeys(width/5,height/5, 1,posca[poscaIndex],180);
+
+    //CONTROLLERS
     addConnection();
 
     for (let i = 0; i < matoCount; i++) {
@@ -58,12 +62,19 @@ function gameReadySetup() {
     print('Max colors', posca.length);
     print('Max Names', wormNames.length);
 
-    
+    //ONSCREENKEYS MADOT
+    screenMadot[0] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[poscaIndex], random(360), wormsCounter);
+    wormsCounter++;
+    poscaIndex++;
+    screenMadot[1] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[poscaIndex], random(360), wormsCounter);
+    wormsCounter++;
+    poscaIndex++;
 
+    //GAMEPAD MADOT
     for (let i = 0; i < matoCount; i++) {
-      madot[i] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[poscaIndex], random(360), i);
+      madot[i] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[poscaIndex], random(360), wormsCounter);
       wormsCounter++;
-      poscaIndex++
+      poscaIndex++;
     }
 
     //POINTS SYSTEM

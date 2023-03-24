@@ -1,15 +1,15 @@
 class onScreenKeys {
-  constructor(_x,_y,ind,_color_rot) {
+  constructor(_x, _y, ind, _color, _rot) {
     this.index = ind;
-    this.x = _x
-    this.y = _y
-    this.LEFT = false
-    this.RIGHT = false
+    this.x = _x;
+    this.y = _y;
+    this.LEFT = false;
+    this.RIGHT = false;
     this.size = 10;
     this.gap = 3;
-    this.color= _color;
+    this.color = _color;
     this.rot = _rot;
-  }  
+  }
 
   show() {
     //LEFT BUTTON
