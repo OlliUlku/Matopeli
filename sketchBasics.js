@@ -40,14 +40,10 @@ function gameReadySetup() {
     // L_top.textFont(_font);
     // L_HUD.textFont(_font);
 
-    //ONSCREENKEYS CLASS
-    // onScreen1 = new onScreenKeys(width/2,height/2, 0,posca[poscaIndex],0);
-    // onScreen2 = new onScreenKeys(width/5,height/5, 1,posca[poscaIndex],180);
-
     //CONTROLLERS
     addConnection();
 
-    for (let i = 0; i < matoCount; i++) {
+    for (let i = 0; i < matoCountBT; i++) {
       ohjaimet[i] = new Controller_8BitDoZero2(i);
     }
 
@@ -62,19 +58,23 @@ function gameReadySetup() {
     print('Max colors', posca.length);
     print('Max Names', wormNames.length);
 
-    //ONSCREENKEYS MADOT
-    screenMadot[0] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[poscaIndex], random(360), wormsCounter);
-    wormsCounter++;
-    poscaIndex++;
-    screenMadot[1] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[poscaIndex], random(360), wormsCounter);
-    wormsCounter++;
-    poscaIndex++;
 
-    //GAMEPAD MADOT
-    for (let i = 0; i < matoCount; i++) {
-      madot[i] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[poscaIndex], random(360), wormsCounter);
+    //ONSCREENKEYS MADOT & NAPIT
+
+    onScreenKeysAR[wormsCounter] = new onScreenKeys(width / 2, height, 0, posca[wormsCounter], 0);
+    madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
+    wormsCounter++;
+    onScreenCount++;
+
+    onScreenKeysAR[wormsCounter] = new onScreenKeys(width / 2, 0, 1, posca[wormsCounter], 180);
+    madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
+    wormsCounter++;
+    onScreenCount++;
+
+    //GAMEPAD Mc sxxxxx
+    for (let i = 0; i < matoCountBT; i++) {
+      madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
       wormsCounter++;
-      poscaIndex++;
     }
 
     //POINTS SYSTEM
@@ -104,28 +104,61 @@ function gameReadySetup() {
   }
 }
 
+function _ONSCREENKEYS() {
+  for (let i = 0; i < onScreenCount; i++) {
+    onScreenKeysAR[i].show();
+  }
+}
+
 function _OHJAIMET() {
-  for (let i = 0; i < matoCount; i++) {
-    if (ohjaimet[i].LEFT || ohjaimet[i].LEFT2) {
+
+
+  for (let i = 0; i < onScreenCount; i++) {
+    let btnLx = onScreenKeysAR[i].leftBtnx;
+    let btnRx = onScreenKeysAR[i].rightBtnx;
+    let btny = onScreenKeysAR[i].y;
+
+    //for (let _i = 0; _i < touches.length; _i++) {
+
+    let Dist = dist(btnLx, btny, mouseX, mouseY);
+    if (Dist < onScreenKeysAR[0].size) {
       madot[i].LEFT = true;
-      ohjaimet[i].LEFT2 = false; //Turn button off
+      print('LEFT');
     } else {
       madot[i].LEFT = false;
     }
 
-    if (ohjaimet[i].RIGHT || ohjaimet[i].RIGHT2) {
+    Dist = dist(btnRx, btny, mouseX, mouseY);
+    if (Dist < onScreenKeysAR[0].size / 2) {
       madot[i].RIGHT = true;
-      ohjaimet[i].RIGHT2 = false; //Turn button off
+      print('RIGHT');
     } else {
       madot[i].RIGHT = false;
     }
+    //}
+  }
+}
 
-    if (ohjaimet[i].B) {
-      madot[i].turbo = true;
-      ohjaimet[i].B = false; // turns button OFF
-    } else {
-      madot[i].turbo = false;
-    }
+for (let i = onScreenCount; i < madot.length; i++) {
+  if (ohjaimet[i].LEFT || ohjaimet[i].LEFT2) {
+    madot[i].LEFT = true;
+    ohjaimet[i].LEFT2 = false; //Turn button off
+  } else {
+    madot[i].LEFT = false;
+  }
+
+  if (ohjaimet[i].RIGHT || ohjaimet[i].RIGHT2) {
+    madot[i].RIGHT = true;
+    ohjaimet[i].RIGHT2 = false; //Turn button off
+  } else {
+    madot[i].RIGHT = false;
+  }
+
+  if (ohjaimet[i].B) {
+    madot[i].turbo = true;
+    ohjaimet[i].B = false; // turns button OFF
+  } else {
+    madot[i].turbo = false;
   }
 }
 
@@ -133,6 +166,7 @@ function _GAME_UPDATE() {
   for (let i = 0; i < madot.length; i++) {
     madot[i].update();
   }
+
   updateBoardState();
 }
 
@@ -155,7 +189,7 @@ function _POINTS() {
 }
 
 function _PANIC_MODE() {
-  if (wormsCounter <= matoCount * 0.6 || matoCount === 3 && wormsCounter <= matoCount * 0.9) {
+  if (wormsCounter <= matoCountBT * 0.6 || matoCountBT === 3 && wormsCounter <= matoCountBT * 0.9) {
     panicMode = true;
   }
 
@@ -199,7 +233,8 @@ function setBorderToFalse() {
 }
 
 function updateBoardState() {
-  for (let i = 0; i < matoCount; i++) {
+
+  for (let i = 0; i < wormsCounter; i++) {
     // CHECK IF WITHIN BOUNDS
     let __x = round(madot[i].pos.x / GridDivision);
     let __y = round(madot[i].pos.y / GridDivision);

@@ -155,8 +155,11 @@ class mato {
       L_HUD.strokeWeight(Pixel * 0.3);
       L_HUD.textAlign(CENTER, CENTER);
       // HUD INDEX
-      L_HUD.textSize(Pixel);
-      L_HUD.text('P' + (this.index + 1), this.pos.x + Pixel, this.pos.y - (Pixel * 3.2));
+      let gamepadInd = this.index + 1 - onScreenCount;
+      if (gamepadInd >= 1) {
+        L_HUD.textSize(Pixel);
+        L_HUD.text('P' + (gamepadInd), this.pos.x + Pixel, this.pos.y - (Pixel * 3.2));
+      }
       // HUD NAME
       L_HUD.fill(White);
       L_HUD.stroke(Black);

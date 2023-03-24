@@ -74,7 +74,6 @@ let SETUP = true;
 let GAMESTATE = 'MENU';
 
 //ON SCREEN KEYS
-let screenMadot = [];
-let onScreen1;
-let onScreen2;
-let poscaIndex = 0;
+let onScreenKeysAR = [];
+let onScreenMadot = [];
+let onScreenCount = 0;

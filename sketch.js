@@ -1,9 +1,9 @@
-let matoCount = 2;
+let matoCountBT = 2;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  let inp = createInput(matoCount);
+  let inp = createInput(matoCountBT);
   inp.size(18);
   inp.center();
   inp.input(InputMatoCount);
@@ -32,13 +32,14 @@ function draw() {
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
     _GAME_UPDATE();
     _PANIC_MODE();
+    _ONSCREENKEYS();
     _POINTS();
     _LAYERS();
   }
 }
 
 function InputMatoCount() {
-  matoCount = this.value();
+  matoCountBT = this.value();
 }
 
 function StartButton() {
