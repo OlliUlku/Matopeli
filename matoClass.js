@@ -45,7 +45,7 @@ class mato {
     this.SY; // SCORETABLE Y
 
     // HUD
-    this.name = wormNames[this.index];
+    this.name = wormNames[wormsCounter];
   }
 
   speedUP_PANIC() {

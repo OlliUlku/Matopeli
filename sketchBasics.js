@@ -1,10 +1,10 @@
-function gameReadySetUp() {
-  // RUNS ONCE
+function gameReadySetup() {
+  // RUNS ONCE THEN TURNS SETUP variable OFF
   if (SETUP) {
+
     frameRate(24);
     background(Beige);
     angleMode(DEGREES);
-    //rectMode(CENTER);
     strokeCap(SQUARE);
 
 
@@ -58,9 +58,12 @@ function gameReadySetUp() {
     print('Max colors', posca.length);
     print('Max Names', wormNames.length);
 
+    
+
     for (let i = 0; i < matoCount; i++) {
-      madot[i] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[i], random(360), i);
+      madot[i] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[poscaIndex], random(360), i);
       wormsCounter++;
+      poscaIndex++
     }
 
     //POINTS SYSTEM
