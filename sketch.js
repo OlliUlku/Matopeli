@@ -1,7 +1,22 @@
-let matoCountBT = 2;
+let matoCountBT = 0;
+
+// function startup() {
+//   const el = document.getElementById("canvas");
+//   el.addEventListener("touchstart", handleStart);
+//   el.addEventListener("touchend", handleEnd);
+//   el.addEventListener("touchcancel", handleCancel);
+//   el.addEventListener("touchmove", handleMove);
+//   print("Initialized.");
+// }
+
 
 function setup() {
+  //fullscreen(true);
   createCanvas(windowWidth, windowHeight);
+
+  for (let element of document.getElementsByClassName("p5Canvas")) {
+    element.addEventListener("contextmenu", (e) => e.preventDefault());
+  }
 
   let inp = createInput(matoCountBT);
   inp.size(18);
@@ -12,6 +27,27 @@ function setup() {
   button.position(width / 2, height / 2 + 20);
   button.center('horizontal');
   button.mousePressed(StartButton);
+
+  //startup();
+  // document.addEventListener("DOMContentLoaded", startup);
+
+
+  // Prevent scrolling when touching the canvas
+  document.body.addEventListener("touchstart", function (e) {
+    if (e.target == canvas) {
+      e.preventDefault();
+    }
+  }, false);
+  document.body.addEventListener("touchend", function (e) {
+    if (e.target == canvas) {
+      e.preventDefault();
+    }
+  }, false);
+  document.body.addEventListener("touchmove", function (e) {
+    if (e.target == canvas) {
+      e.preventDefault();
+    }
+  }, false);
 }
 
 
@@ -19,7 +55,7 @@ function draw() {
 
   if (GAMESTATE === 'MENU') {
     _MENU();
-    
+
   } else if (GAMESTATE === 'GAME') {
     gameReadySetup(); // RUNS ONLY ONCE
 
@@ -51,8 +87,14 @@ function _MENU() {
   background(RedWine);
   textAlign(CENTER, CENTER);
   fill(LightPink);
-  text('How many worms? (Bluetooth)', width / 2, height / 2 - 22);
+  text('How many worms? (Bluehltooth)', width / 2, height / 2 - 22);
   textAlign(LEFT, TOP);
   let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Survive the longest! Oh no your tail turns into STONE!! if you touch this stone you lose!! Please touch everything else, even other worms!!  Every 7 seconds or so (Didnt remember exact time!!) your worm DIVES underground for a couple of seconds! This lets you DIVE under the rocks and emerge on the other side!  LEFT to steer your worm left, RIGHT to steer right! B (button name varies per gamepad...) for UNLIMITED TURBO! (No TURBO while underground though!!) That might be everything but this text could be outdated!! Good luck love you kisses!!! Oh right when there is only 60% of worms left you enter PANIC mode!!';
   text(thisText, 10, 30, width / 2 - 100, height);
 }
+
+function touchStarted() {
+  fill(Black);
+  text('touchstart', 100, 100);
+}
+

@@ -111,34 +111,41 @@ function _ONSCREENKEYS() {
 }
 
 function _OHJAIMET() {
+  if (touches.length != 0) {
+    for (let _i = 0; _i < touches.length; _i++) {
 
+      for (let i = 0; i < onScreenCount; i++) {
+        let btnLx = onScreenKeysAR[i].leftBtnx;
+        let btnRx = onScreenKeysAR[i].rightBtnx;
+        let btny = onScreenKeysAR[i].y;
 
-  for (let i = 0; i < onScreenCount; i++) {
-    let btnLx = onScreenKeysAR[i].leftBtnx;
-    let btnRx = onScreenKeysAR[i].rightBtnx;
-    let btny = onScreenKeysAR[i].y;
+        let DistL = dist(btnLx, btny, touches[_i].x, touches[_i].y);
+        if (DistL < onScreenKeysAR[0].size / 2) {
+          madot[i].LEFT = true;
 
-    //for (let _i = 0; _i < touches.length; _i++) {
+        } else {
+          madot[i].LEFT = false;
+        }
 
-    let Dist = dist(btnLx, btny, mouseX, mouseY);
-    if (Dist < onScreenKeysAR[0].size) {
-      madot[i].LEFT = true;
-      print('LEFT');
-    } else {
+        let DistR = dist(btnRx, btny, touches[_i].x, touches[_i].y);
+        if (DistR < onScreenKeysAR[0].size / 2) {
+          madot[i].RIGHT = true;
+        } else {
+          madot[i].RIGHT = false;
+        }
+      }
+    }
+    fill(Black);
+    text(touches.length, width / 2, height / 2);
+  } else { // IF NO TOUCHES
+    for (let i = 0; i < onScreenCount; i++) {
+      madot[i].RIGHT = false;
       madot[i].LEFT = false;
     }
-
-    Dist = dist(btnRx, btny, mouseX, mouseY);
-    if (Dist < onScreenKeysAR[0].size / 2) {
-      madot[i].RIGHT = true;
-      print('RIGHT');
-    } else {
-      madot[i].RIGHT = false;
-    }
-    //}
   }
 }
 
+//HUOM i JATKAA/ALKAA SIITÄ MIHIN ONSCREENMADOT LOPPUU
 for (let i = onScreenCount; i < madot.length; i++) {
   if (ohjaimet[i].LEFT || ohjaimet[i].LEFT2) {
     madot[i].LEFT = true;
