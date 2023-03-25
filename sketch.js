@@ -108,7 +108,5 @@ function _MENU() {
 }
 
 function touchStarted() {
-  fill(Black);
-  text('touchstart', 100, 100);
 }
 

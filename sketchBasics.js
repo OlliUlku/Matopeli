@@ -6,6 +6,7 @@ function gameReadySetup() {
     background(Beige);
     angleMode(DEGREES);
     strokeCap(SQUARE);
+    matoCountBT = Number(matoCountBT);
 
 
     // LAYERS
@@ -70,6 +71,11 @@ function gameReadySetup() {
       madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
       wormsCounter++;
       onScreenCount++;
+
+      //SET MATOJA
+      MATOJA = onScreenCount + matoCountBT;
+    } else {
+      MATOJA = matoCountBT;
     }
 
     //GAMEPAD
@@ -99,6 +105,7 @@ function gameReadySetup() {
     print('So called Pixels length Y', array2d[0].length);
     Pixel = (width / GridDivision / (array2d.length) * GridDivision);
     print('Pixel length', Pixel);
+
 
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
@@ -139,8 +146,6 @@ function _OHJAIMET() {
           }
         }
       }
-      fill(Black);
-      text(touches.length, width / 2, height / 2);
     } else { // IF NO TOUCHES
       for (let i = 0; i < onScreenCount; i++) {
         madot[i].RIGHT = false;
@@ -207,8 +212,8 @@ function _POINTS() {
 }
 
 function _PANIC_MODE() {
-  let MATOJA = matoCountBT + onScreenCount;
   if (wormsCounter <= MATOJA * 0.6 || MATOJA === 3 && wormsCounter <= MATOJA * 0.9) {
+    // OFF BECAUSE ITS BROKEN FOR THE TIME BEING
     panicMode = true;
   }
 
@@ -253,7 +258,7 @@ function setBorderToFalse() {
 
 function updateBoardState() {
 
-  for (let i = 0; i < wormsCounter; i++) {
+  for (let i = 0; i < madot.length; i++) {
     // CHECK IF WITHIN BOUNDS
     let __x = round(madot[i].pos.x / GridDivision);
     let __y = round(madot[i].pos.y / GridDivision);
@@ -282,19 +287,31 @@ function set2dArrayFalse(_x, _y) {
   //ristin muotoisessa kuviossa kaikki pois päältä!
   _x = round(_x / GridDivision);
   _y = round(_y / GridDivision);
-  // simplify sometime??? 3x3 grid gets turned 'false'
-  array2d[_x][_y] = false;
-  //array2d[_x - 1][_y] = false;
-  //array2d[_x - 1][_y - 1] = false;
-  array2d[_x + 1][_y + 1] = false;
-  //array2d[_x - 1][_y + 1] = false;
-  //array2d[_x + 1][_y - 1] = false;
-  array2d[_x][_y + 1] = false;
-  array2d[_x + 1][_y] = false;
-  //array2d[_x][_y - 1] = false;
 
-  L_stone.fill(100);
   L_stone.noStroke();
-  L_stone.rect(_x * GridDivision, _y * GridDivision, 2 * GridDivision);
+
+  if (array2d[_x][_y]) {
+    array2d[_x][_y] = false;
+    L_stone.fill(random(80, 120));
+    L_stone.rect(_x * GridDivision, _y * GridDivision, GridDivision);
+  }
+
+  if (array2d[_x + 1][_y + 1]) {
+    array2d[_x + 1][_y + 1] = false;
+    L_stone.fill(random(80, 120));
+    L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision + Pixel, GridDivision);
+  }
+
+  if (array2d[_x][_y + 1]) {
+    array2d[_x][_y + 1] = false;
+    L_stone.fill(random(80, 120));
+    L_stone.rect(_x * GridDivision, _y * GridDivision + Pixel, GridDivision);
+  }
+
+  if (array2d[_x + 1][_y]) {
+    array2d[_x + 1][_y] = false;
+    L_stone.fill(random(80, 120));
+    L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision, GridDivision);
+  }
 }
 

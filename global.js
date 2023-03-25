@@ -78,3 +78,5 @@ let onScreenKeysAR = [];
 let onScreenMadot = [];
 let onScreenCount = 0;
 let onScreenToggle = false;
+
+let MATOJA;
