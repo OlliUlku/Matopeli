@@ -143,31 +143,37 @@ function _OHJAIMET() {
       madot[i].LEFT = false;
     }
   }
+
+
+  //HUOM i JATKAA/ALKAA SIITÄ MIHIN ONSCREENMADOT LOPPUU
+  let ctrl_i;
+  for (let i = onScreenCount; i < madot.length; i++) {
+    
+    ctrl_i = i - onScreenCount;
+
+    if (ohjaimet[ctrl_i].LEFT || ohjaimet[ctrl_i].LEFT2) {
+      madot[i].LEFT = true;
+      //ohjaimet[i].LEFT2 = false; //Turn button off
+    } else {
+      madot[i].LEFT = false;
+    }
+
+    if (ohjaimet[ctrl_i].RIGHT || ohjaimet[ctrl_i].RIGHT2) {
+      madot[i].RIGHT = true;
+      //ohjaimet[i].RIGHT2 = false; //Turn button off
+    } else {
+      madot[i].RIGHT = false;
+    }
+
+    if (ohjaimet[ctrl_i].B) {
+      madot[i].turbo = true;
+      ohjaimet[ctrl_i].B = false; // turns button OFF
+    } else {
+      madot[i].turbo = false;
+    }
+  }
 }
 
-//HUOM i JATKAA/ALKAA SIITÄ MIHIN ONSCREENMADOT LOPPUU
-for (let i = onScreenCount; i < madot.length; i++) {
-  if (ohjaimet[i].LEFT || ohjaimet[i].LEFT2) {
-    madot[i].LEFT = true;
-    ohjaimet[i].LEFT2 = false; //Turn button off
-  } else {
-    madot[i].LEFT = false;
-  }
-
-  if (ohjaimet[i].RIGHT || ohjaimet[i].RIGHT2) {
-    madot[i].RIGHT = true;
-    ohjaimet[i].RIGHT2 = false; //Turn button off
-  } else {
-    madot[i].RIGHT = false;
-  }
-
-  if (ohjaimet[i].B) {
-    madot[i].turbo = true;
-    ohjaimet[i].B = false; // turns button OFF
-  } else {
-    madot[i].turbo = false;
-  }
-}
 
 function _GAME_UPDATE() {
   for (let i = 0; i < madot.length; i++) {
@@ -196,7 +202,8 @@ function _POINTS() {
 }
 
 function _PANIC_MODE() {
-  if (wormsCounter <= matoCountBT * 0.6 || matoCountBT === 3 && wormsCounter <= matoCountBT * 0.9) {
+  let MATOJA = matoCountBT + onScreenCount;
+  if (wormsCounter <= MATOJA* 0.6 || MATOJA === 3 && wormsCounter <= MATOJA * 0.9) {
     panicMode = true;
   }
 
