@@ -163,14 +163,14 @@ function _OHJAIMET() {
 
     if (ohjaimet[ctrl_i].LEFT || ohjaimet[ctrl_i].LEFT2) {
       madot[i].LEFT = true;
-      //ohjaimet[i].LEFT2 = false; //Turn button off
+      ohjaimet[ctrl_i].LEFT2 = false; //Turn button off
     } else {
       madot[i].LEFT = false;
     }
 
     if (ohjaimet[ctrl_i].RIGHT || ohjaimet[ctrl_i].RIGHT2) {
       madot[i].RIGHT = true;
-      //ohjaimet[i].RIGHT2 = false; //Turn button off
+      ohjaimet[ctrl_i].RIGHT2 = false; //Turn button off
     } else {
       madot[i].RIGHT = false;
     }
