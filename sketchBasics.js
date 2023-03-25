@@ -60,18 +60,19 @@ function gameReadySetup() {
 
 
     //ONSCREENKEYS MADOT & NAPIT
+    if (onScreenToggle) {
+      onScreenKeysAR[wormsCounter] = new onScreenKeys(width / 2, height, 0, posca[wormsCounter], 0);
+      madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
+      wormsCounter++;
+      onScreenCount++;
 
-    onScreenKeysAR[wormsCounter] = new onScreenKeys(width / 2, height, 0, posca[wormsCounter], 0);
-    madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
-    wormsCounter++;
-    onScreenCount++;
+      onScreenKeysAR[wormsCounter] = new onScreenKeys(width / 2, 0, 1, posca[wormsCounter], 180);
+      madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
+      wormsCounter++;
+      onScreenCount++;
+    }
 
-    onScreenKeysAR[wormsCounter] = new onScreenKeys(width / 2, 0, 1, posca[wormsCounter], 180);
-    madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
-    wormsCounter++;
-    onScreenCount++;
-
-    //GAMEPAD Mc sxxxxx
+    //GAMEPAD
     for (let i = 0; i < matoCountBT; i++) {
       madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
       wormsCounter++;
@@ -105,42 +106,46 @@ function gameReadySetup() {
 }
 
 function _ONSCREENKEYS() {
-  for (let i = 0; i < onScreenCount; i++) {
-    onScreenKeysAR[i].show();
+  if (onScreenToggle) {
+    for (let i = 0; i < onScreenCount; i++) {
+      onScreenKeysAR[i].show();
+    }
   }
 }
 
 function _OHJAIMET() {
-  if (touches.length != 0) {
-    for (let _i = 0; _i < touches.length; _i++) {
+  if (onScreenToggle) {
+    if (touches.length != 0) {
+      for (let _i = 0; _i < touches.length; _i++) {
 
-      for (let i = 0; i < onScreenCount; i++) {
-        let btnLx = onScreenKeysAR[i].leftBtnx;
-        let btnRx = onScreenKeysAR[i].rightBtnx;
-        let btny = onScreenKeysAR[i].y;
+        for (let i = 0; i < onScreenCount; i++) {
+          let btnLx = onScreenKeysAR[i].leftBtnx;
+          let btnRx = onScreenKeysAR[i].rightBtnx;
+          let btny = onScreenKeysAR[i].y;
 
-        let DistL = dist(btnLx, btny, touches[_i].x, touches[_i].y);
-        if (DistL < onScreenKeysAR[0].size / 2) {
-          madot[i].LEFT = true;
+          let DistL = dist(btnLx, btny, touches[_i].x, touches[_i].y);
+          if (DistL < onScreenKeysAR[0].size / 2) {
+            madot[i].LEFT = true;
 
-        } else {
-          madot[i].LEFT = false;
-        }
+          } else {
+            madot[i].LEFT = false;
+          }
 
-        let DistR = dist(btnRx, btny, touches[_i].x, touches[_i].y);
-        if (DistR < onScreenKeysAR[0].size / 2) {
-          madot[i].RIGHT = true;
-        } else {
-          madot[i].RIGHT = false;
+          let DistR = dist(btnRx, btny, touches[_i].x, touches[_i].y);
+          if (DistR < onScreenKeysAR[0].size / 2) {
+            madot[i].RIGHT = true;
+          } else {
+            madot[i].RIGHT = false;
+          }
         }
       }
-    }
-    fill(Black);
-    text(touches.length, width / 2, height / 2);
-  } else { // IF NO TOUCHES
-    for (let i = 0; i < onScreenCount; i++) {
-      madot[i].RIGHT = false;
-      madot[i].LEFT = false;
+      fill(Black);
+      text(touches.length, width / 2, height / 2);
+    } else { // IF NO TOUCHES
+      for (let i = 0; i < onScreenCount; i++) {
+        madot[i].RIGHT = false;
+        madot[i].LEFT = false;
+      }
     }
   }
 
@@ -148,7 +153,7 @@ function _OHJAIMET() {
   //HUOM i JATKAA/ALKAA SIITÄ MIHIN ONSCREENMADOT LOPPUU
   let ctrl_i;
   for (let i = onScreenCount; i < madot.length; i++) {
-    
+
     ctrl_i = i - onScreenCount;
 
     if (ohjaimet[ctrl_i].LEFT || ohjaimet[ctrl_i].LEFT2) {
@@ -203,7 +208,7 @@ function _POINTS() {
 
 function _PANIC_MODE() {
   let MATOJA = matoCountBT + onScreenCount;
-  if (wormsCounter <= MATOJA* 0.6 || MATOJA === 3 && wormsCounter <= MATOJA * 0.9) {
+  if (wormsCounter <= MATOJA * 0.6 || MATOJA === 3 && wormsCounter <= MATOJA * 0.9) {
     panicMode = true;
   }
 

@@ -28,6 +28,11 @@ function setup() {
   button.center('horizontal');
   button.mousePressed(StartButton);
 
+  let button2 = createButton('Start with on-screen controls (2x)');
+  button2.position(width / 2, height / 2 + 20 + 30);
+  button2.center('horizontal');
+  button2.mousePressed(StartButton2);
+
   //startup();
   // document.addEventListener("DOMContentLoaded", startup);
 
@@ -80,6 +85,12 @@ function InputMatoCount() {
 
 function StartButton() {
   removeElements();
+  GAMESTATE = 'GAME';
+}
+
+function StartButton2() {
+  removeElements();
+  onScreenToggle = true
   GAMESTATE = 'GAME';
 }
 
