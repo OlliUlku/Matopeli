@@ -126,8 +126,14 @@ function _OHJAIMET() {
       for (let _i = 0; _i < touches.length; _i++) {
 
         for (let i = 0; i < onScreenCount; i++) {
+   
           let btnLx = onScreenKeysAR[i].leftBtnx;
           let btnRx = onScreenKeysAR[i].rightBtnx;
+            //     dirty fix for button rotation!!!
+          if (i===1) {
+            btnLx = onScreenKeysAR[i].leftBtnx2;
+          btnRx = onScreenKeysAR[i].rightBtnx2;
+            }
           let btny = onScreenKeysAR[i].y;
 
           let DistL = dist(btnLx, btny, touches[_i].x, touches[_i].y);

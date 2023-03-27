@@ -11,6 +11,9 @@ class onScreenKeys {
     this.rot = _rot;
     this.leftBtnx = this.x - this.size * 0.5 - this.gap * 0.5;
     this.rightBtnx = this.x +this.size * 0.5 + this.gap * 0.5;
+    // DIRTY FIX
+this.rightBtnx2 = this.x - this.size * 0.5 - this.gap * 0.5;
+    this.leftBtnx2 = this.x +this.size * 0.5 + this.gap * 0.5;
   }
 
   show() {
