@@ -72,6 +72,7 @@ function draw() {
     controllerUsed(); //checks all buttons and updates values
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
     _GAME_UPDATE();
+    //drawStone(); // DEBUG STONE PLACEMENT
     _PANIC_MODE();
     _ONSCREENKEYS();
     _POINTS();

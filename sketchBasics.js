@@ -314,4 +314,17 @@ function set2dArrayFalse(_x, _y) {
     L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision, GridDivision);
   }
 }
+function drawStone() {
+  if (frameCount % 30 === 0) {
+    for (let x = 0; x < width / GridDivision; x++) {
+      for (let y = 0; y < height / GridDivision; y++) {
+        if (!array2d[x][y]) {
+          L_HUD.fill(10,20,30,40);
+          L_HUD.noStroke();
+          L_HUD.rect(x * GridDivision, y * GridDivision, Pixel);
+        }
+      }
+    }
+  }
+}
 
