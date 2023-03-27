@@ -30,10 +30,10 @@ let wormNames = ['Marjatta',
   'Timon sijainen Timo',
   'Maire'];
 
-let spawnBorder = 150; // PX (Base 50?)
+let spawnBorder = 150; // PX (Base 150?)
 let MOD = 2.5;
-let speedMod = .8 * MOD; // BASE .5
-let rotSpeedMod = .5 * MOD; // .7?
+let speedMod = .8 * MOD; // BASE .8
+let rotSpeedMod = .5 * MOD; // .5?
 let panicMode = false;
 let panicCount = 1500;
 
@@ -65,6 +65,7 @@ let L_stone;
 let L_HUD;
 let L_mato;
 let L_ground;
+let L_grave;
 
 //FONT
 let _font;
@@ -80,3 +81,6 @@ let onScreenCount = 0;
 let onScreenToggle = false;
 
 let MATOJA;
+
+// hudname textsize
+let _ts;

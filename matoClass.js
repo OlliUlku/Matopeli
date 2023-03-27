@@ -157,14 +157,14 @@ class mato {
       // HUD INDEX
       let gamepadInd = this.index + 1 - onScreenCount;
       if (gamepadInd >= 1) {
-        L_HUD.textSize(Pixel);
-        L_HUD.text('P' + (gamepadInd), this.pos.x + Pixel, this.pos.y - (Pixel * 3.2));
+        L_HUD.textSize(_ts * 0.6);
+        L_HUD.text('P' + (gamepadInd), this.pos.x + Pixel, this.pos.y - _ts * 1.9);
       }
       // HUD NAME
       L_HUD.fill(White);
       L_HUD.stroke(Black);
-      L_HUD.textSize(Pixel * 1.3);
-      L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - (Pixel * 2));
+      L_HUD.textSize(_ts);
+      L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - _ts);
 
     } else { // DID HIT STONE (or otherwise) -> kill worm
       if (this.deathToggler) {
@@ -188,13 +188,13 @@ class mato {
         L_top.text(wormsCounter, width - this.SX, this.SY * wormsCounter);
 
         //GRAVE NAME
-        L_top.fill(White);
-        L_top.stroke(Black);
-        L_top.strokeWeight(Pixel * 0.3);
+        L_grave.fill(White);
+        L_grave.stroke(Black);
+        L_grave.strokeWeight(Pixel * 0.3);
         if (this.pos.x < width - 100) { // so it does not jump on top of scoreboard...
-          L_top.textSize(Pixel * 1.3);
-          L_top.fill(225);
-          L_top.text(this.name, this.pos.x + Pixel, this.pos.y - (Pixel * 2));
+          L_grave.textSize(_ts);
+          L_grave.fill(225);
+          L_grave.text(this.name, this.pos.x + Pixel, this.pos.y - _ts);
         }
 
         //NAME IN SCORE TABLE

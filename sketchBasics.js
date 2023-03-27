@@ -35,6 +35,10 @@ function gameReadySetup() {
     L_ground.angleMode(DEGREES);
     L_ground.textAlign(CENTER, CENTER);
 
+    L_grave = createGraphics(pxDens * width, pxDens * height);
+    L_grave.angleMode(DEGREES);
+    L_grave.textAlign(CENTER, CENTER);
+
     // FONTS
 
     // _font = loadFont('Heebo-Regular.ttf')
@@ -54,7 +58,7 @@ function gameReadySetup() {
 
     posca.splice(14, 1); // removes Beige (#dbc48e) which is background color, from array
 
-    shuffle(posca, true);
+    //shuffle(posca, true);
     shuffle(wormNames, true);
     print('Max colors', posca.length);
     print('Max Names', wormNames.length);
@@ -106,6 +110,9 @@ function gameReadySetup() {
     Pixel = (width / GridDivision / (array2d.length) * GridDivision);
     print('Pixel length', Pixel);
 
+    // wormname textsize
+    _ts = Pixel * 2.1;
+
 
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
@@ -126,14 +133,14 @@ function _OHJAIMET() {
       for (let _i = 0; _i < touches.length; _i++) {
 
         for (let i = 0; i < onScreenCount; i++) {
-   
+
           let btnLx = onScreenKeysAR[i].leftBtnx;
           let btnRx = onScreenKeysAR[i].rightBtnx;
-            //     dirty fix for button rotation!!!
-          if (i===1) {
+          //     dirty fix for button rotation!!!
+          if (i === 1) {
             btnLx = onScreenKeysAR[i].leftBtnx2;
-          btnRx = onScreenKeysAR[i].rightBtnx2;
-            }
+            btnRx = onScreenKeysAR[i].rightBtnx2;
+          }
           let btny = onScreenKeysAR[i].y;
 
           let DistL = dist(btnLx, btny, touches[_i].x, touches[_i].y);
@@ -238,10 +245,44 @@ function _PANIC_MODE() {
   }
 }
 
+function _GAME_END() {
+  if (wormsCounter <= 1) {
+    for (let i = 0; i < madot.length; i++) {
+      if (!madot[i].stop) {
+        L_HUD.rectMode(CENTER);
+        L_HUD.noStroke();
+        L_HUD.fill(249, 249, 249, 80);
+        L_HUD.rect(width / 2, height / 2, width, height);
+        L_top.textAlign(CENTER, CENTER);
+        L_top.fill(madot[i].color);
+        L_top.stroke(Black);
+        let ts = width / 12;
+        L_top.strokeWeight(ts/15);
+        L_top.textSize(ts);
+        L_top.text(madot[i].name, width / 2, height / 2 + ts * 0.5);
+        L_top.textSize(ts * 0.6);
+        L_top.fill(Black);
+        L_top.noStroke();
+        L_top.textAlign(CENTER, TOP);
+        L_top.text('The Winner is:', width / 2, height / 2 - ts * 0.5);
+      }
+    }
+    background(Beige);
+    image(L_HUD, 0, 0);
+    image(L_mato, 0, 0);
+    image(L_stone, 0, 0);
+    image(L_HUD, 0, 0);
+    image(L_HUD, 0, 0);
+    image(L_top, 0, 0);
+    noLoop();
+  }
+}
+
 function _LAYERS() {
   image(L_ground, 0, 0);
   image(L_mato, 0, 0);
   image(L_stone, 0, 0);
+  image(L_grave, 0, 0);
   image(L_HUD, 0, 0);
   image(L_top, 0, 0);
 }
@@ -325,7 +366,7 @@ function drawStone() {
     for (let x = 0; x < width / GridDivision; x++) {
       for (let y = 0; y < height / GridDivision; y++) {
         if (!array2d[x][y]) {
-          L_HUD.fill(10,20,30,40);
+          L_HUD.fill(10, 20, 30, 40);
           L_HUD.noStroke();
           L_HUD.rect(x * GridDivision, y * GridDivision, Pixel);
         }
