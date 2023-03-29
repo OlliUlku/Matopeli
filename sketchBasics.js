@@ -257,7 +257,7 @@ function _GAME_END() {
         L_top.fill(madot[i].color);
         L_top.stroke(Black);
         let ts = width / 12;
-        L_top.strokeWeight(ts/15);
+        L_top.strokeWeight(ts / 18);
         L_top.textSize(ts);
         L_top.text(madot[i].name, width / 2, height / 2 + ts * 0.5);
         L_top.textSize(ts * 0.6);
@@ -306,25 +306,27 @@ function setBorderToFalse() {
 function updateBoardState() {
 
   for (let i = 0; i < madot.length; i++) {
-    // CHECK IF WITHIN BOUNDS
-    let __x = round(madot[i].pos.x / GridDivision);
-    let __y = round(madot[i].pos.y / GridDivision);
-    if (__x > 0 && __x < width / GridDivision && __y > 0 && __y < height / GridDivision) {
-      if (array2d[__x][__y]
-        //&& array2d[__x - 1][__y] 
-        && array2d[__x + 1][__y]
-        //&& array2d[__x][__y - 1] 
-        && array2d[__x][__y + 1]
-        && array2d[__x + 1][__y + 1]
-        //&& array2d[__x - 1][__y - 1] 
-        //&& array2d[__x + 1][__y - 1] 
-        //&& array2d[__x - 1][__y + 1] 
-        && !madot[i].underground) {
-        setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y);
-      } else if (!madot[i].underground) {
-        madot[i].stop = true;
-        setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y); // tehokkuus -> pysäytä tän looppaaminen...
-        //print('hit wall');
+    if (!madot[i].stop) {
+      // CHECK IF WITHIN BOUNDS
+      let __x = round(madot[i].pos.x / GridDivision);
+      let __y = round(madot[i].pos.y / GridDivision);
+      if (__x > 0 && __x < width / GridDivision && __y > 0 && __y < height / GridDivision) {
+        if (array2d[__x][__y]
+          //&& array2d[__x - 1][__y] 
+          && array2d[__x + 1][__y]
+          //&& array2d[__x][__y - 1] 
+          && array2d[__x][__y + 1]
+          && array2d[__x + 1][__y + 1]
+          //&& array2d[__x - 1][__y - 1] 
+          //&& array2d[__x + 1][__y - 1] 
+          //&& array2d[__x - 1][__y + 1] 
+          && !madot[i].underground) {
+          setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y);
+        } else if (!madot[i].underground) {
+          madot[i].stop = true;
+          setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y); // tehokkuus -> pysäytä tän looppaaminen...
+          //print('hit wall');
+        }
       }
     }
   }
@@ -341,26 +343,85 @@ function set2dArrayFalse(_x, _y) {
     array2d[_x][_y] = false;
     L_stone.fill(random(80, 120));
     L_stone.rect(_x * GridDivision, _y * GridDivision, GridDivision);
+    setTimeout(removeStone, remTime, _x, _y);
   }
 
   if (array2d[_x + 1][_y + 1]) {
     array2d[_x + 1][_y + 1] = false;
     L_stone.fill(random(80, 120));
     L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision + Pixel, GridDivision);
+    setTimeout(removeStone, remTime, _x + 1, _y + 1);
   }
 
   if (array2d[_x][_y + 1]) {
     array2d[_x][_y + 1] = false;
     L_stone.fill(random(80, 120));
     L_stone.rect(_x * GridDivision, _y * GridDivision + Pixel, GridDivision);
+    setTimeout(removeStone, remTime, _x, _y + 1);
   }
 
   if (array2d[_x + 1][_y]) {
     array2d[_x + 1][_y] = false;
     L_stone.fill(random(80, 120));
     L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision, GridDivision);
+    setTimeout(removeStone, remTime, _x + 1, _y);
   }
 }
+
+function removeStone(_x, _y) {
+  // HOX NEED TO BE ALREADY ROUNDED
+  let Perc = 0.95;
+
+  if (!array2d[_x][_y]) {
+    array2d[_x][_y] = true;
+    L_stone.erase();
+    L_stone.rect(_x * GridDivision, _y * GridDivision, GridDivision);
+    L_stone.noErase();
+    if (random() < Perc) {
+      L_mato.erase();
+      L_mato.rect(_x * GridDivision, _y * GridDivision, GridDivision);
+      L_mato.noErase();
+    }
+  }
+
+  if (!array2d[_x + 1][_y + 1]) {
+    array2d[_x + 1][_y + 1] = true;
+    L_stone.erase();
+    L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision + Pixel, GridDivision);
+    L_stone.noErase();
+    if (random() < Perc) {
+      L_mato.erase();
+      L_mato.rect(_x * GridDivision + Pixel, _y * GridDivision + Pixel, GridDivision);
+      L_mato.noErase();
+    }
+  }
+
+
+  if (!array2d[_x][_y + 1]) {
+    array2d[_x][_y + 1] = true;
+    L_stone.erase();
+    L_stone.rect(_x * GridDivision, _y * GridDivision + Pixel, GridDivision);
+    L_stone.noErase();
+    if (random() < Perc) {
+      L_mato.erase();
+      L_mato.rect(_x * GridDivision, _y * GridDivision + Pixel, GridDivision);
+      L_mato.noErase();
+    }
+  }
+
+  if (!array2d[_x + 1][_y]) {
+    array2d[_x + 1][_y] = true;
+    L_stone.erase();
+    L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision, GridDivision);
+    L_stone.noErase();
+    if (random() < Perc) {
+      L_mato.erase();
+      L_mato.rect(_x * GridDivision + Pixel, _y * GridDivision, GridDivision);
+      L_mato.noErase();
+    }
+  }
+}
+
 function drawStone() {
   if (frameCount % 30 === 0) {
     for (let x = 0; x < width / GridDivision; x++) {

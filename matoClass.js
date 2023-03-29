@@ -5,7 +5,7 @@ class mato {
     this.vel.rotate(rot);
     this.acc = createVector(0, -0.004 * speedMod); // PANIC ACCELERATION
     this.acc.rotate(rot);
-    this.color = _color;
+    this.color = color(_color);
     this.rotateAMT = 3 * rotSpeedMod;
     this.UGrotateAMT = 2.5 * rotSpeedMod;
     this.size = 2;
@@ -19,7 +19,7 @@ class mato {
 
     //underground dive feature
     this.underground = false;
-    this.uGTimer = new Timer(random(8500, 9500 * 2), true);
+    this.uGTimer = new Timer(random(UGtime, UGtime * 2), true);
     this.uGSize;
     this.uGR = 0.26;
     this.r = 0.6 * GridDivision;
@@ -105,18 +105,36 @@ class mato {
       }
 
       // UNDERGROUND
-      if (this.uGTimer.getRemainingTime() < 1500 + panicCount * 2) {
+      let diveTime = 3000 + panicCount; // move to this.
+      let alertTime = 2000;
+
+      if (this.uGTimer.getRemainingTime() < alertTime) {
+        L_HUD.textSize(Pixel * 4);
+        L_HUD.textAlign(CENTER, CENTER);
+        L_HUD.fill(CacaoBrown);
+        L_HUD.noStroke(Black);
+        L_HUD.text('!', this.pos.x + Pixel * 4, this.pos.y + Pixel);
+        this.underground = true;
+      } else if (this.uGTimer.getRemainingTime() < diveTime) {
         //if (!panicMode) {
         this.underground = true;
         //} else {
         //  this.underground = false;
         //}
-      } else {
+      } else if (this.uGTimer.getRemainingTime() < diveTime + alertTime) {
+        L_HUD.textSize(Pixel * 4);
+        L_HUD.textAlign(CENTER, CENTER);
+        L_HUD.fill(CacaoBrown);
+        L_HUD.noStroke(Black);
+        L_HUD.text('!', this.pos.x + Pixel * 4, this.pos.y + Pixel);
+        this.underground = false;
+      }
+      else {
         this.underground = false;
       }
 
       if (this.uGTimer.expired()) {
-        this.uGTimer.setTimer(12000);
+        this.uGTimer.setTimer(UGtime);
         this.uGTimer.start();
       }
 
@@ -124,6 +142,7 @@ class mato {
 
       if (!this.underground) {
         //if (frameCount % 5 === 0 || this.turbo) {
+          this.color.setAlpha(255);
         L_mato.fill(this.color);
         L_mato.noStroke();
         L_mato.rect(round(this.pos.x / GridDivision) * GridDivision, round(this.pos.y / GridDivision) * GridDivision, this.size * GridDivision);
@@ -136,6 +155,7 @@ class mato {
           } else if (random() < 0.5) {
             L_ground.fill(Brown);
           } else {
+            this.color.setAlpha(110);
             L_ground.fill(this.color);
           }
 

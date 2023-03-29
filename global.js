@@ -84,3 +84,9 @@ let MATOJA;
 
 // hudname textsize
 let _ts;
+
+// REMOVE STONE
+let remTime = 4000;
+
+// Global UNDERGROUND TIME
+let UGtime = 9000; //22000

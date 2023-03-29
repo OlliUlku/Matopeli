@@ -80,6 +80,7 @@ function draw() {
     _LAYERS();
     _GAME_END(); // at one worm left
 
+    remTime += 20;
   }
 }
 
