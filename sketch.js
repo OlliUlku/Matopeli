@@ -1,4 +1,5 @@
 let matoCountBT = 0;
+let GD = 8; // Grid division, base 8
 
 // function startup() {
 //   const el = document.getElementById("canvas");
@@ -67,18 +68,21 @@ function draw() {
     // LAYER CLEAR
     L_HUD.clear(0, 0, 0, 0);
     background(Beige);
+    if (frameCount % 15 === 0) {
+      L_ground.background(fadeColor);
+    }
 
     // THE BEEF
     controllerUsed(); //checks all buttons and updates values
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
     _GAME_UPDATE();
-    
+
     //drawStone(); // DEBUG STONE PLACEMENT
     _PANIC_MODE();
     _ONSCREENKEYS();
     _POINTS();
     _LAYERS();
-    _GAME_END(); // at one worm left
+    //_GAME_END(); // at one worm left
 
     remTime += 20;
   }

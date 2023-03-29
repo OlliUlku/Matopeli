@@ -31,14 +31,13 @@ let wormNames = ['Marjatta',
   'Maire'];
 
 let spawnBorder = 150; // PX (Base 150?)
-let MOD = 2.5;
-let speedMod = .8 * MOD; // BASE .8
+let MOD = 2.5; // Base 2.5
+let speedMod = 1.3 * MOD; // BASE .8
 let rotSpeedMod = .5 * MOD; // .5?
 let panicMode = false;
 let panicCount = 1500;
 
 // GRID DIVISION UPDATE
-let GridDivision = 8; // HUOM TÄLLÄ HETKELLÄ NÄYTÖN PIKSELEIDEN MÄÄRÄ TÄYTYY OLLA TÄLLÄ JAOLLINEN... ehkä... KORJAA?
 let Pixel; //PIXEL SIZE
 let stoneDelay = 0; // 2000 if div is 32 :D
 
@@ -83,10 +82,17 @@ let onScreenToggle = false;
 let MATOJA;
 
 // hudname textsize
-let _ts;
+let TextSize;
 
 // REMOVE STONE
 let remTime = 4000;
 
 // Global UNDERGROUND TIME
-let UGtime = 9000; //22000
+let UGtime = 22000; //22000 ???
+
+// To Keep text from scaling with division... LOL i made it a static size through this?
+let txtDivision = 8;
+let txtPixel;
+
+// to slowly sink UG dirt
+let fadeColor;

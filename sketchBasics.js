@@ -3,6 +3,8 @@ function gameReadySetup() {
   if (SETUP) {
 
     frameRate(24);
+    fadeColor = color(Beige);
+    fadeColor.setAlpha(20);
     background(Beige);
     angleMode(DEGREES);
     strokeCap(SQUARE);
@@ -107,11 +109,18 @@ function gameReadySetup() {
 
     print('So called Pixels length X', array2d.length);
     print('So called Pixels length Y', array2d[0].length);
-    Pixel = (width / GridDivision / (array2d.length) * GridDivision);
-    print('Pixel length', Pixel);
+    Pixel = (width / GD / (array2d.length) * GD);
+    txtPixel = (width / GD / array2d.length * txtDivision);
+
+    print ('Grid Division', GD )
+    print('Pixel size', Pixel);
+    print('txtDiv', txtDivision);
+
+    print('txtPixel size', txtPixel);
+
 
     // wormname textsize
-    _ts = Pixel * 2.1;
+    TextSize = txtPixel * 2.1;
 
 
     //TURN SETUP OFF SO IT WONT RUN AGAIN
@@ -238,6 +247,9 @@ function _PANIC_MODE() {
       madot[i].speedUP_PANIC();
     }
 
+    remTime += 80;
+
+
     panicModeText = ' -> panic mode';
     if (panicCount > 0) {
       panicCount = panicCount - (1.55 * speedMod);
@@ -288,16 +300,16 @@ function _LAYERS() {
 }
 
 function create2dArray() {
-  for (let _x = 0; _x < width / GridDivision; _x++) {
+  for (let _x = 0; _x < width / GD; _x++) {
     array2d[_x] = [];
-    for (let _y = 0; _y < height / GridDivision; _y++) {
+    for (let _y = 0; _y < height / GD; _y++) {
       array2d[_x][_y] = true;
     }
   }
 }
 
 function setBorderToFalse() {
-  for (let i = 0; i < height / GridDivision; i++) {
+  for (let i = 0; i < height / GD; i++) {
     array2d[0][i] = false;
     array2d[array2d.length - 1][i] = false;
   }
@@ -308,9 +320,9 @@ function updateBoardState() {
   for (let i = 0; i < madot.length; i++) {
     if (!madot[i].stop) {
       // CHECK IF WITHIN BOUNDS
-      let __x = round(madot[i].pos.x / GridDivision);
-      let __y = round(madot[i].pos.y / GridDivision);
-      if (__x > 0 && __x < width / GridDivision && __y > 0 && __y < height / GridDivision) {
+      let __x = round(madot[i].pos.x / GD);
+      let __y = round(madot[i].pos.y / GD);
+      if (__x > 0 && __x < width / GD && __y > 0 && __y < height / GD) {
         if (array2d[__x][__y]
           //&& array2d[__x - 1][__y] 
           && array2d[__x + 1][__y]
@@ -334,36 +346,36 @@ function updateBoardState() {
 
 function set2dArrayFalse(_x, _y) {
   //ristin muotoisessa kuviossa kaikki pois päältä!
-  _x = round(_x / GridDivision);
-  _y = round(_y / GridDivision);
+  _x = round(_x / GD);
+  _y = round(_y / GD);
 
   L_stone.noStroke();
 
   if (array2d[_x][_y]) {
     array2d[_x][_y] = false;
     L_stone.fill(random(80, 120));
-    L_stone.rect(_x * GridDivision, _y * GridDivision, GridDivision);
+    L_stone.rect(_x * GD, _y * GD, GD);
     setTimeout(removeStone, remTime, _x, _y);
   }
 
   if (array2d[_x + 1][_y + 1]) {
     array2d[_x + 1][_y + 1] = false;
     L_stone.fill(random(80, 120));
-    L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision + Pixel, GridDivision);
+    L_stone.rect(_x * GD + Pixel, _y * GD + Pixel, GD);
     setTimeout(removeStone, remTime, _x + 1, _y + 1);
   }
 
   if (array2d[_x][_y + 1]) {
     array2d[_x][_y + 1] = false;
     L_stone.fill(random(80, 120));
-    L_stone.rect(_x * GridDivision, _y * GridDivision + Pixel, GridDivision);
+    L_stone.rect(_x * GD, _y * GD + Pixel, GD);
     setTimeout(removeStone, remTime, _x, _y + 1);
   }
 
   if (array2d[_x + 1][_y]) {
     array2d[_x + 1][_y] = false;
     L_stone.fill(random(80, 120));
-    L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision, GridDivision);
+    L_stone.rect(_x * GD + Pixel, _y * GD, GD);
     setTimeout(removeStone, remTime, _x + 1, _y);
   }
 }
@@ -375,11 +387,11 @@ function removeStone(_x, _y) {
   if (!array2d[_x][_y]) {
     array2d[_x][_y] = true;
     L_stone.erase();
-    L_stone.rect(_x * GridDivision, _y * GridDivision, GridDivision);
+    L_stone.rect(_x * GD, _y * GD, GD);
     L_stone.noErase();
     if (random() < Perc) {
       L_mato.erase();
-      L_mato.rect(_x * GridDivision, _y * GridDivision, GridDivision);
+      L_mato.rect(_x * GD, _y * GD, GD);
       L_mato.noErase();
     }
   }
@@ -387,11 +399,11 @@ function removeStone(_x, _y) {
   if (!array2d[_x + 1][_y + 1]) {
     array2d[_x + 1][_y + 1] = true;
     L_stone.erase();
-    L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision + Pixel, GridDivision);
+    L_stone.rect(_x * GD + Pixel, _y * GD + Pixel, GD);
     L_stone.noErase();
     if (random() < Perc) {
       L_mato.erase();
-      L_mato.rect(_x * GridDivision + Pixel, _y * GridDivision + Pixel, GridDivision);
+      L_mato.rect(_x * GD + Pixel, _y * GD + Pixel, GD);
       L_mato.noErase();
     }
   }
@@ -400,11 +412,11 @@ function removeStone(_x, _y) {
   if (!array2d[_x][_y + 1]) {
     array2d[_x][_y + 1] = true;
     L_stone.erase();
-    L_stone.rect(_x * GridDivision, _y * GridDivision + Pixel, GridDivision);
+    L_stone.rect(_x * GD, _y * GD + Pixel, GD);
     L_stone.noErase();
     if (random() < Perc) {
       L_mato.erase();
-      L_mato.rect(_x * GridDivision, _y * GridDivision + Pixel, GridDivision);
+      L_mato.rect(_x * GD, _y * GD + Pixel, GD);
       L_mato.noErase();
     }
   }
@@ -412,24 +424,24 @@ function removeStone(_x, _y) {
   if (!array2d[_x + 1][_y]) {
     array2d[_x + 1][_y] = true;
     L_stone.erase();
-    L_stone.rect(_x * GridDivision + Pixel, _y * GridDivision, GridDivision);
+    L_stone.rect(_x * GD + Pixel, _y * GD, GD);
     L_stone.noErase();
     if (random() < Perc) {
       L_mato.erase();
-      L_mato.rect(_x * GridDivision + Pixel, _y * GridDivision, GridDivision);
+      L_mato.rect(_x * GD + Pixel, _y * GD, GD);
       L_mato.noErase();
     }
   }
 }
 
-function drawStone() {
+function drawStone() { //DEBUG PURPOSES
   if (frameCount % 30 === 0) {
-    for (let x = 0; x < width / GridDivision; x++) {
-      for (let y = 0; y < height / GridDivision; y++) {
+    for (let x = 0; x < width / GD; x++) {
+      for (let y = 0; y < height / GD; y++) {
         if (!array2d[x][y]) {
           L_HUD.fill(10, 20, 30, 40);
           L_HUD.noStroke();
-          L_HUD.rect(x * GridDivision, y * GridDivision, Pixel);
+          L_HUD.rect(x * GD, y * GD, Pixel);
         }
       }
     }
