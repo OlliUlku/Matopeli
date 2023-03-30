@@ -112,7 +112,7 @@ function gameReadySetup() {
     Pixel = (width / GD / (array2d.length) * GD);
     txtPixel = (width / GD / array2d.length * txtDivision);
 
-    print ('Grid Division', GD )
+    print('Grid Division', GD);
     print('Pixel size', Pixel);
     print('txtDiv', txtDivision);
 
@@ -121,7 +121,6 @@ function gameReadySetup() {
 
     // wormname textsize
     TextSize = txtPixel * 2.1;
-
 
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
@@ -333,10 +332,10 @@ function updateBoardState() {
           //&& array2d[__x + 1][__y - 1] 
           //&& array2d[__x - 1][__y + 1] 
           && !madot[i].underground) {
-          setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y);
+          setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y, i);
         } else if (!madot[i].underground) {
           madot[i].stop = true;
-          setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y); // tehokkuus -> pysäytä tän looppaaminen...
+          setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
           //print('hit wall');
         }
       }
@@ -344,45 +343,32 @@ function updateBoardState() {
   }
 }
 
-function set2dArrayFalse(_x, _y) {
-  //ristin muotoisessa kuviossa kaikki pois päältä!
+function set2dArrayFalse(_x, _y, matoindex) {
+  //neliön muotoisessa kuviossa kaikki pois päältä!
   _x = round(_x / GD);
   _y = round(_y / GD);
-
   L_stone.noStroke();
-
-  if (array2d[_x][_y]) {
-    array2d[_x][_y] = false;
-    L_stone.fill(random(80, 120));
-    L_stone.rect(_x * GD, _y * GD, GD);
-    setTimeout(removeStone, remTime, _x, _y);
-  }
-
-  if (array2d[_x + 1][_y + 1]) {
-    array2d[_x + 1][_y + 1] = false;
-    L_stone.fill(random(80, 120));
-    L_stone.rect(_x * GD + Pixel, _y * GD + Pixel, GD);
-    setTimeout(removeStone, remTime, _x + 1, _y + 1);
-  }
-
-  if (array2d[_x][_y + 1]) {
-    array2d[_x][_y + 1] = false;
-    L_stone.fill(random(80, 120));
-    L_stone.rect(_x * GD, _y * GD + Pixel, GD);
-    setTimeout(removeStone, remTime, _x, _y + 1);
-  }
-
-  if (array2d[_x + 1][_y]) {
-    array2d[_x + 1][_y] = false;
-    L_stone.fill(random(80, 120));
-    L_stone.rect(_x * GD + Pixel, _y * GD, GD);
-    setTimeout(removeStone, remTime, _x + 1, _y);
+  for (let dx = 0; dx <= 1; dx++) {
+    for (let dy = 0; dy <= 1; dy++) {
+      if (array2d[_x + dx][_y + dy]) {
+        array2d[_x + dx][_y + dy] = false;
+        L_stone.fill(random(80, 120));
+        L_stone.rect((_x + dx) * GD, (_y + dy) * GD, GD);
+        setTimeout(removeStone, remTime, _x + dx, _y + dy, true, matoindex);
+      }
+    }
   }
 }
 
-function removeStone(_x, _y) {
+function removeStone(_x, _y, kakka, matoindex) {
   // HOX NEED TO BE ALREADY ROUNDED
-  let Perc = 0.95;
+  let Perc, pooped;
+  pooped = kakka;
+  if (pooped) {
+    Perc = 0.95;
+  } else if (!pooped) {
+    Perc = 1;
+  }
 
   if (!array2d[_x][_y]) {
     array2d[_x][_y] = true;
@@ -393,43 +379,10 @@ function removeStone(_x, _y) {
       L_mato.erase();
       L_mato.rect(_x * GD, _y * GD, GD);
       L_mato.noErase();
-    }
-  }
-
-  if (!array2d[_x + 1][_y + 1]) {
-    array2d[_x + 1][_y + 1] = true;
-    L_stone.erase();
-    L_stone.rect(_x * GD + Pixel, _y * GD + Pixel, GD);
-    L_stone.noErase();
-    if (random() < Perc) {
-      L_mato.erase();
-      L_mato.rect(_x * GD + Pixel, _y * GD + Pixel, GD);
-      L_mato.noErase();
-    }
-  }
-
-
-  if (!array2d[_x][_y + 1]) {
-    array2d[_x][_y + 1] = true;
-    L_stone.erase();
-    L_stone.rect(_x * GD, _y * GD + Pixel, GD);
-    L_stone.noErase();
-    if (random() < Perc) {
-      L_mato.erase();
-      L_mato.rect(_x * GD, _y * GD + Pixel, GD);
-      L_mato.noErase();
-    }
-  }
-
-  if (!array2d[_x + 1][_y]) {
-    array2d[_x + 1][_y] = true;
-    L_stone.erase();
-    L_stone.rect(_x * GD + Pixel, _y * GD, GD);
-    L_stone.noErase();
-    if (random() < Perc) {
-      L_mato.erase();
-      L_mato.rect(_x * GD + Pixel, _y * GD, GD);
-      L_mato.noErase();
+    } else {
+      let matoIND = matoindex;
+      madot[matoIND].poop++;
+      print('mato', madot[matoIND].name, 'poops made:', madot[matoIND].poop);
     }
   }
 }

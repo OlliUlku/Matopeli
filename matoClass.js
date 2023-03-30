@@ -46,6 +46,9 @@ class mato {
 
     // HUD
     this.name = wormNames[wormsCounter];
+
+    // POOP
+    this.poop = 0
   }
 
   speedUP_PANIC() {

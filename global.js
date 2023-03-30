@@ -99,3 +99,6 @@ let fadeColor;
 
 // menu DOM buttons etc.
 let slider;
+
+//POOP
+let pooped;
