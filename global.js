@@ -96,3 +96,6 @@ let txtPixel;
 
 // to slowly sink UG dirt
 let fadeColor;
+
+// menu DOM buttons etc.
+let slider;

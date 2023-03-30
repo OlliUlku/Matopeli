@@ -1,5 +1,5 @@
-let matoCountBT = 0;
-let GD = 8; // Grid division, base 8
+let matoCountBT = 2;
+let GD = 8; // Grid division, base 8, max 24
 
 // function startup() {
 //   const el = document.getElementById("canvas");
@@ -33,6 +33,11 @@ function setup() {
   button2.position(width / 2, height / 2 + 20 + 30);
   button2.center('horizontal');
   button2.mousePressed(StartButton2);
+
+  slider = createSlider(1, 24, 8, 1);
+  slider.position(10, 10);
+  slider.style('width', '80px');
+
 
   //startup();
   // document.addEventListener("DOMContentLoaded", startup);
@@ -82,7 +87,7 @@ function draw() {
     _ONSCREENKEYS();
     _POINTS();
     _LAYERS();
-    _GAME_END(); // at one worm left
+    //_GAME_END(); // at one worm left
 
     remTime += 20;
   }
@@ -114,6 +119,10 @@ function _MENU() {
   textAlign(LEFT, TOP);
   let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Survive the longest! Oh no your tail turns into STONE!! if you touch this stone you lose!! Please touch everything else, even other worms!!  Every 7 seconds or so (Didnt remember exact time!!) your worm DIVES underground for a couple of seconds! This lets you DIVE under the rocks and emerge on the other side!  LEFT to steer your worm left, RIGHT to steer right! B (button name varies per gamepad...) for UNLIMITED TURBO! (No TURBO while underground though!!) That might be everything but this text could be outdated!! Good luck love you kisses!!! Oh right when there is only 60% of worms left you enter PANIC mode!!';
   text(thisText, 10, 30, width / 2 - 100, height);
+
+  let valS = slider.value();
+  GD = valS;
+  text(GD + ' x larger pixels', 100, 13)
 }
 
 function touchStarted() {
