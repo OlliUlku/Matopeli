@@ -183,21 +183,21 @@ function _OHJAIMET() {
 
     ctrl_i = i - onScreenCount;
 
-    if (ohjaimet[ctrl_i].LEFT || ohjaimet[ctrl_i].LEFT2) {
+    if (ohjaimet[ctrl_i].LEFT || ohjaimet[ctrl_i].LEFT2 || keyIsDown(LEFT_ARROW)) {
       madot[i].LEFT = true;
       ohjaimet[ctrl_i].LEFT2 = false; //Turn button off
     } else {
       madot[i].LEFT = false;
     }
 
-    if (ohjaimet[ctrl_i].RIGHT || ohjaimet[ctrl_i].RIGHT2) {
+    if (ohjaimet[ctrl_i].RIGHT || ohjaimet[ctrl_i].RIGHT2 || keyIsDown(RIGHT_ARROW)) {
       madot[i].RIGHT = true;
       ohjaimet[ctrl_i].RIGHT2 = false; //Turn button off
     } else {
       madot[i].RIGHT = false;
     }
 
-    if (ohjaimet[ctrl_i].B) {
+    if (ohjaimet[ctrl_i].B || keyIsDown(UP_ARROW)) {
       madot[i].turbo = true;
       ohjaimet[ctrl_i].B = false; // turns button OFF
     } else {
