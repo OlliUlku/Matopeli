@@ -302,15 +302,15 @@ function create2dArray() {
   for (let _x = 0; _x < width / GD; _x++) {
     array2d[_x] = [];
     for (let _y = 0; _y < height / GD; _y++) {
-      array2d[_x][_y] = true;
+      array2d[_x][_y] = [stone = true, poop = false]
     }
   }
 }
 
 function setBorderToFalse() {
   for (let i = 0; i < height / GD; i++) {
-    array2d[0][i] = false;
-    array2d[array2d.length - 1][i] = false;
+    array2d[0][i][0] = false;
+    array2d[array2d.length - 1][i][0] = false;
   }
 }
 
@@ -322,15 +322,10 @@ function updateBoardState() {
       let __x = round(madot[i].pos.x / GD);
       let __y = round(madot[i].pos.y / GD);
       if (__x > 0 && __x < width / GD && __y > 0 && __y < height / GD) {
-        if (array2d[__x][__y]
-          //&& array2d[__x - 1][__y] 
-          && array2d[__x + 1][__y]
-          //&& array2d[__x][__y - 1] 
-          && array2d[__x][__y + 1]
-          && array2d[__x + 1][__y + 1]
-          //&& array2d[__x - 1][__y - 1] 
-          //&& array2d[__x + 1][__y - 1] 
-          //&& array2d[__x - 1][__y + 1] 
+        if (array2d[__x][__y][0]
+          && array2d[__x + 1][__y][0]
+          && array2d[__x][__y + 1][0]
+          && array2d[__x + 1][__y + 1][0]
           && !madot[i].underground) {
           setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y, i);
         } else if (!madot[i].underground) {
