@@ -122,6 +122,9 @@ function gameReadySetup() {
     // wormname textsize
     TextSize = txtPixel * 2.1;
 
+    //PANIC COUNT
+    panicCount = 1500 / 8 * GD;
+
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
   }
@@ -202,6 +205,13 @@ function _OHJAIMET() {
     } else {
       madot[i].turbo = false;
     }
+
+    if (ohjaimet[ctrl_i].A || keyIsDown(DOWN_ARROW)) {
+      madot[i].UGStart = true;
+      ohjaimet[ctrl_i].A = false; // turns button OFF
+    } else {
+      madot[i].UGStart = false;
+    }
   }
 }
 
@@ -251,7 +261,7 @@ function _PANIC_MODE() {
 
     panicModeText = ' -> panic mode';
     if (panicCount > 0) {
-      panicCount = panicCount - (1.55 * speedMod);
+      panicCount = panicCount - (1.55 * speedMod / 8 * GD);
     }
   }
 }
@@ -352,7 +362,7 @@ function updateBoardState() {
         //print('hit wall');
       }
       if (!madot[i].underground) {
-        setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
+        setTimeout(set2dArrayFalse, (1000 + panicCount + stoneDelay) * 8 / GD, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
       }
     }
   }

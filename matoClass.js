@@ -1,9 +1,9 @@
 class mato {
   constructor(x, y, _color, rot, controllerIndex) {
     this.pos = createVector(x, y);
-    this.vel = createVector(0, -0.5 * speedMod);
+    this.vel = createVector(0, -0.5 * speedMod / 8 * GD);
     this.vel.rotate(rot);
-    this.acc = createVector(0, -0.001 * speedMod); // PANIC ACCELERATION
+    this.acc = createVector(0, -0.001 * speedMod / 8 * GD); // PANIC ACCELERATION
     this.acc.rotate(rot);
     this.color = color(_color);
     this.rotateAMT = 3 * rotSpeedMod;
@@ -13,22 +13,23 @@ class mato {
     this.Rot;
 
     // TEST CONSTANT ACCELERATION
-    this.acc_normal = createVector(0, -0.00005 * speedMod);
+    this.acc_normal = createVector(0, -0.00005 * speedMod / 8 * GD);
     this.acc_normal.rotate(rot);
 
 
     //underground dive feature
     this.underground = false;
-    this.uGTimer = new Timer(random(UGtime, UGtime * 2), true);
+    this.uGTimer = new Timer(1, true);
     this.uGSize;
     this.uGR = 0.26;
     this.r = 0.6 * GD;
+    this.UGStart = false;
 
     // TURBO
     this.turbo = false;
-    this.velTurbo = createVector(0, -2.85 * speedMod);
+    this.velTurbo = createVector(0, -2.85 * speedMod / 8 * GD);
     this.velTurbo.rotate(rot);
-    this.accTurbo = createVector(0, -0.01 * speedMod);
+    this.accTurbo = createVector(0, -0.01 * speedMod / 8 * GD);
     this.accTurbo.rotate(rot);
     this.turboRotateAMT = 2.5 * rotSpeedMod;
 
@@ -55,7 +56,7 @@ class mato {
     this.tail = 4000;
 
     // POOP DOLLARS
-    this.dollars = 0;
+    this.dollars = 0.4;
   }
 
   speedUP_PANIC() {
@@ -75,7 +76,7 @@ class mato {
   }
 
   poopEaten() {
-    this.tail += 1000;
+    this.tail += 2000;
     this.poopsEaten++;
     this.dollars++;
     //print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
@@ -112,10 +113,13 @@ class mato {
       }
 
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
-        if (!this.turbo || this.underground) {
+        if (!this.turbo || this.underground || this.dollars <= 0.4) {
           this.pos.add(this.vel);
         } else {
-          this.pos.add(this.velTurbo);
+          if (this.dollars >= 0.4) {
+            this.pos.add(this.velTurbo);
+            this.dollars -= 1 / 5;
+          }
         }
       } else {
         this.pos.add(this.vel);
@@ -126,7 +130,9 @@ class mato {
       let diveTime = 3000 + panicCount; // move to this.
       let alertTime = 1500;
 
-      if (this.uGTimer.getRemainingTime() < alertTime) {
+      if (this.uGTimer.expired()) {
+        this.underground = false;
+      } else if (this.uGTimer.getRemainingTime() < alertTime) {
         L_HUD.textSize(Pixel * 4);
         L_HUD.textAlign(CENTER, CENTER);
         L_HUD.fill(CacaoBrown);
@@ -148,11 +154,11 @@ class mato {
         this.underground = false;
       }
       else {
-        this.underground = false;
       }
 
-      if (this.uGTimer.expired()) {
-        this.uGTimer.setTimer(UGtime);
+      if (this.uGTimer.expired() && this.UGStart && this.dollars >= 5) {
+        this.dollars -= 5;
+        this.uGTimer.setTimer(diveTime);
         this.uGTimer.start();
       }
 
@@ -204,13 +210,11 @@ class mato {
       L_HUD.textSize(TextSize);
       L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize);
       L_HUD.textAlign(LEFT, CENTER);
-      let MiniTextS = TextSize * 0.5
+      let MiniTextS = TextSize * 0.65;
       L_HUD.textSize(MiniTextS);
       L_HUD.fill(Black);
       L_HUD.noStroke();
-      L_HUD.text('poops made: ' + this.poop, this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel);
-      L_HUD.text('poops eaten: ' + this.poopsEaten, this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel + MiniTextS);
-      L_HUD.text('poop dollars: ' + this.dollars + '$', this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel + MiniTextS * 2);
+      L_HUD.text('poop $: ' + round(this.dollars), this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel);
 
 
     } else { // DID HIT STONE (or otherwise) -> kill worm

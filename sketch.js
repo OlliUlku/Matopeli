@@ -34,7 +34,7 @@ function setup() {
   button2.center('horizontal');
   button2.mousePressed(StartButton2);
 
-  slider = createSlider(1, 24, 8, 1);
+  slider = createSlider(3, 24, 8, 1);
   slider.position(10, 10);
   slider.style('width', '80px');
 

@@ -35,7 +35,7 @@ let MOD = 2.5; // Base 2.5
 let speedMod = 1.3 * MOD; // BASE .8
 let rotSpeedMod = .5 * MOD; // .5?
 let panicMode = false;
-let panicCount = 1500;
+let panicCount;
 
 // GRID DIVISION UPDATE
 let Pixel; //PIXEL SIZE
