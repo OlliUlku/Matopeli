@@ -87,7 +87,7 @@ function draw() {
     _ONSCREENKEYS();
     _POINTS();
     _LAYERS();
-    _GAME_END(); // at one worm left
+    //_GAME_END(); // at one worm left
 
   }
 }

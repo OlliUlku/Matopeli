@@ -56,7 +56,7 @@ class mato {
     this.tail = 4000;
 
     // POOP DOLLARS
-    this.dollars = 0.4;
+    this.dollars = 0.9;
   }
 
   speedUP_PANIC() {
@@ -113,12 +113,12 @@ class mato {
       }
 
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
-        if (!this.turbo || this.underground || this.dollars <= 0.4) {
+        if (!this.turbo || this.underground || this.dollars <= 0.9) {
           this.pos.add(this.vel);
         } else {
-          if (this.dollars >= 0.4) {
+          if (this.dollars >= 0.9) {
             this.pos.add(this.velTurbo);
-            this.dollars -= 1 / 5;
+            this.dollars -= 1 / 10;
           }
         }
       } else {
@@ -214,7 +214,7 @@ class mato {
       L_HUD.textSize(MiniTextS);
       L_HUD.fill(Black);
       L_HUD.noStroke();
-      L_HUD.text('poop $: ' + round(this.dollars), this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel);
+      L_HUD.text('poop $: ' + floor(this.dollars), this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel);
 
 
     } else { // DID HIT STONE (or otherwise) -> kill worm
