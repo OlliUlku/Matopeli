@@ -82,14 +82,13 @@ function draw() {
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
     _GAME_UPDATE();
 
-    //drawStone(); // DEBUG STONE PLACEMENT
+    //drawDebug(); // DEBUG STONE PLACEMENT
     _PANIC_MODE();
     _ONSCREENKEYS();
     _POINTS();
     _LAYERS();
     _GAME_END(); // at one worm left
 
-    remTime += 20;
   }
 }
 

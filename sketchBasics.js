@@ -246,7 +246,7 @@ function _PANIC_MODE() {
       madot[i].speedUP_PANIC();
     }
 
-    remTime += 80;
+    //remTime += 120;
 
 
     panicModeText = ' -> panic mode';
@@ -302,15 +302,20 @@ function create2dArray() {
   for (let _x = 0; _x < width / GD; _x++) {
     array2d[_x] = [];
     for (let _y = 0; _y < height / GD; _y++) {
-      array2d[_x][_y] = [stone = true, poop = false]
+      // 0 = PASSABLE (NO STONE), 1 = POOP
+      array2d[_x][_y] = [true, false];
     }
   }
 }
 
 function setBorderToFalse() {
   for (let i = 0; i < height / GD; i++) {
-    array2d[0][i][0] = false;
-    array2d[array2d.length - 1][i][0] = false;
+    array2d[0][i][0] = false; //LEFT
+    array2d[array2d.length - 1][i][0] = false; //RIGHT
+  }
+  for (let i = 0; i < width / GD; i++) {
+    array2d[i][0][0] = false; //TOP
+    array2d[i][array2d[1].length - 1][0] = false; //BOT
   }
 }
 
@@ -318,21 +323,36 @@ function updateBoardState() {
 
   for (let i = 0; i < madot.length; i++) {
     if (!madot[i].stop) {
-      // CHECK IF WITHIN BOUNDS
       let __x = round(madot[i].pos.x / GD);
       let __y = round(madot[i].pos.y / GD);
+      // CHECK IF WITHIN BOUNDS
       if (__x > 0 && __x < width / GD && __y > 0 && __y < height / GD) {
+        // NO STONE AND NO UNDERGROUND
         if (array2d[__x][__y][0]
           && array2d[__x + 1][__y][0]
           && array2d[__x][__y + 1][0]
           && array2d[__x + 1][__y + 1][0]
           && !madot[i].underground) {
-          setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y, i);
+          // HAS POOP
+          for (let dx = 0; dx <= 1; dx++) {
+            for (let dy = 0; dy <= 1; dy++) {
+              if (array2d[__x + dx][__y + dy][1]) {
+                array2d[__x + dx][__y + dy][1] = false;
+                madot[i].poopEaten();
+              }
+            }
+          }
+
         } else if (!madot[i].underground) {
           madot[i].stop = true;
-          setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
           //print('hit wall');
         }
+      } else { // OUT OF BOUNDS
+        madot[i].stop = true;
+        //print('hit wall');
+      }
+      if (!madot[i].underground) {
+        setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
       }
     }
   }
@@ -345,11 +365,11 @@ function set2dArrayFalse(_x, _y, matoindex) {
   L_stone.noStroke();
   for (let dx = 0; dx <= 1; dx++) {
     for (let dy = 0; dy <= 1; dy++) {
-      if (array2d[_x + dx][_y + dy]) {
-        array2d[_x + dx][_y + dy] = false;
+      if (array2d[_x + dx][_y + dy][0]) {
+        array2d[_x + dx][_y + dy][0] = false;
         L_stone.fill(random(80, 120));
         L_stone.rect((_x + dx) * GD, (_y + dy) * GD, GD);
-        setTimeout(removeStone, remTime, _x + dx, _y + dy, true, matoindex);
+        setTimeout(removeStone, madot[matoindex].tail + remTime, _x + dx, _y + dy, true, matoindex);
       }
     }
   }
@@ -365,8 +385,8 @@ function removeStone(_x, _y, kakka, matoindex) {
     Perc = 1;
   }
 
-  if (!array2d[_x][_y]) {
-    array2d[_x][_y] = true;
+  if (!array2d[_x][_y][0]) {
+    array2d[_x][_y][0] = true;
     L_stone.erase();
     L_stone.rect(_x * GD, _y * GD, GD);
     L_stone.noErase();
@@ -376,17 +396,23 @@ function removeStone(_x, _y, kakka, matoindex) {
       L_mato.noErase();
     } else {
       let matoIND = matoindex;
+      array2d[_x][_y][1] = true; // set poop[eli 1] true
       madot[matoIND].poop++;
       print('mato', madot[matoIND].name, 'poops made:', madot[matoIND].poop);
     }
   }
 }
 
-function drawStone() { //DEBUG PURPOSES
-  if (frameCount % 30 === 0) {
+function drawDebug() { //DEBUG PURPOSES
+  if (frameCount % 10 === 0) {
     for (let x = 0; x < width / GD; x++) {
       for (let y = 0; y < height / GD; y++) {
-        if (!array2d[x][y]) {
+        if (!array2d[x][y][0]) { // DRAW STONE
+          L_HUD.fill(10, 20, 30, 40);
+          L_HUD.noStroke();
+          L_HUD.rect(x * GD, y * GD, Pixel);
+        }
+        if (array2d[x][y][1]) { // DRAW POOP
           L_HUD.fill(10, 20, 30, 40);
           L_HUD.noStroke();
           L_HUD.rect(x * GD, y * GD, Pixel);

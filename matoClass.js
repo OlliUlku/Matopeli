@@ -48,7 +48,14 @@ class mato {
     this.name = wormNames[wormsCounter];
 
     // POOP
-    this.poop = 0
+    this.poop = 0;
+    this.poopsEaten = 0;
+
+    // TAIL SIZE
+    this.tail = 4000;
+
+    // POOP DOLLARS
+    this.dollars = 0;
   }
 
   speedUP_PANIC() {
@@ -65,6 +72,13 @@ class mato {
 
   speedUP() { // NEED TO ADD ALL THE NEEDED VECTORS...
     this.vel.add(this.acc_normal);
+  }
+
+  poopEaten() {
+    this.tail += 1000;
+    this.poopsEaten++;
+    this.dollars++;
+    //print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
   }
 
   update() {
@@ -146,7 +160,7 @@ class mato {
 
       if (!this.underground) {
         //if (frameCount % 5 === 0 || this.turbo) {
-          this.color.setAlpha(255);
+        this.color.setAlpha(255);
         L_mato.fill(this.color);
         L_mato.noStroke();
         L_mato.rect(round(this.pos.x / GD) * GD, round(this.pos.y / GD) * GD, this.size * GD);
@@ -189,6 +203,15 @@ class mato {
       L_HUD.stroke(Black);
       L_HUD.textSize(TextSize);
       L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize);
+      L_HUD.textAlign(LEFT, CENTER);
+      let MiniTextS = TextSize * 0.5
+      L_HUD.textSize(MiniTextS);
+      L_HUD.fill(Black);
+      L_HUD.noStroke();
+      L_HUD.text('poops made: ' + this.poop, this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel);
+      L_HUD.text('poops eaten: ' + this.poopsEaten, this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel + MiniTextS);
+      L_HUD.text('poop dollars: ' + this.dollars + '$', this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel + MiniTextS * 2);
+
 
     } else { // DID HIT STONE (or otherwise) -> kill worm
       if (this.deathToggler) {

@@ -85,7 +85,7 @@ let MATOJA;
 let TextSize;
 
 // REMOVE STONE
-let remTime = 4000;
+let remTime = 0;
 
 // Global UNDERGROUND TIME
 let UGtime = 22000; //22000 ???
