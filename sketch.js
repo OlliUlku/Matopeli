@@ -80,6 +80,7 @@ function draw() {
     // THE BEEF
     controllerUsed(); //checks all buttons and updates values
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
+    _SPEED_UP_TEST();
     _GAME_UPDATE();
 
     //drawDebug(); // DEBUG STONE PLACEMENT

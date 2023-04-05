@@ -13,7 +13,7 @@ class mato {
     this.Rot;
 
     // TEST CONSTANT ACCELERATION
-    this.acc_normal = createVector(0, -0.00005 * speedMod / 8 * GD);
+    this.acc_normal = createVector(0, -0.0007 * speedMod / 8 * GD); // poistin nollan!
     this.acc_normal.rotate(rot);
 
 
@@ -27,9 +27,9 @@ class mato {
 
     // TURBO
     this.turbo = false;
-    this.velTurbo = createVector(0, -2.85 * speedMod / 8 * GD);
+    this.velTurbo = createVector(0, -2.85 * speedMod * 1.2 / 8 * GD);
     this.velTurbo.rotate(rot);
-    this.accTurbo = createVector(0, -0.01 * speedMod / 8 * GD);
+    this.accTurbo = createVector(0, -0.01 * speedMod * 1.2 / 8 * GD);
     this.accTurbo.rotate(rot);
     this.turboRotateAMT = 2.5 * rotSpeedMod;
 
@@ -73,6 +73,7 @@ class mato {
 
   speedUP() { // NEED TO ADD ALL THE NEEDED VECTORS...
     this.vel.add(this.acc_normal);
+    this.velTurbo.add(this.acc_normal);
   }
 
   poopEaten() {

@@ -32,7 +32,7 @@ let wormNames = ['Marjatta',
 
 let spawnBorder = 150; // PX (Base 150?)
 let MOD = 2.5; // Base 2.5
-let speedMod = 1.3 * MOD; // BASE .8
+let speedMod = .5 * MOD; // BASE 1.3
 let rotSpeedMod = .5 * MOD; // .5?
 let panicMode = false;
 let panicCount;
