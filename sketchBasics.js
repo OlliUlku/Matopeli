@@ -15,22 +15,18 @@ function gameReadySetup() {
     let pxDens = pixelDensity();
     L_top = createGraphics(pxDens * width, pxDens * height);
     L_top.angleMode(DEGREES);
-    //L_top.rectMode(CENTER);
     L_top.textAlign(CENTER, CENTER);
 
     L_stone = createGraphics(pxDens * width, pxDens * height);
     L_stone.angleMode(DEGREES);
-    //L_stone.rectMode(CENTER);
     L_stone.textAlign(CENTER, CENTER);
 
     L_HUD = createGraphics(pxDens * width, pxDens * height);
     L_HUD.angleMode(DEGREES);
-    //L_HUD.rectMode(CENTER);
     L_HUD.textAlign(CENTER, CENTER);
 
     L_mato = createGraphics(pxDens * width, pxDens * height);
     L_mato.angleMode(DEGREES);
-    //L_mato.rectMode(CENTER);
     L_mato.textAlign(CENTER, CENTER);
 
     L_ground = createGraphics(pxDens * width, pxDens * height);
@@ -40,6 +36,10 @@ function gameReadySetup() {
     L_grave = createGraphics(pxDens * width, pxDens * height);
     L_grave.angleMode(DEGREES);
     L_grave.textAlign(CENTER, CENTER);
+
+    L_pickup = createGraphics(pxDens * width, pxDens * height);
+    L_pickup.angleMode(DEGREES);
+    L_pickup.textAlign(CENTER, CENTER);
 
     // FONTS
 
@@ -90,22 +90,17 @@ function gameReadySetup() {
       wormsCounter++;
     }
 
-    //POINTS SYSTEM
 
-    // html text formatting hohhoijaa
-    // fontSize = round((width + height) * 0.1);
-    // print('fontsize', fontSize)
-    // fontSizeString = '\'' + fontSize + 'px\'';
-    // print(fontSizeString)
+    //POINTS SYSTEM // OLD
 
-    pointsText = createP();
-    pointsText.style('font-size', '16px');
-    pointsText.style('font-family', 'Arial');
-    pointsText.position(3, -15);
+    // pointsText = createP();
+    // pointsText.style('font-size', '16px');
+    // pointsText.style('font-family', 'Arial');
+    // pointsText.position(3, -15);
 
-    wormsText = createP();
-    wormsText.style('font-size', '16px');
-    wormsText.position(3, 0);
+    // wormsText = createP();
+    // wormsText.style('font-size', '16px');
+    // wormsText.position(3, 0);
 
     print('So called Pixels length X', array2d.length);
     print('So called Pixels length Y', array2d[0].length);
@@ -215,16 +210,37 @@ function _OHJAIMET() {
   }
 }
 
+function _PICKUPS_UPDATE() {
+  if (pickups.length < 1) {
+    // PICKUPS (X,Y,TYPE)
+    pickups[0] = new pickup(random(30, width - 30), random(30, height - 30), 0);
+  }
 
-function _GAME_UPDATE() {
+  for (let i = 0; i < pickups.length; i++) {
+    pickups[i].show();
+  }
+}
+
+function _WORMS_UPDATE() {
   for (let i = 0; i < madot.length; i++) {
     madot[i].update();
+    for (let k = 0; k < pickups.length; k++) {
+      // HUOM NELJÄLLÄ JAKAMINEN
+      let mx = round(madot[i].pos.x / GD / 4);
+      let my = round(madot[i].pos.y / GD / 4);
+      let px = round(pickups[k].x / GD / 4);
+      let py = round(pickups[k].y / GD / 4);
+      if (mx === px && my === py) {
+        pickups[k].grab(i);
+        pickups.splice(k, 1);
+      }
+    }
   }
 
   updateBoardState();
 }
 
-function _SPEED_UP_TEST() {
+function _SPEED_UP() {
   for (let i = 0; i < madot.length; i++) {
     madot[i].speedUP();
   }
@@ -291,6 +307,7 @@ function _GAME_END() {
     background(Beige);
     image(L_HUD, 0, 0);
     image(L_mato, 0, 0);
+    image(L_pickup, 0, 0);
     image(L_stone, 0, 0);
     image(L_HUD, 0, 0);
     image(L_HUD, 0, 0);
@@ -302,6 +319,7 @@ function _GAME_END() {
 function _LAYERS() {
   image(L_ground, 0, 0);
   image(L_mato, 0, 0);
+  image(L_pickup, 0, 0);
   image(L_stone, 0, 0);
   image(L_grave, 0, 0);
   image(L_HUD, 0, 0);

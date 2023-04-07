@@ -56,7 +56,7 @@ class mato {
     this.tail = 4000;
 
     // POOP DOLLARS
-    this.dollars = 0.9;
+    this.dollars = costT;
   }
 
   speedUP_PANIC() {
@@ -84,6 +84,8 @@ class mato {
   }
 
   update() {
+    let rX = round(this.pos.x / GD) * GD
+    let rY = round(this.pos.y / GD) * GD
     if (!this.stop) { // IF DIDNT HIT STONE... (in array2d -> false)
 
       // UPDATE POSITION
@@ -114,12 +116,12 @@ class mato {
       }
 
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
-        if (!this.turbo || this.underground || this.dollars <= 0.9) {
+        if (!this.turbo || this.underground || this.dollars <= costT) {
           this.pos.add(this.vel);
         } else {
           if (this.dollars >= 0.9) {
             this.pos.add(this.velTurbo);
-            this.dollars -= 1 / 10;
+            this.dollars -= costT;
           }
         }
       } else {
@@ -157,8 +159,8 @@ class mato {
       else {
       }
 
-      if (this.uGTimer.expired() && this.UGStart && this.dollars >= 5) {
-        this.dollars -= 5;
+      if (this.uGTimer.expired() && this.UGStart && this.dollars >= costUG) {
+        this.dollars -= costUG;
         this.uGTimer.setTimer(diveTime);
         this.uGTimer.start();
       }
@@ -240,14 +242,15 @@ class mato {
         L_top.text(wormsCounter, width - this.SX, this.SY * wormsCounter);
 
         //GRAVE NAME
-        L_grave.fill(White);
-        L_grave.stroke(Black);
-        L_grave.strokeWeight(txtPixel * 0.3);
-        if (this.pos.x < width - 100) { // so it does not jump on top of scoreboard...
-          L_grave.textSize(TextSize);
-          L_grave.fill(225);
-          L_grave.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize);
-        }
+        
+        // L_grave.fill(White);
+        // L_grave.stroke(Black);
+        // L_grave.strokeWeight(txtPixel * 0.3);
+        // if (this.pos.x < width - 100) { // so it does not jump on top of scoreboard...
+        //   L_grave.textSize(TextSize);
+        //   L_grave.fill(225);
+        //   L_grave.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize);
+        // }
 
         //NAME IN SCORE TABLE
         L_top.textAlign(RIGHT, CENTER);

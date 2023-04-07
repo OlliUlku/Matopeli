@@ -72,6 +72,7 @@ function draw() {
 
     // LAYER CLEAR
     L_HUD.clear(0, 0, 0, 0);
+    L_pickup.clear(0, 0, 0, 0);
     background(Beige);
     if (frameCount % 15 === 0) {
       L_ground.background(fadeColor);
@@ -80,15 +81,16 @@ function draw() {
     // THE BEEF
     controllerUsed(); //checks all buttons and updates values
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
-    _SPEED_UP_TEST();
-    _GAME_UPDATE();
+    _PICKUPS_UPDATE();
+    //_SPEED_UP();
+    _WORMS_UPDATE();
 
     //drawDebug(); // DEBUG STONE PLACEMENT
-    _PANIC_MODE();
+    //_PANIC_MODE();
     _ONSCREENKEYS();
-    _POINTS();
+    //_POINTS(); OLD
     _LAYERS();
-    //_GAME_END(); // at one worm left
+    _GAME_END(); // at one worm left
 
   }
 }

@@ -2,7 +2,6 @@ let wormNames = ['Marjatta',
   'Kalevi',
   'Mauno',
   'Pekka',
-  'Reetta',
   'Kissa',
   'Koira',
   'Hevonen',
@@ -32,7 +31,7 @@ let wormNames = ['Marjatta',
 
 let spawnBorder = 150; // PX (Base 150?)
 let MOD = 2.5; // Base 2.5
-let speedMod = .5 * MOD; // BASE 1.3
+let speedMod = .8 * MOD; // BASE 1.3
 let rotSpeedMod = .5 * MOD; // .5?
 let panicMode = false;
 let panicCount;
@@ -65,6 +64,7 @@ let L_HUD;
 let L_mato;
 let L_ground;
 let L_grave;
+let L_pickup;
 
 //FONT
 let _font;
@@ -102,3 +102,10 @@ let slider;
 
 //POOP
 let pooped;
+
+// PICKUPS
+let pickups = [];
+
+// PRICES
+let costT = 1 / 5
+let costUG = 50
