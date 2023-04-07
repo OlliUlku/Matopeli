@@ -19,7 +19,7 @@ class mato {
 
     //underground dive feature
     this.underground = false;
-    this.uGTimer = new Timer(1, true);
+    this.uGTimer = new Timer(random(UGtime, UGtime * 2), true);
     this.uGSize;
     this.uGR = 0.26;
     this.r = 0.6 * GD;
@@ -56,7 +56,7 @@ class mato {
     this.tail = 4000;
 
     // POOP DOLLARS
-    this.dollars = costT;
+    this.dollars = startDollars;
   }
 
   speedUP_PANIC() {
@@ -77,19 +77,20 @@ class mato {
   }
 
   poopEaten() {
-    this.tail += 2000;
+    this.tail += 4000;
     this.poopsEaten++;
     this.dollars++;
     //print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
   }
 
   update() {
-    let rX = round(this.pos.x / GD) * GD
-    let rY = round(this.pos.y / GD) * GD
+    let rX = round(this.pos.x / GD) * GD;
+    let rY = round(this.pos.y / GD) * GD;
     if (!this.stop) { // IF DIDNT HIT STONE... (in array2d -> false)
 
       // UPDATE POSITION
 
+      // SET ROTATION
       if (!this.turbo) {
         if (!this.underground) {
           this.Rot = this.rotateAMT;
@@ -116,13 +117,18 @@ class mato {
       }
 
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
-        if (!this.turbo || this.underground || this.dollars <= costT) {
-          this.pos.add(this.vel);
-        } else {
-          if (this.dollars >= 0.9) {
-            this.pos.add(this.velTurbo);
-            this.dollars -= costT;
+
+        if (this.dollars >= costT) {
+          this.pos.add(this.velTurbo);
+          this.dollars -= costT;
+        }
+
+        else {
+          if (!this.turbo || this.underground || this.dollars <= costT) {
+            this.pos.add(this.vel);
+            // TURBO
           }
+
         }
       } else {
         this.pos.add(this.vel);
@@ -130,7 +136,7 @@ class mato {
       }
 
       // UNDERGROUND
-      let diveTime = 3000 + panicCount; // move to this.
+      let diveTime = 4000 + panicCount; // move to this.
       let alertTime = 1500;
 
       if (this.uGTimer.expired()) {
@@ -159,7 +165,12 @@ class mato {
       else {
       }
 
-      if (this.uGTimer.expired() && this.UGStart && this.dollars >= costUG) {
+      if (this.uGTimer.expired()) {
+        this.uGTimer.setTimer(UGtime);
+        this.uGTimer.start();
+      }
+
+      if (this.uGTimer.getRemainingTime() > diveTime && this.UGStart && this.dollars >= costUG) {
         this.dollars -= costUG;
         this.uGTimer.setTimer(diveTime);
         this.uGTimer.start();
@@ -217,7 +228,8 @@ class mato {
       L_HUD.textSize(MiniTextS);
       L_HUD.fill(Black);
       L_HUD.noStroke();
-      L_HUD.text('poop $: ' + floor(this.dollars), this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel);
+      //POOPDOLLARS
+      //L_HUD.text('poop $: ' + floor(this.dollars), this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel);
 
 
     } else { // DID HIT STONE (or otherwise) -> kill worm
@@ -242,7 +254,7 @@ class mato {
         L_top.text(wormsCounter, width - this.SX, this.SY * wormsCounter);
 
         //GRAVE NAME
-        
+
         // L_grave.fill(White);
         // L_grave.stroke(Black);
         // L_grave.strokeWeight(txtPixel * 0.3);

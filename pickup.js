@@ -13,7 +13,7 @@ class pickup {
     }
     grab(matoIND) {
         if (this.type === 0) {
-            madot[matoIND].dollars += 50;
+            madot[matoIND].dollars += omenaVal;
             madot[matoIND].tail += 10000;
         }
     }

@@ -88,7 +88,8 @@ let TextSize;
 let remTime = 0;
 
 // Global UNDERGROUND TIME
-let UGtime = 22000; //22000 ???
+let UGtime = 28000; //22000 ???
+let diveTime
 
 // To Keep text from scaling with division... LOL i made it a static size through this?
 let txtDivision = 8;
@@ -107,5 +108,7 @@ let pooped;
 let pickups = [];
 
 // PRICES
-let costT = 1 / 5
-let costUG = 50
+let startDollars = 0;
+let omenaVal = 15;
+let costT = 1 / 5;
+let costUG = 5;
