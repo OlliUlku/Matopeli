@@ -1,4 +1,5 @@
 let wormNames = ['Marjatta',
+'Reetta',
   'Kalevi',
   'Mauno',
   'Pekka',
@@ -27,6 +28,7 @@ let wormNames = ['Marjatta',
   'Giselle',
   'Åke',
   'Timon sijainen Timo',
+  'The Concept Of Timo',
   'Maire'];
 
 let spawnBorder = 150; // PX (Base 150?)
@@ -88,7 +90,7 @@ let TextSize;
 let remTime = 0;
 
 // Global UNDERGROUND TIME
-let UGtime = 28000; //22000 ???
+let UGtime = 22000; //22000 ???
 let diveTime
 
 // To Keep text from scaling with division... LOL i made it a static size through this?
@@ -106,6 +108,8 @@ let pooped;
 
 // PICKUPS
 let pickups = [];
+let pickups_newTime = 10000
+let pickups_count = 0
 
 // PRICES
 let startDollars = 0;

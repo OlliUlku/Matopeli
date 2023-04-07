@@ -13,7 +13,7 @@ let GD = 8; // Grid division, base 8, max 24
 
 function setup() {
   //fullscreen(true);
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(round(windowWidth / GD - 1) * GD, round(windowHeight / GD - 1) * GD);
 
   for (let element of document.getElementsByClassName("p5Canvas")) {
     element.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -84,7 +84,7 @@ function draw() {
     _PICKUPS_UPDATE();
     //_SPEED_UP();
     _WORMS_UPDATE();
-
+    _WORLD_UPDATE();
     //drawDebug(); // DEBUG STONE PLACEMENT
     //_PANIC_MODE();
     _ONSCREENKEYS();
@@ -124,7 +124,7 @@ function _MENU() {
 
   let valS = slider.value();
   GD = valS;
-  text(GD + ' x larger pixels', 100, 13)
+  text(GD + ' x larger pixels', 100, 13);
 }
 
 function touchStarted() {

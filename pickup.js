@@ -15,6 +15,7 @@ class pickup {
         if (this.type === 0) {
             madot[matoIND].dollars += omenaVal;
             madot[matoIND].tail += 10000;
+            print(madot[matoIND].name + ' ate a fruit! New tail size: ' + madot[matoIND].tail)
         }
     }
 }

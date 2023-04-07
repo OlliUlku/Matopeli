@@ -1,6 +1,7 @@
 function gameReadySetup() {
   // RUNS ONCE THEN TURNS SETUP variable OFF
   if (SETUP) {
+    resizeCanvas(round(windowWidth / GD - 1) * GD, round(windowHeight / GD - 1) * GD);
 
     frameRate(24);
     fadeColor = color(Beige);
@@ -54,16 +55,15 @@ function gameReadySetup() {
       ohjaimet[i] = new Controller_8BitDoZero2(i);
     }
 
-    // array that checks whether a (x,y) location has been 'used'
+    // array that checks whether a (x,y) location has been 'used' etc..
     create2dArray();
-    setBorderToFalse(); //safeguard...
+    //setBorderToFalse(); //safeguard...
 
     posca.splice(14, 1); // removes Beige (#dbc48e) which is background color, from array
 
     //shuffle(posca, true);
     shuffle(wormNames, true);
-    print('Max colors', posca.length);
-    print('Max Names', wormNames.length);
+
 
 
     //ONSCREENKEYS MADOT & NAPIT
@@ -102,16 +102,19 @@ function gameReadySetup() {
     // wormsText.style('font-size', '16px');
     // wormsText.position(3, 0);
 
-    print('So called Pixels length X', array2d.length);
-    print('So called Pixels length Y', array2d[0].length);
+
     Pixel = (width / GD / (array2d.length) * GD);
     txtPixel = (width / GD / array2d.length * txtDivision);
 
-    print('Grid Division', GD);
-    print('Pixel size', Pixel);
-    print('txtDiv', txtDivision);
-
-    print('txtPixel size', txtPixel);
+    //PRINT INFO FOR DEBUG?
+    //print('Max colors', posca.length);
+    //print('Max Names', wormNames.length);
+    //print('So called Pixels length X', array2d.length);
+    //print('So called Pixels length Y', array2d[0].length);
+    //print('Grid Division', GD);
+    //print('Pixel size', Pixel);
+    //print('txtDiv', txtDivision);
+    //print('txtPixel size', txtPixel);
 
 
     // wormname textsize
@@ -120,8 +123,11 @@ function gameReadySetup() {
     //PANIC COUNT
     panicCount = 1500 / 8 * GD;
 
+    pickupSpawner();
+
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
+    print('GAME START!!!');
   }
 }
 
@@ -213,7 +219,8 @@ function _OHJAIMET() {
 function _PICKUPS_UPDATE() {
   if (pickups.length < 1) {
     // PICKUPS (X,Y,TYPE)
-    pickups[0] = new pickup(random(30, width - 30), random(30, height - 30), 0);
+    pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 0);
+    pickups_count += 1;
   }
 
   for (let i = 0; i < pickups.length; i++) {
@@ -224,6 +231,10 @@ function _PICKUPS_UPDATE() {
 function _WORMS_UPDATE() {
   for (let i = 0; i < madot.length; i++) {
     madot[i].update();
+    madot[i].border();
+
+    // TOUCHING PICKUP?
+    //reverse for splice if 2 pickups are hit at same frame?
     for (let k = 0; k < pickups.length; k++) {
       // HUOM NELJÄLLÄ JAKAMINEN
       let mx = round(madot[i].pos.x / GD / 4);
@@ -233,11 +244,10 @@ function _WORMS_UPDATE() {
       if (mx === px && my === py) {
         pickups[k].grab(i);
         pickups.splice(k, 1);
+        pickups_count -= 1;
       }
     }
   }
-
-  updateBoardState();
 }
 
 function _SPEED_UP() {
@@ -313,6 +323,7 @@ function _GAME_END() {
     image(L_HUD, 0, 0);
     image(L_top, 0, 0);
     noLoop();
+    print('GAME END!!!');
   }
 }
 
@@ -336,6 +347,7 @@ function create2dArray() {
   }
 }
 
+// OLD NON USED??
 function setBorderToFalse() {
   for (let i = 0; i < height / GD; i++) {
     array2d[0][i][0] = false; //LEFT
@@ -347,7 +359,7 @@ function setBorderToFalse() {
   }
 }
 
-function updateBoardState() {
+function _WORLD_UPDATE() {
 
   for (let i = 0; i < madot.length; i++) {
     if (!madot[i].stop) {
@@ -375,8 +387,8 @@ function updateBoardState() {
           madot[i].stop = true;
           //print('hit wall');
         }
-      } else { // OUT OF BOUNDS
-        madot[i].stop = true;
+      } else { // OUT OF BOUNDS // OLD???
+        //madot[i].stop = true;
         //print('hit wall');
       }
       if (!madot[i].underground) {
@@ -426,7 +438,9 @@ function removeStone(_x, _y, kakka, matoindex) {
       let matoIND = matoindex;
       array2d[_x][_y][1] = true; // set poop[eli 1] true
       madot[matoIND].poop++;
-      print('mato', madot[matoIND].name, 'poops made:', madot[matoIND].poop);
+      if (!madot[matoIND].stop) {
+        print(madot[matoIND].name, 'pooped. Poopcount:', madot[matoIND].poop);
+      }
     }
   }
 }
@@ -450,3 +464,8 @@ function drawDebug() { //DEBUG PURPOSES
   }
 }
 
+function pickupSpawner() {
+  pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 0);
+  pickups_count += 1;
+  setTimeout(pickupSpawner, pickups_newTime);
+}

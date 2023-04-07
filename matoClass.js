@@ -80,7 +80,27 @@ class mato {
     this.tail += 4000;
     this.poopsEaten++;
     this.dollars++;
-    //print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
+    print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
+  }
+
+  border() {
+
+    if (this.pos.x < Pixel * 0.3) {
+      this.pos.x = width - (Pixel * 2);
+      print(this.name + ' used teleport!!');
+    } else if (this.pos.x >= width - 2 * Pixel) {
+      this.pos.x = Pixel * 0.3;
+      print(this.name + ' used teleport!!');
+    }
+
+    if (this.pos.y < Pixel * 0.2) {
+      this.pos.y = height - (Pixel * 2);
+      print(this.name + ' used teleport!!');
+    } else if (this.pos.y >= height - 2 * Pixel) {
+      this.pos.y = Pixel * 0.2;
+      print(this.name + ' used teleport!!');
+    }
+
   }
 
   update() {
@@ -116,6 +136,7 @@ class mato {
         this.acc_normal.rotate(this.Rot);
       }
 
+      // is in frame... is this needed anymore with passable walls???
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
 
         if (this.dollars >= costT) {
@@ -132,7 +153,8 @@ class mato {
         }
       } else {
         this.pos.add(this.vel);
-        this.stop = true;
+        //OLD
+        //this.stop = true;
       }
 
       // UNDERGROUND
@@ -235,22 +257,22 @@ class mato {
     } else { // DID HIT STONE (or otherwise) -> kill worm
       if (this.deathToggler) {
 
-        this.SX = Pixel * 2;
-        this.SY = Pixel * 3;
+        this.SX = txtPixel * 2;
+        this.SY = txtPixel * 3;
 
         // SCORE TABLE 
-        L_top.strokeWeight(Pixel * 0.15);
+        L_top.strokeWeight(txtPixel * 0.15);
         L_top.fill(this.color);
         L_top.stroke(Black);
         L_top.rectMode(CENTER);
-        L_top.rect(width - this.SX, this.SY * wormsCounter, this.SX + Pixel * 0.5);
+        L_top.rect(width - this.SX, this.SY * wormsCounter, this.SX + txtPixel * 0.5);
 
         //NUMBER TEXT
         L_top.textAlign(CENTER, CENTER);
-        L_top.textSize(Pixel * 1.5);
+        L_top.textSize(txtPixel * 1.5);
         L_top.fill(White);
         L_top.stroke(Black);
-        L_top.strokeWeight(Pixel * 0.3);
+        L_top.strokeWeight(txtPixel * 0.3);
         L_top.text(wormsCounter, width - this.SX, this.SY * wormsCounter);
 
         //GRAVE NAME
@@ -266,7 +288,7 @@ class mato {
 
         //NAME IN SCORE TABLE
         L_top.textAlign(RIGHT, CENTER);
-        L_top.textSize(Pixel * 1.5);
+        L_top.textSize(txtPixel * 1.5);
         L_top.fill(White);
         L_top.text(this.name, width - this.SX * 1.9, this.SY * wormsCounter);
 
