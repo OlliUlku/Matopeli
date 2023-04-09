@@ -53,7 +53,7 @@ class mato {
     this.poopsEaten = 0;
 
     // TAIL SIZE
-    this.tail = 4000;
+    this.tail = 60000;
 
     // POOP DOLLARS
     this.dollars = startDollars;
@@ -77,7 +77,7 @@ class mato {
   }
 
   poopEaten() {
-    this.tail += 4000;
+    this.tail += 8000;
     this.poopsEaten++;
     this.dollars++;
     print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);

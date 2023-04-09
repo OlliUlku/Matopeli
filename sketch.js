@@ -86,7 +86,7 @@ function draw() {
     _WORMS_UPDATE();
     _WORLD_UPDATE();
     //drawDebug(); // DEBUG STONE PLACEMENT
-    //_PANIC_MODE();
+    _PANIC_MODE();
     _ONSCREENKEYS();
     //_POINTS(); OLD
     _LAYERS();

@@ -269,14 +269,14 @@ function _POINTS() {
 }
 
 function _PANIC_MODE() {
-  if (wormsCounter <= MATOJA * 0.6 || MATOJA === 3 && wormsCounter <= MATOJA * 0.9) {
+  if (wormsCounter <= MATOJA * 0.8 || MATOJA === 3 && wormsCounter <= MATOJA * 0.9) {
     // OFF BECAUSE ITS BROKEN FOR THE TIME BEING
     panicMode = true;
   }
 
   if (panicMode) {
 
-    wormsText.style('color', '#8c172a');
+    //wormsText.style('color', '#8c172a');
 
     for (let i = 0; i < madot.length; i++) {
       madot[i].speedUP_PANIC();
@@ -285,7 +285,7 @@ function _PANIC_MODE() {
     //remTime += 120;
 
 
-    panicModeText = ' -> panic mode';
+    //panicModeText = ' -> panic mode';
     if (panicCount > 0) {
       panicCount = panicCount - (1.55 * speedMod / 8 * GD);
     }

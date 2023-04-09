@@ -90,7 +90,7 @@ let TextSize;
 let remTime = 0;
 
 // Global UNDERGROUND TIME
-let UGtime = 22000; //22000 ???
+let UGtime = 17000; //22000 ???
 let diveTime
 
 // To Keep text from scaling with division... LOL i made it a static size through this?
@@ -113,6 +113,6 @@ let pickups_count = 0
 
 // PRICES
 let startDollars = 0;
-let omenaVal = 15;
+let omenaVal = 8;
 let costT = 1 / 5;
 let costUG = 5;
