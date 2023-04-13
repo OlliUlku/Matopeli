@@ -313,7 +313,7 @@ class top_poop_eater_score {
   constructor() {
     this.sizeX = txtPixel * 18;
     this.sizeY = txtPixel * 20;
-    this.gapX = Pixel * 10 + txtPixel * 15;
+    this.gapX = txtPixel * 10 + txtPixel * 15;
     this.x = width - this.sizeX - this.gapX;
     this.y = height - this.sizeY;
     this.textSize = txtPixel * 1.4;
@@ -327,7 +327,7 @@ class top_poop_eater_score {
     }
     this.arr.sort((firstItem, secondItem) => firstItem.poops - secondItem.poops);
     reverse(this.arr);
-    this.sizeY = txtPixel * this.arr.length * 1.5 + 1.6 * Pixel;
+    this.sizeY = txtPixel * this.arr.length * 1.5 + 1.6 * txtPixel;
     this.y = height - this.sizeY;
 
 
@@ -337,18 +337,18 @@ class top_poop_eater_score {
   show() {
     L_HUD.noStroke();
     L_HUD.fill(this.color);
-    L_HUD.rect(this.x, this.y - Pixel * 3, this.sizeX, this.sizeY + Pixel * 3);
+    L_HUD.rect(this.x, this.y - txtPixel * 3, this.sizeX, this.sizeY + txtPixel * 3);
     L_HUD.textSize(this.textSize * 1.5);
     L_HUD.fill(Black);
-    L_HUD.text('Most Poop eaten:', this.x + txtPixel, this.y - Pixel);
+    L_HUD.text('Most Poop eaten:', this.x + txtPixel, this.y - txtPixel);
     L_HUD.textSize(this.textSize);
     for (let i = 0; i < this.arr.length; i++) {
       L_HUD.fill(this.arr[i].color);
       L_HUD.textAlign(LEFT, TOP);
-      L_HUD.text(this.arr[i].name, this.x + Pixel, this.y + Pixel + this.textSize * 1.5 * i);
+      L_HUD.text(this.arr[i].name, this.x + txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
       L_HUD.textAlign(RIGHT, TOP);
       L_HUD.fill(Black);
-      L_HUD.text(this.arr[i].poops, this.x + this.sizeX - 1 * Pixel, this.y + Pixel + this.textSize * 1.5 * i);
+      L_HUD.text(this.arr[i].poops, this.x + this.sizeX - 1 * txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
     }
   }
 }
