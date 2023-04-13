@@ -1,7 +1,7 @@
 class mato {
   constructor(x, y, _color, rot, controllerIndex) {
     this.pos = createVector(x, y);
-    this.vel = createVector(0, -0.5 * speedMod / 8 * GD);
+    this.vel = createVector(0, -0.5 * speedMod / 8 * GD * 0.5);
     this.vel.rotate(rot);
     this.acc = createVector(0, -0.001 * speedMod / 8 * GD); // PANIC ACCELERATION
     this.acc.rotate(rot);
@@ -57,6 +57,9 @@ class mato {
 
     // POOP DOLLARS
     this.dollars = startDollars;
+
+    //GEAR
+    this.gear = 'fast';
   }
 
   speedUP_PANIC() {
@@ -140,6 +143,7 @@ class mato {
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
 
         if (this.dollars >= costT) {
+            // TURBO
           this.pos.add(this.velTurbo);
           this.dollars -= costT;
         }
@@ -147,12 +151,17 @@ class mato {
         else {
           if (!this.turbo || this.underground || this.dollars <= costT) {
             this.pos.add(this.vel);
-            // TURBO
+            if (this.gear === 'fast') {
+              this.pos.add(this.vel);
+            }
           }
 
         }
       } else {
         this.pos.add(this.vel);
+        if (this.gear === 'fast') {
+          this.pos.add(this.vel);
+        }
         //OLD
         //this.stop = true;
       }

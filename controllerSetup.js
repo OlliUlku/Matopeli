@@ -58,6 +58,14 @@ function controllerUsed() {
                             ohjaimet[controller.index].RIGHT2 = true;
                         }
 
+                        if (btn === 4) { // NOT ON ZERO 2
+                            ohjaimet[controller.index].L = true;
+                        }
+
+                        if (btn === 5) { // NOT ON ZERO 2
+                            ohjaimet[controller.index].R = true;
+                        }
+
                         //OLDIE
                         //players[controller.index].buttonPainettu(btn);
                     }

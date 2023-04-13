@@ -225,6 +225,16 @@ function _OHJAIMET() {
     } else {
       madot[i].UGStart = false;
     }
+    
+    if (ohjaimet[ctrl_i].L) {
+      madot[i].gear = 'slow';
+      ohjaimet[ctrl_i].L = false; // turns button OFF
+    }
+
+    if (ohjaimet[ctrl_i].R) {
+      madot[i].gear = 'fast';
+      ohjaimet[ctrl_i].R = false; // turns button OFF
+    }
   }
 }
 
@@ -393,7 +403,7 @@ function _WORLD_UPDATE() {
                 if (madot[i].underground) {
                   L_mato.erase();
                   L_mato.rect((__x + dx) * GD, (__y + dy) * GD, Pixel);
-                  noErase();
+                  L_mato.noErase();
                 }
               }
             }
