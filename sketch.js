@@ -59,6 +59,7 @@ function setup() {
       e.preventDefault();
     }
   }, false);
+
 }
 
 
@@ -66,6 +67,8 @@ function draw() {
 
   if (GAMESTATE === 'MENU') {
     _MENU();
+  
+
 
   } else if (GAMESTATE === 'GAME') {
     gameReadySetup(); // RUNS ONLY ONCE

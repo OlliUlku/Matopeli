@@ -36,6 +36,7 @@ let MOD = 2.5; // Base 2.5
 let speedMod = .8 * MOD; // BASE 1.3
 let rotSpeedMod = .5 * MOD; // .5?
 let panicMode = false;
+let panicONCE = true;
 let panicCount;
 
 // GRID DIVISION UPDATE
@@ -116,3 +117,9 @@ let startDollars = 0;
 let omenaVal = 8;
 let costT = 1 / 5;
 let costUG = 5;
+
+// IMAGES
+let img_panicMode
+
+// POOP SCORE
+let poopScore;

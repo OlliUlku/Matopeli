@@ -84,9 +84,20 @@ function gameReadySetup() {
       MATOJA = matoCountBT;
     }
 
+    Pixel = (width / GD / (array2d.length) * GD);
+    txtPixel = (width / GD / array2d.length * txtDivision);
+
     //GAMEPAD
     for (let i = 0; i < matoCountBT; i++) {
-      madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
+      angleMode(RADIANS);
+      let spawnX, spawnY;
+      spawnX = sin(PI * 2 / MATOJA * i);
+      spawnY = sin(PI * 2 / MATOJA * i + HALF_PI);
+      print(spawnX);
+      spawnX = map(spawnX, -1, 1, Pixel * 8, width - Pixel * 8);
+      spawnY = map(spawnY, -1, 1, Pixel * 8, height - Pixel * 8);
+      angleMode(DEGREES);
+      madot[wormsCounter] = new mato(spawnX + random(-Pixel * 4, Pixel * 4), spawnY + random(-Pixel * 4, Pixel * 4), posca[wormsCounter], -360 / MATOJA * i + random(-10, 10), wormsCounter);
       wormsCounter++;
     }
 
@@ -103,8 +114,7 @@ function gameReadySetup() {
     // wormsText.position(3, 0);
 
 
-    Pixel = (width / GD / (array2d.length) * GD);
-    txtPixel = (width / GD / array2d.length * txtDivision);
+
 
     //PRINT INFO FOR DEBUG?
     //print('Max colors', posca.length);
@@ -124,6 +134,8 @@ function gameReadySetup() {
     panicCount = 1500 / 8 * GD;
 
     pickupSpawner();
+
+    poopScore = new top_poop_eater_score();
 
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
@@ -269,23 +281,23 @@ function _POINTS() {
 }
 
 function _PANIC_MODE() {
+
   if (wormsCounter <= MATOJA * 0.8 || MATOJA === 3 && wormsCounter <= MATOJA * 0.9) {
-    // OFF BECAUSE ITS BROKEN FOR THE TIME BEING
-    panicMode = true;
+    if (panicONCE) {
+      img_panicMode = createImg('panic_anim.png');
+      img_panicMode.position(10, 10);
+      img_panicMode.size(480 / 3, 432 / 3);
+      panicONCE = false;
+      panicMode = true;
+    }
   }
 
   if (panicMode) {
-
-    //wormsText.style('color', '#8c172a');
 
     for (let i = 0; i < madot.length; i++) {
       madot[i].speedUP_PANIC();
     }
 
-    //remTime += 120;
-
-
-    //panicModeText = ' -> panic mode';
     if (panicCount > 0) {
       panicCount = panicCount - (1.55 * speedMod / 8 * GD);
     }
@@ -371,14 +383,18 @@ function _WORLD_UPDATE() {
         if (array2d[__x][__y][0]
           && array2d[__x + 1][__y][0]
           && array2d[__x][__y + 1][0]
-          && array2d[__x + 1][__y + 1][0]
-          && !madot[i].underground) {
+          && array2d[__x + 1][__y + 1][0]) {
           // HAS POOP
           for (let dx = 0; dx <= 1; dx++) {
             for (let dy = 0; dy <= 1; dy++) {
               if (array2d[__x + dx][__y + dy][1]) {
                 array2d[__x + dx][__y + dy][1] = false;
                 madot[i].poopEaten();
+                if (madot[i].underground) {
+                  L_mato.erase();
+                  L_mato.rect((__x + dx) * GD, (__y + dy) * GD, Pixel);
+                  noErase();
+                }
               }
             }
           }
@@ -396,6 +412,8 @@ function _WORLD_UPDATE() {
       }
     }
   }
+  poopScore.update();
+  poopScore.show();
 }
 
 function set2dArrayFalse(_x, _y, matoindex) {
