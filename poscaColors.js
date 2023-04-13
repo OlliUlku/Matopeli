@@ -52,7 +52,6 @@ let posca = [
   AppleGreen,
   Blue,
   Pink,
-  Red,
   BrightYellow,
   LightBlue,
   Lilac,
@@ -82,7 +81,6 @@ let posca = [
   SunshineYellow,
   AquaGreen,
 
-  DeepGrey,
   RubyRed,
   EnglishGreen,
   Ochre,

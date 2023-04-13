@@ -13,7 +13,7 @@ let GD = 8; // Grid division, base 8, max 24
 
 function setup() {
   //fullscreen(true);
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(round(windowWidth / GD - 1) * GD, round(windowHeight / GD - 1) * GD);
 
   for (let element of document.getElementsByClassName("p5Canvas")) {
     element.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -34,7 +34,7 @@ function setup() {
   button2.center('horizontal');
   button2.mousePressed(StartButton2);
 
-  slider = createSlider(1, 24, 8, 1);
+  slider = createSlider(3, 24, 8, 1);
   slider.position(10, 10);
   slider.style('width', '80px');
 
@@ -59,6 +59,7 @@ function setup() {
       e.preventDefault();
     }
   }, false);
+
 }
 
 
@@ -66,12 +67,15 @@ function draw() {
 
   if (GAMESTATE === 'MENU') {
     _MENU();
+  
+
 
   } else if (GAMESTATE === 'GAME') {
     gameReadySetup(); // RUNS ONLY ONCE
 
     // LAYER CLEAR
     L_HUD.clear(0, 0, 0, 0);
+    L_pickup.clear(0, 0, 0, 0);
     background(Beige);
     if (frameCount % 15 === 0) {
       L_ground.background(fadeColor);
@@ -80,16 +84,17 @@ function draw() {
     // THE BEEF
     controllerUsed(); //checks all buttons and updates values
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
-    _GAME_UPDATE();
-
-    //drawStone(); // DEBUG STONE PLACEMENT
+    _PICKUPS_UPDATE();
+    //_SPEED_UP();
+    _WORMS_UPDATE();
+    _WORLD_UPDATE();
+    //drawDebug(); // DEBUG STONE PLACEMENT
     _PANIC_MODE();
     _ONSCREENKEYS();
-    _POINTS();
+    //_POINTS(); OLD
     _LAYERS();
     _GAME_END(); // at one worm left
 
-    remTime += 20;
   }
 }
 
@@ -122,7 +127,7 @@ function _MENU() {
 
   let valS = slider.value();
   GD = valS;
-  text(GD + ' x larger pixels', 100, 13)
+  text(GD + ' x larger pixels', 100, 13);
 }
 
 function touchStarted() {

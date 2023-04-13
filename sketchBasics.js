@@ -1,6 +1,7 @@
 function gameReadySetup() {
   // RUNS ONCE THEN TURNS SETUP variable OFF
   if (SETUP) {
+    resizeCanvas(round(windowWidth / GD - 1) * GD, round(windowHeight / GD - 1) * GD);
 
     frameRate(24);
     fadeColor = color(Beige);
@@ -15,22 +16,18 @@ function gameReadySetup() {
     let pxDens = pixelDensity();
     L_top = createGraphics(pxDens * width, pxDens * height);
     L_top.angleMode(DEGREES);
-    //L_top.rectMode(CENTER);
     L_top.textAlign(CENTER, CENTER);
 
     L_stone = createGraphics(pxDens * width, pxDens * height);
     L_stone.angleMode(DEGREES);
-    //L_stone.rectMode(CENTER);
     L_stone.textAlign(CENTER, CENTER);
 
     L_HUD = createGraphics(pxDens * width, pxDens * height);
     L_HUD.angleMode(DEGREES);
-    //L_HUD.rectMode(CENTER);
     L_HUD.textAlign(CENTER, CENTER);
 
     L_mato = createGraphics(pxDens * width, pxDens * height);
     L_mato.angleMode(DEGREES);
-    //L_mato.rectMode(CENTER);
     L_mato.textAlign(CENTER, CENTER);
 
     L_ground = createGraphics(pxDens * width, pxDens * height);
@@ -40,6 +37,10 @@ function gameReadySetup() {
     L_grave = createGraphics(pxDens * width, pxDens * height);
     L_grave.angleMode(DEGREES);
     L_grave.textAlign(CENTER, CENTER);
+
+    L_pickup = createGraphics(pxDens * width, pxDens * height);
+    L_pickup.angleMode(DEGREES);
+    L_pickup.textAlign(CENTER, CENTER);
 
     // FONTS
 
@@ -54,16 +55,15 @@ function gameReadySetup() {
       ohjaimet[i] = new Controller_8BitDoZero2(i);
     }
 
-    // array that checks whether a (x,y) location has been 'used'
+    // array that checks whether a (x,y) location has been 'used' etc..
     create2dArray();
-    setBorderToFalse(); //safeguard...
+    //setBorderToFalse(); //safeguard...
 
     posca.splice(14, 1); // removes Beige (#dbc48e) which is background color, from array
 
     //shuffle(posca, true);
     shuffle(wormNames, true);
-    print('Max colors', posca.length);
-    print('Max Names', wormNames.length);
+
 
 
     //ONSCREENKEYS MADOT & NAPIT
@@ -84,46 +84,62 @@ function gameReadySetup() {
       MATOJA = matoCountBT;
     }
 
-    //GAMEPAD
-    for (let i = 0; i < matoCountBT; i++) {
-      madot[wormsCounter] = new mato(random(spawnBorder, width - spawnBorder), random(spawnBorder, height - spawnBorder), posca[wormsCounter], random(360), wormsCounter);
-      wormsCounter++;
-    }
-
-    //POINTS SYSTEM
-
-    // html text formatting hohhoijaa
-    // fontSize = round((width + height) * 0.1);
-    // print('fontsize', fontSize)
-    // fontSizeString = '\'' + fontSize + 'px\'';
-    // print(fontSizeString)
-
-    pointsText = createP();
-    pointsText.style('font-size', '16px');
-    pointsText.style('font-family', 'Arial');
-    pointsText.position(3, -15);
-
-    wormsText = createP();
-    wormsText.style('font-size', '16px');
-    wormsText.position(3, 0);
-
-    print('So called Pixels length X', array2d.length);
-    print('So called Pixels length Y', array2d[0].length);
     Pixel = (width / GD / (array2d.length) * GD);
     txtPixel = (width / GD / array2d.length * txtDivision);
 
-    print('Grid Division', GD);
-    print('Pixel size', Pixel);
-    print('txtDiv', txtDivision);
+    //GAMEPAD
+    for (let i = 0; i < matoCountBT; i++) {
+      angleMode(RADIANS);
+      let spawnX, spawnY;
+      spawnX = sin(PI * 2 / MATOJA * i);
+      spawnY = sin(PI * 2 / MATOJA * i + HALF_PI);
+      print(spawnX);
+      spawnX = map(spawnX, -1, 1, Pixel * 8, width - Pixel * 8);
+      spawnY = map(spawnY, -1, 1, Pixel * 8, height - Pixel * 8);
+      angleMode(DEGREES);
+      madot[wormsCounter] = new mato(spawnX + random(-Pixel * 4, Pixel * 4), spawnY + random(-Pixel * 4, Pixel * 4), posca[wormsCounter], -360 / MATOJA * i + random(-10, 10), wormsCounter);
+      wormsCounter++;
+    }
 
-    print('txtPixel size', txtPixel);
+
+    //POINTS SYSTEM // OLD
+
+    // pointsText = createP();
+    // pointsText.style('font-size', '16px');
+    // pointsText.style('font-family', 'Arial');
+    // pointsText.position(3, -15);
+
+    // wormsText = createP();
+    // wormsText.style('font-size', '16px');
+    // wormsText.position(3, 0);
+
+
+
+
+    //PRINT INFO FOR DEBUG?
+    //print('Max colors', posca.length);
+    //print('Max Names', wormNames.length);
+    //print('So called Pixels length X', array2d.length);
+    //print('So called Pixels length Y', array2d[0].length);
+    //print('Grid Division', GD);
+    //print('Pixel size', Pixel);
+    //print('txtDiv', txtDivision);
+    //print('txtPixel size', txtPixel);
 
 
     // wormname textsize
     TextSize = txtPixel * 2.1;
 
+    //PANIC COUNT
+    panicCount = 1500 / 8 * GD;
+
+    pickupSpawner();
+
+    poopScore = new top_poop_eater_score();
+
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
+    print('GAME START!!!');
   }
 }
 
@@ -202,19 +218,61 @@ function _OHJAIMET() {
     } else {
       madot[i].turbo = false;
     }
+
+    if (ohjaimet[ctrl_i].A || keyIsDown(DOWN_ARROW)) {
+      madot[i].UGStart = true;
+      ohjaimet[ctrl_i].A = false; // turns button OFF
+    } else {
+      madot[i].UGStart = false;
+    }
+    
+    if (ohjaimet[ctrl_i].L) {
+      madot[i].gear = 'slow';
+      ohjaimet[ctrl_i].L = false; // turns button OFF
+    }
+
+    if (ohjaimet[ctrl_i].R) {
+      madot[i].gear = 'fast';
+      ohjaimet[ctrl_i].R = false; // turns button OFF
+    }
   }
 }
 
+function _PICKUPS_UPDATE() {
+  if (pickups.length < 1) {
+    // PICKUPS (X,Y,TYPE)
+    pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 0);
+    pickups_count += 1;
+  }
 
-function _GAME_UPDATE() {
+  for (let i = 0; i < pickups.length; i++) {
+    pickups[i].show();
+  }
+}
+
+function _WORMS_UPDATE() {
   for (let i = 0; i < madot.length; i++) {
     madot[i].update();
-  }
+    madot[i].border();
 
-  updateBoardState();
+    // TOUCHING PICKUP?
+    //reverse for splice if 2 pickups are hit at same frame?
+    for (let k = 0; k < pickups.length; k++) {
+      // HUOM NELJÄLLÄ JAKAMINEN
+      let mx = round(madot[i].pos.x / GD / 4);
+      let my = round(madot[i].pos.y / GD / 4);
+      let px = round(pickups[k].x / GD / 4);
+      let py = round(pickups[k].y / GD / 4);
+      if (mx === px && my === py) {
+        pickups[k].grab(i);
+        pickups.splice(k, 1);
+        pickups_count -= 1;
+      }
+    }
+  }
 }
 
-function _SPEED_UP_TEST() {
+function _SPEED_UP() {
   for (let i = 0; i < madot.length; i++) {
     madot[i].speedUP();
   }
@@ -233,25 +291,25 @@ function _POINTS() {
 }
 
 function _PANIC_MODE() {
-  if (wormsCounter <= MATOJA * 0.6 || MATOJA === 3 && wormsCounter <= MATOJA * 0.9) {
-    // OFF BECAUSE ITS BROKEN FOR THE TIME BEING
-    panicMode = true;
+
+  if (wormsCounter <= MATOJA * 0.8 || MATOJA === 3 && wormsCounter <= MATOJA * 0.9) {
+    if (panicONCE) {
+      img_panicMode = createImg('panic_anim.png');
+      img_panicMode.position(10, 10);
+      img_panicMode.size(480 / 3, 432 / 3);
+      panicONCE = false;
+      panicMode = true;
+    }
   }
 
   if (panicMode) {
-
-    wormsText.style('color', '#8c172a');
 
     for (let i = 0; i < madot.length; i++) {
       madot[i].speedUP_PANIC();
     }
 
-    remTime += 80;
-
-
-    panicModeText = ' -> panic mode';
     if (panicCount > 0) {
-      panicCount = panicCount - (1.55 * speedMod);
+      panicCount = panicCount - (1.55 * speedMod / 8 * GD);
     }
   }
 }
@@ -281,17 +339,20 @@ function _GAME_END() {
     background(Beige);
     image(L_HUD, 0, 0);
     image(L_mato, 0, 0);
+    image(L_pickup, 0, 0);
     image(L_stone, 0, 0);
     image(L_HUD, 0, 0);
     image(L_HUD, 0, 0);
     image(L_top, 0, 0);
     noLoop();
+    print('GAME END!!!');
   }
 }
 
 function _LAYERS() {
   image(L_ground, 0, 0);
   image(L_mato, 0, 0);
+  image(L_pickup, 0, 0);
   image(L_stone, 0, 0);
   image(L_grave, 0, 0);
   image(L_HUD, 0, 0);
@@ -302,45 +363,67 @@ function create2dArray() {
   for (let _x = 0; _x < width / GD; _x++) {
     array2d[_x] = [];
     for (let _y = 0; _y < height / GD; _y++) {
-      array2d[_x][_y] = true;
+      // 0 = PASSABLE (NO STONE), 1 = POOP
+      array2d[_x][_y] = [true, false];
     }
   }
 }
 
+// OLD NON USED??
 function setBorderToFalse() {
   for (let i = 0; i < height / GD; i++) {
-    array2d[0][i] = false;
-    array2d[array2d.length - 1][i] = false;
+    array2d[0][i][0] = false; //LEFT
+    array2d[array2d.length - 1][i][0] = false; //RIGHT
+  }
+  for (let i = 0; i < width / GD; i++) {
+    array2d[i][0][0] = false; //TOP
+    array2d[i][array2d[1].length - 1][0] = false; //BOT
   }
 }
 
-function updateBoardState() {
+function _WORLD_UPDATE() {
 
   for (let i = 0; i < madot.length; i++) {
     if (!madot[i].stop) {
-      // CHECK IF WITHIN BOUNDS
       let __x = round(madot[i].pos.x / GD);
       let __y = round(madot[i].pos.y / GD);
+      // CHECK IF WITHIN BOUNDS
       if (__x > 0 && __x < width / GD && __y > 0 && __y < height / GD) {
-        if (array2d[__x][__y]
-          //&& array2d[__x - 1][__y] 
-          && array2d[__x + 1][__y]
-          //&& array2d[__x][__y - 1] 
-          && array2d[__x][__y + 1]
-          && array2d[__x + 1][__y + 1]
-          //&& array2d[__x - 1][__y - 1] 
-          //&& array2d[__x + 1][__y - 1] 
-          //&& array2d[__x - 1][__y + 1] 
-          && !madot[i].underground) {
-          setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y, i);
+        // NO STONE AND NO UNDERGROUND
+        if (array2d[__x][__y][0]
+          && array2d[__x + 1][__y][0]
+          && array2d[__x][__y + 1][0]
+          && array2d[__x + 1][__y + 1][0]) {
+          // HAS POOP
+          for (let dx = 0; dx <= 1; dx++) {
+            for (let dy = 0; dy <= 1; dy++) {
+              if (array2d[__x + dx][__y + dy][1]) {
+                array2d[__x + dx][__y + dy][1] = false;
+                madot[i].poopEaten();
+                if (madot[i].underground) {
+                  L_mato.erase();
+                  L_mato.rect((__x + dx) * GD, (__y + dy) * GD, Pixel);
+                  L_mato.noErase();
+                }
+              }
+            }
+          }
+
         } else if (!madot[i].underground) {
           madot[i].stop = true;
-          setTimeout(set2dArrayFalse, 1000 + panicCount + stoneDelay, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
           //print('hit wall');
         }
+      } else { // OUT OF BOUNDS // OLD???
+        //madot[i].stop = true;
+        //print('hit wall');
+      }
+      if (!madot[i].underground) {
+        setTimeout(set2dArrayFalse, (1000 + panicCount + stoneDelay) * 8 / GD, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
       }
     }
   }
+  poopScore.update();
+  poopScore.show();
 }
 
 function set2dArrayFalse(_x, _y, matoindex) {
@@ -350,11 +433,11 @@ function set2dArrayFalse(_x, _y, matoindex) {
   L_stone.noStroke();
   for (let dx = 0; dx <= 1; dx++) {
     for (let dy = 0; dy <= 1; dy++) {
-      if (array2d[_x + dx][_y + dy]) {
-        array2d[_x + dx][_y + dy] = false;
+      if (array2d[_x + dx][_y + dy][0]) {
+        array2d[_x + dx][_y + dy][0] = false;
         L_stone.fill(random(80, 120));
         L_stone.rect((_x + dx) * GD, (_y + dy) * GD, GD);
-        setTimeout(removeStone, remTime, _x + dx, _y + dy, true, matoindex);
+        setTimeout(removeStone, madot[matoindex].tail + remTime, _x + dx, _y + dy, true, matoindex);
       }
     }
   }
@@ -370,8 +453,8 @@ function removeStone(_x, _y, kakka, matoindex) {
     Perc = 1;
   }
 
-  if (!array2d[_x][_y]) {
-    array2d[_x][_y] = true;
+  if (!array2d[_x][_y][0]) {
+    array2d[_x][_y][0] = true;
     L_stone.erase();
     L_stone.rect(_x * GD, _y * GD, GD);
     L_stone.noErase();
@@ -381,17 +464,25 @@ function removeStone(_x, _y, kakka, matoindex) {
       L_mato.noErase();
     } else {
       let matoIND = matoindex;
+      array2d[_x][_y][1] = true; // set poop[eli 1] true
       madot[matoIND].poop++;
-      print('mato', madot[matoIND].name, 'poops made:', madot[matoIND].poop);
+      if (!madot[matoIND].stop) {
+        print(madot[matoIND].name, 'pooped. Poopcount:', madot[matoIND].poop);
+      }
     }
   }
 }
 
-function drawStone() { //DEBUG PURPOSES
-  if (frameCount % 30 === 0) {
+function drawDebug() { //DEBUG PURPOSES
+  if (frameCount % 10 === 0) {
     for (let x = 0; x < width / GD; x++) {
       for (let y = 0; y < height / GD; y++) {
-        if (!array2d[x][y]) {
+        if (!array2d[x][y][0]) { // DRAW STONE
+          L_HUD.fill(10, 20, 30, 40);
+          L_HUD.noStroke();
+          L_HUD.rect(x * GD, y * GD, Pixel);
+        }
+        if (array2d[x][y][1]) { // DRAW POOP
           L_HUD.fill(10, 20, 30, 40);
           L_HUD.noStroke();
           L_HUD.rect(x * GD, y * GD, Pixel);
@@ -401,3 +492,8 @@ function drawStone() { //DEBUG PURPOSES
   }
 }
 
+function pickupSpawner() {
+  pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 0);
+  pickups_count += 1;
+  setTimeout(pickupSpawner, pickups_newTime);
+}

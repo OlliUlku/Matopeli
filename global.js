@@ -1,8 +1,8 @@
 let wormNames = ['Marjatta',
+'Reetta',
   'Kalevi',
   'Mauno',
   'Pekka',
-  'Reetta',
   'Kissa',
   'Koira',
   'Hevonen',
@@ -28,14 +28,16 @@ let wormNames = ['Marjatta',
   'Giselle',
   'Åke',
   'Timon sijainen Timo',
+  'The Concept Of Timo',
   'Maire'];
 
 let spawnBorder = 150; // PX (Base 150?)
 let MOD = 2.5; // Base 2.5
-let speedMod = 1.3 * MOD; // BASE .8
+let speedMod = .8 * MOD; // BASE 1.3
 let rotSpeedMod = .5 * MOD; // .5?
 let panicMode = false;
-let panicCount = 1500;
+let panicONCE = true;
+let panicCount;
 
 // GRID DIVISION UPDATE
 let Pixel; //PIXEL SIZE
@@ -65,6 +67,7 @@ let L_HUD;
 let L_mato;
 let L_ground;
 let L_grave;
+let L_pickup;
 
 //FONT
 let _font;
@@ -85,10 +88,11 @@ let MATOJA;
 let TextSize;
 
 // REMOVE STONE
-let remTime = 4000;
+let remTime = 0;
 
 // Global UNDERGROUND TIME
-let UGtime = 22000; //22000 ???
+let UGtime = 17000; //22000 ???
+let diveTime
 
 // To Keep text from scaling with division... LOL i made it a static size through this?
 let txtDivision = 8;
@@ -102,3 +106,20 @@ let slider;
 
 //POOP
 let pooped;
+
+// PICKUPS
+let pickups = [];
+let pickups_newTime = 10000
+let pickups_count = 0
+
+// PRICES
+let startDollars = 0;
+let omenaVal = 8;
+let costT = 1 / 5;
+let costUG = 5;
+
+// IMAGES
+let img_panicMode
+
+// POOP SCORE
+let poopScore;

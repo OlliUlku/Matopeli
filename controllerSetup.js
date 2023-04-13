@@ -48,11 +48,22 @@ function controllerUsed() {
                         if (btn === 0) {
                             ohjaimet[controller.index].B = true;
                         }
+                        if (btn === 1) {
+                            ohjaimet[controller.index].A = true;
+                        }
                         if (btn === 14) { // NOT ON ZERO 2
                             ohjaimet[controller.index].LEFT2 = true;
                         }
                         if (btn === 15) { // NOT ON ZERO 2
                             ohjaimet[controller.index].RIGHT2 = true;
+                        }
+
+                        if (btn === 4) { // NOT ON ZERO 2
+                            ohjaimet[controller.index].L = true;
+                        }
+
+                        if (btn === 5) { // NOT ON ZERO 2
+                            ohjaimet[controller.index].R = true;
                         }
 
                         //OLDIE
