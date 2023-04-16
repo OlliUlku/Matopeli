@@ -125,6 +125,7 @@ function gameReadySetup() {
     //print('Pixel size', Pixel);
     //print('txtDiv', txtDivision);
     //print('txtPixel size', txtPixel);
+    print('MATOJA ' + MATOJA);
 
 
     // wormname textsize
@@ -136,6 +137,14 @@ function gameReadySetup() {
     pickupSpawner();
 
     poopScore = new top_poop_eater_score();
+    appleScore = new top_apple_eater_score();
+
+    // IMAGES
+
+    img_panicMode = createImg('panic_anim.png');
+    img_kakkakruunu = loadImage('kakkakruunu.png');
+    img_valtikka = loadImage('valtikka1.png');
+    img_align = loadImage('align1.png');
 
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
@@ -225,7 +234,7 @@ function _OHJAIMET() {
     } else {
       madot[i].UGStart = false;
     }
-    
+
     if (ohjaimet[ctrl_i].L) {
       madot[i].gear = 'slow';
       ohjaimet[ctrl_i].L = false; // turns button OFF
@@ -264,9 +273,12 @@ function _WORMS_UPDATE() {
       let px = round(pickups[k].x / GD / 4);
       let py = round(pickups[k].y / GD / 4);
       if (mx === px && my === py) {
-        pickups[k].grab(i);
-        pickups.splice(k, 1);
-        pickups_count -= 1;
+        if (pickups[k].timerPickupSpawn.expired()) {
+          pickups[k].grab(i);
+          pickups.splice(k, 1);
+          pickups_count -= 1;
+        }
+
       }
     }
   }
@@ -294,7 +306,6 @@ function _PANIC_MODE() {
 
   if (wormsCounter <= MATOJA * 0.8 || MATOJA === 3 && wormsCounter <= MATOJA * 0.9) {
     if (panicONCE) {
-      img_panicMode = createImg('panic_anim.png');
       img_panicMode.position(10, 10);
       img_panicMode.size(480 / 3, 432 / 3);
       panicONCE = false;
@@ -424,6 +435,8 @@ function _WORLD_UPDATE() {
   }
   poopScore.update();
   poopScore.show();
+  appleScore.update();
+  appleScore.show();
 }
 
 function set2dArrayFalse(_x, _y, matoindex) {
@@ -467,7 +480,7 @@ function removeStone(_x, _y, kakka, matoindex) {
       array2d[_x][_y][1] = true; // set poop[eli 1] true
       madot[matoIND].poop++;
       if (!madot[matoIND].stop) {
-        print(madot[matoIND].name, 'pooped. Poopcount:', madot[matoIND].poop);
+        //print(madot[matoIND].name, 'pooped. Poopcount:', madot[matoIND].poop);
       }
     }
   }

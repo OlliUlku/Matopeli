@@ -49,15 +49,17 @@ let DarkBrown = "#453132";
 
 //EDITED LIST DOESNT INCLUDE BEIGE for example
 let posca = [
-  AppleGreen,
-  Blue,
-  Pink,
-  BrightYellow,
-  LightBlue,
-  Lilac,
-  
+
   Violet,
   Orange,
+  Pink,
+  AppleGreen,
+  Blue,
+  LightBlue,
+  RedWine,
+  EnglishGreen,
+
+
   LightGreen,
   Black,
   White,
@@ -68,21 +70,21 @@ let posca = [
   EmeraldGreen,
   StrawYellow,
   Turquoise,
-  RedWine,
   PrussianBlue,
+  BrightYellow,
+  CoralPink,
 
+  Lilac,
   LightPink,
   Yellow,
   Green,
   GlacierBlue,
-  CoralPink,
   Lavender,
   Apricot,
   SunshineYellow,
   AquaGreen,
 
   RubyRed,
-  EnglishGreen,
   Ochre,
   Rasperry,
   KhakiGreen,

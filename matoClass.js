@@ -48,18 +48,23 @@ class mato {
     // HUD
     this.name = wormNames[wormsCounter];
 
-    // POOP
+    // COLLECTIBLES // POOP // APPLES
     this.poop = 0;
     this.poopsEaten = 0;
+    this.applesEaten = 0;
 
     // TAIL SIZE
-    this.tail = 6000;
+    this.tail = 2000;
 
     // POOP DOLLARS
-    this.dollars = startDollars;
+    this.PickupTurbo = startDollars;
 
     //GEAR
     this.gear = 'fast';
+
+    // POOP ROYALTY
+    this.royalty = false;
+    this.appleRoyalty = false;
   }
 
   speedUP_PANIC() {
@@ -80,28 +85,35 @@ class mato {
   }
 
   poopEaten() {
-    this.tail += 10000;
+    this.tail += 30000 / MATOJA;
     this.poopsEaten++;
-    this.dollars++;
-    //print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
+    this.PickupTurbo++;
+    print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
+  }
+
+  appleEaten() {
+    this.tail += 60000 / MATOJA;
+    this.applesEaten++;
+    this.PickupTurbo += omenaVal;
+    print(this.name + ' ate a fruit! New tail size: ' + this.tail);
   }
 
   border() {
 
     if (this.pos.x < Pixel * 0.3) {
       this.pos.x = width - (Pixel * 2);
-      print(this.name + ' used teleport!!');
+      // print(this.name + ' used teleport!!');
     } else if (this.pos.x >= width - 2 * Pixel) {
       this.pos.x = Pixel * 0.3;
-      print(this.name + ' used teleport!!');
+      // print(this.name + ' used teleport!!');
     }
 
     if (this.pos.y < Pixel * 0.2) {
       this.pos.y = height - (Pixel * 2);
-      print(this.name + ' used teleport!!');
+      // print(this.name + ' used teleport!!');
     } else if (this.pos.y >= height - 2 * Pixel) {
       this.pos.y = Pixel * 0.2;
-      print(this.name + ' used teleport!!');
+      // print(this.name + ' used teleport!!');
     }
 
   }
@@ -142,14 +154,14 @@ class mato {
       // is in frame... is this needed anymore with passable walls???
       if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
 
-        if (this.dollars >= costT) {
-            // TURBO
+        if (this.PickupTurbo >= costT) {
+          // TURBO
           this.pos.add(this.velTurbo);
-          this.dollars -= costT;
+          this.PickupTurbo -= costT;
         }
 
         else {
-          if (!this.turbo || this.underground || this.dollars <= costT) {
+          if (!this.turbo || this.underground || this.PickupTurbo <= costT) {
             this.pos.add(this.vel);
             if (this.gear === 'fast') {
               this.pos.add(this.vel);
@@ -201,8 +213,8 @@ class mato {
         this.uGTimer.start();
       }
 
-      if (this.uGTimer.getRemainingTime() > diveTime && this.UGStart && this.dollars >= costUG) {
-        this.dollars -= costUG;
+      if (this.uGTimer.getRemainingTime() > diveTime && this.UGStart && this.PickupTurbo >= costUG) {
+        this.PickupTurbo -= costUG;
         this.uGTimer.setTimer(diveTime);
         this.uGTimer.start();
       }
@@ -215,6 +227,29 @@ class mato {
         L_mato.fill(this.color);
         L_mato.noStroke();
         L_mato.rect(round(this.pos.x / GD) * GD, round(this.pos.y / GD) * GD, this.size * GD);
+        if (this.royalty) {
+          L_HUD.image(img_kakkakruunu, round(this.pos.x / GD) * GD - Pixel * 1.5, round(this.pos.y / GD) * GD - Pixel * 1.4, Pixel * 5, Pixel * 5);
+        }
+        if (this.appleRoyalty) {
+          L_HUD.push();
+          L_HUD.translate(round(this.pos.x / GD) * GD - Pixel, round(this.pos.y / GD) * GD - Pixel);
+          L_HUD.translate(-Pixel * 4, Pixel * 3.3);
+          L_HUD.rotate(-50);
+          L_HUD.image(img_valtikka, 0, 0, Pixel * 9, Pixel * 9);
+          L_HUD.pop();
+        }
+
+        // ALIGN AND ROTATE EXAMPLE!
+
+        // L_HUD.push();
+        // L_HUD.translate(round(this.pos.x / GD) * GD + Pixel, round(this.pos.y / GD) * GD + Pixel);
+        // L_HUD.stroke(10);
+        // L_HUD.strokeWeight(5);
+        // L_HUD.point(0, 0);
+        // L_HUD.rotate(millis()/100);
+        // L_HUD.image(img_align, -Pixel * 3, -Pixel * 3, Pixel * 6, Pixel * 6);
+        // L_HUD.pop();
+
 
       } else {
         L_ground.fill(this.color);
@@ -323,7 +358,7 @@ class top_poop_eater_score {
   }
   update() {
     for (let i = 0; i < madot.length; i++) {
-      this.arr[i] = { name: madot[i].name, poops: madot[i].poopsEaten, color: madot[i].color };
+      this.arr[i] = { name: madot[i].name, poops: madot[i].poopsEaten, color: madot[i].color, Index: i };
     }
     this.arr.sort((firstItem, secondItem) => firstItem.poops - secondItem.poops);
     reverse(this.arr);
@@ -331,7 +366,12 @@ class top_poop_eater_score {
     this.y = height - this.sizeY;
 
 
-
+    for (let i = 0; i < madot.length; i++) {
+      madot[i].royalty = false;
+    }
+    if (this.arr[0].poops != this.arr[1].poops) {
+      madot[this.arr[0].Index].royalty = true;
+    }
   }
 
   show() {
@@ -340,7 +380,9 @@ class top_poop_eater_score {
     L_HUD.rect(this.x, this.y - txtPixel * 3, this.sizeX, this.sizeY + txtPixel * 3);
     L_HUD.textSize(this.textSize * 1.5);
     L_HUD.fill(Black);
-    L_HUD.text('Most Poop eaten:', this.x + txtPixel, this.y - txtPixel);
+    L_HUD.textAlign(LEFT, CENTER);
+    L_HUD.text('Poop eaten:', this.x + txtPixel, this.y - txtPixel);
+    L_HUD.image(img_kakkakruunu, this.x + txtPixel * 12, this.y - txtPixel * 5, txtPixel * 8, txtPixel * 8);
     L_HUD.textSize(this.textSize);
     for (let i = 0; i < this.arr.length; i++) {
       L_HUD.fill(this.arr[i].color);
@@ -349,6 +391,61 @@ class top_poop_eater_score {
       L_HUD.textAlign(RIGHT, TOP);
       L_HUD.fill(Black);
       L_HUD.text(this.arr[i].poops, this.x + this.sizeX - 1 * txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
+    }
+  }
+}
+
+class top_apple_eater_score {
+  constructor() {
+    this.sizeX = txtPixel * 18;
+    this.sizeY = txtPixel * 20;
+    this.gapX = txtPixel * 10 + txtPixel * 15;
+    this.scoreGap = this.sizeX + Pixel;
+    this.x = width - this.sizeX - this.gapX - this.scoreGap;
+    this.y = height - this.sizeY;
+    this.textSize = txtPixel * 1.4;
+    this.arr = [];
+    this.color = color(LightPink);
+    this.color.setAlpha(110);
+  }
+  update() {
+    for (let i = 0; i < madot.length; i++) {
+      this.arr[i] = { name: madot[i].name, apples: madot[i].applesEaten, color: madot[i].color, Index: i };
+    }
+    this.arr.sort((firstItem, secondItem) => firstItem.apples - secondItem.apples);
+    reverse(this.arr);
+    this.sizeY = txtPixel * this.arr.length * 1.5 + 1.6 * txtPixel;
+    this.y = height - this.sizeY;
+
+    for (let i = 0; i < madot.length; i++) {
+      madot[i].appleRoyalty = false;
+    }
+    if (this.arr[0].apples != this.arr[1].apples) {
+      madot[this.arr[0].Index].appleRoyalty = true;
+    }
+  }
+
+  show() {
+    L_HUD.noStroke();
+    L_HUD.fill(this.color);
+    L_HUD.rect(this.x, this.y - txtPixel * 3, this.sizeX, this.sizeY + txtPixel * 3);
+    L_HUD.textSize(this.textSize * 1.5);
+    L_HUD.fill(Black);
+    L_HUD.textAlign(LEFT, CENTER);
+    L_HUD.text('Apples eaten:', this.x + txtPixel, this.y - txtPixel);
+    L_HUD.push();
+    L_HUD.translate(this.x + txtPixel * 9, this.y + txtPixel * 1);
+    L_HUD.rotate(-50);
+    L_HUD.image(img_valtikka, 0, 0, txtPixel * 14.5, txtPixel * 14.5);
+    L_HUD.pop();
+    L_HUD.textSize(this.textSize);
+    for (let i = 0; i < this.arr.length; i++) {
+      L_HUD.fill(this.arr[i].color);
+      L_HUD.textAlign(LEFT, TOP);
+      L_HUD.text(this.arr[i].name, this.x + txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
+      L_HUD.textAlign(RIGHT, TOP);
+      L_HUD.fill(Black);
+      L_HUD.text(this.arr[i].apples, this.x + this.sizeX - 1 * txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
     }
   }
 }

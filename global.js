@@ -1,5 +1,5 @@
 let wormNames = ['Marjatta',
-'Reetta',
+  'Reetta',
   'Kalevi',
   'Mauno',
   'Pekka',
@@ -29,7 +29,8 @@ let wormNames = ['Marjatta',
   'Åke',
   'Timon sijainen Timo',
   'The Concept Of Timo',
-  'Maire'];
+  'Maire',
+  'UlkuniemiJussiSakari'];
 
 let spawnBorder = 150; // PX (Base 150?)
 let MOD = 2.5; // Base 2.5
@@ -92,7 +93,7 @@ let remTime = 0;
 
 // Global UNDERGROUND TIME
 let UGtime = 17000; //22000 ???
-let diveTime
+let diveTime;
 
 // To Keep text from scaling with division... LOL i made it a static size through this?
 let txtDivision = 8;
@@ -109,8 +110,8 @@ let pooped;
 
 // PICKUPS
 let pickups = [];
-let pickups_newTime = 10000
-let pickups_count = 0
+let pickups_newTime = 10000;
+let pickups_count = 0;
 
 // PRICES
 let startDollars = 0;
@@ -119,7 +120,12 @@ let costT = 1 / 5;
 let costUG = 5;
 
 // IMAGES
-let img_panicMode
+let img_panicMode;
+let img_kakkakruunu;
+let img_valtikka;
+let img_align;
 
-// POOP SCORE
+// POOP/APPLE SCORE
 let poopScore;
+let appleScore;
+
