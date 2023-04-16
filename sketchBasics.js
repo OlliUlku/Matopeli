@@ -261,8 +261,10 @@ function _PICKUPS_UPDATE() {
 
 function _WORMS_UPDATE() {
   for (let i = 0; i < madot.length; i++) {
-    madot[i].update();
     madot[i].border();
+    madot[i].update();
+
+
 
     // TOUCHING PICKUP?
     //reverse for splice if 2 pickups are hit at same frame?
