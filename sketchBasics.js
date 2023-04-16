@@ -42,6 +42,10 @@ function gameReadySetup() {
     L_pickup.angleMode(DEGREES);
     L_pickup.textAlign(CENTER, CENTER);
 
+    L_ghost = createGraphics(pxDens * width, pxDens * height);
+    L_ghost.angleMode(DEGREES);
+    L_ghost.textAlign(CENTER, CENTER);
+
     // FONTS
 
     // _font = loadFont('Heebo-Regular.ttf')
@@ -88,16 +92,18 @@ function gameReadySetup() {
     txtPixel = (width / GD / array2d.length * txtDivision);
 
     //GAMEPAD
+    
+
     for (let i = 0; i < matoCountBT; i++) {
       angleMode(RADIANS);
       let spawnX, spawnY;
       spawnX = sin(PI * 2 / MATOJA * i);
       spawnY = sin(PI * 2 / MATOJA * i + HALF_PI);
       print(spawnX);
-      spawnX = map(spawnX, -1, 1, Pixel * 8, width - Pixel * 8);
-      spawnY = map(spawnY, -1, 1, Pixel * 8, height - Pixel * 8);
+      spawnX = map(spawnX, -1, 1, Pixel * 3, width - txtPixel * 3);
+      spawnY = map(spawnY, -1, 1, Pixel * 3, height - txtPixel * 3);
       angleMode(DEGREES);
-      madot[wormsCounter] = new mato(spawnX + random(-Pixel * 4, Pixel * 4), spawnY + random(-Pixel * 4, Pixel * 4), posca[wormsCounter], -360 / MATOJA * i + random(-10, 10), wormsCounter);
+      madot[wormsCounter] = new mato(spawnX + random(-txtPixel * 3, txtPixel * 3), spawnY + random(-txtPixel * 3, txtPixel * 3), posca[wormsCounter], -360 / MATOJA * i + random(-10, 10), wormsCounter);
       wormsCounter++;
     }
 
@@ -263,22 +269,28 @@ function _WORMS_UPDATE() {
   for (let i = 0; i < madot.length; i++) {
     madot[i].update();
     madot[i].border();
+    madot[i].show();
+    madot[i].showHUD();
 
-    // TOUCHING PICKUP?
-    //reverse for splice if 2 pickups are hit at same frame?
-    for (let k = 0; k < pickups.length; k++) {
-      // HUOM NELJÄLLÄ JAKAMINEN
-      let mx = round(madot[i].pos.x / GD / 4);
-      let my = round(madot[i].pos.y / GD / 4);
-      let px = round(pickups[k].x / GD / 4);
-      let py = round(pickups[k].y / GD / 4);
-      if (mx === px && my === py) {
-        if (pickups[k].timerPickupSpawn.expired()) {
-          pickups[k].grab(i);
-          pickups.splice(k, 1);
-          pickups_count -= 1;
+
+
+    if (!madot[i].ghostMode) {
+      // TOUCHING PICKUP?
+      //reverse for splice if 2 pickups are hit at same frame?
+      for (let k = 0; k < pickups.length; k++) {
+        // HUOM NELJÄLLÄ JAKAMINEN
+        let mx = round(madot[i].pos.x / GD / 4);
+        let my = round(madot[i].pos.y / GD / 4);
+        let px = round(pickups[k].x / GD / 4);
+        let py = round(pickups[k].y / GD / 4);
+        if (mx === px && my === py) {
+          if (pickups[k].timerPickupSpawn.expired()) {
+            pickups[k].grab(i);
+            pickups.splice(k, 1);
+            pickups_count -= 1;
+          }
+
         }
-
       }
     }
   }
@@ -365,6 +377,7 @@ function _LAYERS() {
   image(L_mato, 0, 0);
   image(L_pickup, 0, 0);
   image(L_stone, 0, 0);
+  image(L_ghost, 0, 0);
   image(L_grave, 0, 0);
   image(L_HUD, 0, 0);
   image(L_top, 0, 0);
@@ -377,6 +390,12 @@ function create2dArray() {
       // 0 = PASSABLE (NO STONE), 1 = POOP
       array2d[_x][_y] = [true, false];
     }
+  }
+
+  //SAFETY EXTRA X
+  array2d[array2d.length] = [];
+  for (let _y = 0; _y < height / GD; _y++) {
+    array2d[array2d.length-1][_y] = [true, false];
   }
 }
 
@@ -395,7 +414,7 @@ function setBorderToFalse() {
 function _WORLD_UPDATE() {
 
   for (let i = 0; i < madot.length; i++) {
-    if (!madot[i].stop) {
+    if (!madot[i].stop && !madot[i].ghostMode) {
       let __x = round(madot[i].pos.x / GD);
       let __y = round(madot[i].pos.y / GD);
       // CHECK IF WITHIN BOUNDS
@@ -421,7 +440,7 @@ function _WORLD_UPDATE() {
           }
 
         } else if (!madot[i].underground) {
-          madot[i].stop = true;
+          madot[i].ghostMode = true;
           //print('hit wall');
         }
       } else { // OUT OF BOUNDS // OLD???

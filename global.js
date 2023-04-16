@@ -69,6 +69,7 @@ let L_mato;
 let L_ground;
 let L_grave;
 let L_pickup;
+let L_ghost;
 
 //FONT
 let _font;
@@ -128,4 +129,9 @@ let img_align;
 // POOP/APPLE SCORE
 let poopScore;
 let appleScore;
+
+// SPAWNRADIUS
+let spawnRadiusZeroX;
+let spawnRadiusZeroY;
+let spawnRadius;
 

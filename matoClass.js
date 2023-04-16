@@ -65,6 +65,17 @@ class mato {
     // POOP ROYALTY
     this.royalty = false;
     this.appleRoyalty = false;
+
+    // GHOST
+    this.ghostMode = false;
+    // for different ghost flicker time
+    this.rndNum = random(1000);
+
+    this.ghostMOD = 3
+    this.ghostVel = createVector(0, -0.5 * speedMod / 8 * GD * 0.5 * this.ghostMOD);
+    this.ghostVel.rotate(rot);
+
+
   }
 
   speedUP_PANIC() {
@@ -118,227 +129,298 @@ class mato {
 
   }
 
-  update() {
+  updateGhost() {
     let rX = round(this.pos.x / GD) * GD;
     let rY = round(this.pos.y / GD) * GD;
-    if (!this.stop) { // IF DIDNT HIT STONE... (in array2d -> false)
+    // UPDATE POSITION
 
-      // UPDATE POSITION
-
-      // SET ROTATION
-      if (!this.turbo) {
-        if (!this.underground) {
-          this.Rot = this.rotateAMT;
-        } else {
-          this.Rot = this.UGrotateAMT;
-        }
-      } else {
-        this.Rot = this.turboRotateAMT;
-      }
-
-      if (this.LEFT) {
-        this.vel.rotate(-this.Rot);
-        this.velTurbo.rotate(-this.Rot);
-        this.accTurbo.rotate(-this.Rot);
-        this.acc.rotate(-this.Rot);
-        this.acc_normal.rotate(-this.Rot);
-      }
-      if (this.RIGHT) {
-        this.vel.rotate(this.Rot);
-        this.velTurbo.rotate(this.Rot);
-        this.accTurbo.rotate(this.Rot);
-        this.acc.rotate(this.Rot);
-        this.acc_normal.rotate(this.Rot);
-      }
-
-      // is in frame... is this needed anymore with passable walls???
-      if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
-
-        if (this.PickupTurbo >= costT) {
-          // TURBO
-          this.pos.add(this.velTurbo);
-          this.PickupTurbo -= costT;
-        }
-
-        else {
-          if (!this.turbo || this.underground || this.PickupTurbo <= costT) {
-            this.pos.add(this.vel);
-            if (this.gear === 'fast') {
-              this.pos.add(this.vel);
-            }
-          }
-
-        }
-      } else {
-        this.pos.add(this.vel);
-        if (this.gear === 'fast') {
-          this.pos.add(this.vel);
-        }
-        //OLD
-        //this.stop = true;
-      }
-
-      // UNDERGROUND
-      let diveTime = 4000 + panicCount; // move to this.
-      let alertTime = 1500;
-
-      if (this.uGTimer.expired()) {
-        this.underground = false;
-      } else if (this.uGTimer.getRemainingTime() < alertTime) {
-        L_HUD.textSize(Pixel * 4);
-        L_HUD.textAlign(CENTER, CENTER);
-        L_HUD.fill(CacaoBrown);
-        L_HUD.noStroke(Black);
-        L_HUD.text('!', this.pos.x + Pixel * 3.7, this.pos.y + Pixel);
-        this.underground = true;
-      } else if (this.uGTimer.getRemainingTime() < diveTime) {
-        //if (!panicMode) {
-        this.underground = true;
-        //} else {
-        //  this.underground = false;
-        //}
-      } else if (this.uGTimer.getRemainingTime() < diveTime + alertTime) {
-        L_HUD.textSize(Pixel * 4);
-        L_HUD.textAlign(CENTER, CENTER);
-        L_HUD.fill(CacaoBrown);
-        L_HUD.noStroke(Black);
-        L_HUD.text('!', this.pos.x + Pixel * 3.7, this.pos.y + Pixel);
-        this.underground = false;
-      }
-      else {
-      }
-
-      if (this.uGTimer.expired()) {
-        this.uGTimer.setTimer(UGtime);
-        this.uGTimer.start();
-      }
-
-      if (this.uGTimer.getRemainingTime() > diveTime && this.UGStart && this.PickupTurbo >= costUG) {
-        this.PickupTurbo -= costUG;
-        this.uGTimer.setTimer(diveTime);
-        this.uGTimer.start();
-      }
-
-      // SHOW -
-
+    // SET ROTATION
+    if (!this.turbo) {
       if (!this.underground) {
-        //if (frameCount % 5 === 0 || this.turbo) {
-        this.color.setAlpha(255);
-        L_mato.fill(this.color);
-        L_mato.noStroke();
-        L_mato.rect(round(this.pos.x / GD) * GD, round(this.pos.y / GD) * GD, this.size * GD);
-        if (this.royalty) {
-          L_HUD.image(img_kakkakruunu, round(this.pos.x / GD) * GD - Pixel * 1.5, round(this.pos.y / GD) * GD - Pixel * 1.4, Pixel * 5, Pixel * 5);
-        }
-        if (this.appleRoyalty) {
-          L_HUD.push();
-          L_HUD.translate(round(this.pos.x / GD) * GD - Pixel, round(this.pos.y / GD) * GD - Pixel);
-          L_HUD.translate(-Pixel * 4, Pixel * 3.3);
-          L_HUD.rotate(-50);
-          L_HUD.image(img_valtikka, 0, 0, Pixel * 9, Pixel * 9);
-          L_HUD.pop();
-        }
-
-        // ALIGN AND ROTATE EXAMPLE!
-
-        // L_HUD.push();
-        // L_HUD.translate(round(this.pos.x / GD) * GD + Pixel, round(this.pos.y / GD) * GD + Pixel);
-        // L_HUD.stroke(10);
-        // L_HUD.strokeWeight(5);
-        // L_HUD.point(0, 0);
-        // L_HUD.rotate(millis()/100);
-        // L_HUD.image(img_align, -Pixel * 3, -Pixel * 3, Pixel * 6, Pixel * 6);
-        // L_HUD.pop();
-
-
+        this.Rot = this.rotateAMT;
       } else {
-        L_ground.fill(this.color);
-        if (random() < this.uGR) {
-          if (random() < 0.5) {
-            L_ground.fill(Ivory);
-          } else if (random() < 0.5) {
-            L_ground.fill(Brown);
+        this.Rot = this.UGrotateAMT;
+      }
+    } else {
+      this.Rot = this.turboRotateAMT;
+    }
+
+    if (this.LEFT) {
+      this.vel.rotate(-this.Rot * this.ghostMOD);
+      this.ghostVel.rotate(-this.Rot * this.ghostMOD);
+      this.velTurbo.rotate(-this.Rot * this.ghostMOD);
+      this.accTurbo.rotate(-this.Rot * this.ghostMOD);
+      this.acc.rotate(-this.Rot * this.ghostMOD);
+      this.acc_normal.rotate(-this.Rot * this.ghostMOD);
+    }
+    if (this.RIGHT) {
+      this.vel.rotate(this.Rot * this.ghostMOD);
+      this.ghostVel.rotate(this.Rot * this.ghostMOD);
+      this.velTurbo.rotate(this.Rot * this.ghostMOD);
+      this.accTurbo.rotate(this.Rot * this.ghostMOD);
+      this.acc.rotate(this.Rot * this.ghostMOD);
+      this.acc_normal.rotate(this.Rot * this.ghostMOD);
+    }
+
+    if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
+
+      if (this.PickupTurbo >= costT) {
+        // TURBO
+        this.pos.add(this.ghostVel);
+        this.pos.add(this.ghostVel);
+        this.PickupTurbo -= costT;
+      }
+
+      else {
+        if (!this.turbo || this.underground || this.PickupTurbo <= costT) {
+          this.pos.add(this.ghostVel);
+          this.pos.add(this.ghostVel);
+        }
+
+      }
+    } else {
+      this.pos.add(this.ghostVel);
+      this.pos.add(this.ghostVel);
+    }
+  }
+
+  showGhost() {
+    this.color.setAlpha(map(sin(millis() / 13 + this.rndNum), -1, 1, -1, 150));
+    L_ghost.fill(this.color);
+    L_ghost.noStroke();
+    L_ghost.rect(round(this.pos.x / GD) * GD, round(this.pos.y / GD) * GD, this.size * GD);
+  }
+
+  update() {
+    if (this.ghostMode) {
+      this.updateGhost();
+    }
+    else {
+      let rX = round(this.pos.x / GD) * GD;
+      let rY = round(this.pos.y / GD) * GD;
+      if (!this.stop) { // IF DIDNT HIT STONE... (in array2d -> false)
+
+        // UPDATE POSITION
+
+        // SET ROTATION
+        if (!this.turbo) {
+          if (!this.underground) {
+            this.Rot = this.rotateAMT;
           } else {
-            this.color.setAlpha(110);
-            L_ground.fill(this.color);
+            this.Rot = this.UGrotateAMT;
+          }
+        } else {
+          this.Rot = this.turboRotateAMT;
+        }
+
+        if (this.LEFT) {
+          this.vel.rotate(-this.Rot);
+          this.ghostVel.rotate(-this.Rot);
+          this.velTurbo.rotate(-this.Rot);
+          this.accTurbo.rotate(-this.Rot);
+          this.acc.rotate(-this.Rot);
+          this.acc_normal.rotate(-this.Rot);
+        }
+        if (this.RIGHT) {
+          this.vel.rotate(this.Rot);
+          this.ghostVel.rotate(this.Rot);
+          this.velTurbo.rotate(this.Rot);
+          this.accTurbo.rotate(this.Rot);
+          this.acc.rotate(this.Rot);
+          this.acc_normal.rotate(this.Rot);
+        }
+
+        if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
+
+          if (this.PickupTurbo >= costT) {
+            // TURBO
+            this.pos.add(this.velTurbo);
+            this.PickupTurbo -= costT;
           }
 
-          if (!panicMode) {
-            this.uGSize = random(0.5, 1);
-          } else {
-            this.uGSize = random(0.7, 1.5);
-            this.uGR = 0.36;
+          else {
+            if (!this.turbo || this.underground || this.PickupTurbo <= costT) {
+              this.pos.add(this.vel);
+              if (this.gear === 'fast') {
+                this.pos.add(this.vel);
+              }
+            }
+
           }
-          L_ground.noStroke();
-          L_ground.rect(round(this.pos.x / GD) * GD + random(-this.r, this.r) + Pixel, round(this.pos.y / GD) * GD + random(-this.r, this.r) + Pixel, this.size / 4 + this.uGSize * GD * 0.8);
+        } else {
+          this.pos.add(this.vel);
+          if (this.gear === 'fast') {
+            this.pos.add(this.vel);
+          }
+          //OLD
+          //this.stop = true;
+        }
+        // UNDERGROUND
+        let diveTime = 4000 + panicCount; // move to this.
+        let alertTime = 1500;
+
+        if (this.uGTimer.expired()) {
+          this.underground = false;
+        } else if (this.uGTimer.getRemainingTime() < alertTime) {
+          L_HUD.textSize(Pixel * 4);
+          L_HUD.textAlign(CENTER, CENTER);
+          L_HUD.fill(CacaoBrown);
+          L_HUD.noStroke(Black);
+          L_HUD.text('!', this.pos.x + Pixel * 3.7, this.pos.y + Pixel);
+          this.underground = true;
+        } else if (this.uGTimer.getRemainingTime() < diveTime) {
+          //if (!panicMode) {
+          this.underground = true;
+          //} else {
+          //  this.underground = false;
+          //}
+        } else if (this.uGTimer.getRemainingTime() < diveTime + alertTime) {
+          L_HUD.textSize(Pixel * 4);
+          L_HUD.textAlign(CENTER, CENTER);
+          L_HUD.fill(CacaoBrown);
+          L_HUD.noStroke(Black);
+          L_HUD.text('!', this.pos.x + Pixel * 3.7, this.pos.y + Pixel);
+          this.underground = false;
+        }
+        else {
+        }
+
+        if (this.uGTimer.expired()) {
+          this.uGTimer.setTimer(UGtime);
+          this.uGTimer.start();
+        }
+
+        if (this.uGTimer.getRemainingTime() > diveTime && this.UGStart && this.PickupTurbo >= costUG) {
+          this.PickupTurbo -= costUG;
+          this.uGTimer.setTimer(diveTime);
+          this.uGTimer.start();
         }
       }
+    }
+  }
 
-      L_HUD.fill(White);
-      L_HUD.stroke(Black);
-      L_HUD.strokeWeight(txtPixel * 0.3);
-      L_HUD.textAlign(CENTER, CENTER);
-      // HUD INDEX
-      let gamepadInd = this.index + 1 - onScreenCount;
-      if (gamepadInd >= 1) {
-        L_HUD.textSize(TextSize * 0.6);
-        L_HUD.text('P' + (gamepadInd), this.pos.x + Pixel, this.pos.y - TextSize * 1.9);
+  showHUD() {
+    if (!this.stop) {
+      if (this.royalty) {
+        L_HUD.image(img_kakkakruunu, round(this.pos.x / GD) * GD - Pixel * 1.5, round(this.pos.y / GD) * GD - Pixel * 1.4, Pixel * 5, Pixel * 5);
       }
-      // HUD NAME
-      L_HUD.fill(White);
-      L_HUD.stroke(Black);
-      L_HUD.textSize(TextSize);
-      L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize);
-      L_HUD.textAlign(LEFT, CENTER);
-      let MiniTextS = TextSize * 0.65;
-      L_HUD.textSize(MiniTextS);
-      L_HUD.fill(Black);
-      L_HUD.noStroke();
-      //POOPDOLLARS
-      //L_HUD.text('poop eaten: ' + floor(this.poopsEaten), this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel);
+      if (this.appleRoyalty) {
+        L_HUD.push();
+        L_HUD.translate(round(this.pos.x / GD) * GD - Pixel, round(this.pos.y / GD) * GD - Pixel);
+        L_HUD.translate(-Pixel * 4, Pixel * 3.3);
+        L_HUD.rotate(-50);
+        L_HUD.image(img_valtikka, 0, 0, Pixel * 9, Pixel * 9);
+        L_HUD.pop();
+      }
+    }
+    L_HUD.fill(White);
+    L_HUD.stroke(Black);
+    L_HUD.strokeWeight(txtPixel * 0.3);
+    L_HUD.textAlign(CENTER, CENTER);
+    // HUD INDEX
+    let gamepadInd = this.index + 1 - onScreenCount;
+    if (gamepadInd >= 1) {
+      L_HUD.textSize(TextSize * 0.6);
+      L_HUD.text('P' + (gamepadInd), this.pos.x + Pixel, this.pos.y - TextSize * 1.9);
+    }
+    // HUD NAME
+    L_HUD.fill(White);
+    L_HUD.stroke(Black);
+    L_HUD.textSize(TextSize);
+    L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize);
+    L_HUD.textAlign(LEFT, CENTER);
+    let MiniTextS = TextSize * 0.65;
+    L_HUD.textSize(MiniTextS);
+    L_HUD.fill(Black);
+    L_HUD.noStroke();
+    //POOPDOLLARS
+    //L_HUD.text('poop eaten: ' + floor(this.poopsEaten), this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel);
+  }
+
+  show() {
+    if (this.ghostMode) {
+      this.showGhost();
+    } else {
+      if (!this.stop) { // IF DIDNT HIT STONE... (in array2d -> false)
+
+        if (!this.underground) {
+          this.color.setAlpha(255);
+          L_mato.fill(this.color);
+          L_mato.noStroke();
+          L_mato.rect(round(this.pos.x / GD) * GD, round(this.pos.y / GD) * GD, this.size * GD);
+
+          // ALIGN AND ROTATE EXAMPLE!
+
+          // L_HUD.push();
+          // L_HUD.translate(round(this.pos.x / GD) * GD + Pixel, round(this.pos.y / GD) * GD + Pixel);
+          // L_HUD.stroke(10);
+          // L_HUD.strokeWeight(5);
+          // L_HUD.point(0, 0);
+          // L_HUD.rotate(millis()/100);
+          // L_HUD.image(img_align, -Pixel * 3, -Pixel * 3, Pixel * 6, Pixel * 6);
+          // L_HUD.pop();
 
 
-    } else { // DID HIT STONE (or otherwise) -> kill worm
-      if (this.deathToggler) {
+        } else {
+          L_ground.fill(this.color);
+          if (random() < this.uGR) {
+            if (random() < 0.5) {
+              L_ground.fill(Ivory);
+            } else if (random() < 0.5) {
+              L_ground.fill(Brown);
+            } else {
+              this.color.setAlpha(110);
+              L_ground.fill(this.color);
+            }
 
-        this.SX = txtPixel * 2;
-        this.SY = txtPixel * 3;
+            if (!panicMode) {
+              this.uGSize = random(0.5, 1);
+            } else {
+              this.uGSize = random(0.7, 1.5);
+              this.uGR = 0.36;
+            }
+            L_ground.noStroke();
+            L_ground.rect(round(this.pos.x / GD) * GD + random(-this.r, this.r) + Pixel, round(this.pos.y / GD) * GD + random(-this.r, this.r) + Pixel, this.size / 4 + this.uGSize * GD * 0.8);
+          }
+        }
 
-        // SCORE TABLE 
-        L_top.strokeWeight(txtPixel * 0.15);
-        L_top.fill(this.color);
-        L_top.stroke(Black);
-        L_top.rectMode(CENTER);
-        L_top.rect(width - this.SX, this.SY * wormsCounter, this.SX + txtPixel * 0.5);
 
-        //NUMBER TEXT
-        L_top.textAlign(CENTER, CENTER);
-        L_top.textSize(txtPixel * 1.5);
-        L_top.fill(White);
-        L_top.stroke(Black);
-        L_top.strokeWeight(txtPixel * 0.3);
-        L_top.text(wormsCounter, width - this.SX, this.SY * wormsCounter);
 
-        //GRAVE NAME
 
-        // L_grave.fill(White);
-        // L_grave.stroke(Black);
-        // L_grave.strokeWeight(txtPixel * 0.3);
-        // if (this.pos.x < width - 100) { // so it does not jump on top of scoreboard...
-        //   L_grave.textSize(TextSize);
-        //   L_grave.fill(225);
-        //   L_grave.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize);
-        // }
+      } else { // DID HIT STONE (or otherwise) -> kill worm
+        if (this.deathToggler) {
 
-        //NAME IN SCORE TABLE
-        L_top.textAlign(RIGHT, CENTER);
-        L_top.textSize(txtPixel * 1.5);
-        L_top.fill(White);
-        L_top.text(this.name, width - this.SX * 1.9, this.SY * wormsCounter);
+          this.SX = txtPixel * 2;
+          this.SY = txtPixel * 3;
 
-        wormsCounter--;
-        this.deathToggler = !this.deathToggler;
+          // // SCORE TABLE 
 
+          // L_top.strokeWeight(txtPixel * 0.15);
+          // L_top.fill(this.color);
+          // L_top.stroke(Black);
+          // L_top.rectMode(CENTER);
+          // L_top.rect(width - this.SX, this.SY * wormsCounter, this.SX + txtPixel * 0.5);
+
+          // //NUMBER TEXT IN SCORE TABLE
+
+          // L_top.textAlign(CENTER, CENTER);
+          // L_top.textSize(txtPixel * 1.5);
+          // L_top.fill(White);
+          // L_top.stroke(Black);
+          // L_top.strokeWeight(txtPixel * 0.3);
+          // L_top.text(wormsCounter, width - this.SX, this.SY * wormsCounter);
+
+          // //NAME IN SCORE TABLE
+
+          // L_top.textAlign(RIGHT, CENTER);
+          // L_top.textSize(txtPixel * 1.5);
+          // L_top.fill(White);
+          // L_top.text(this.name, width - this.SX * 1.9, this.SY * wormsCounter);
+
+          wormsCounter--;
+          this.deathToggler = false;
+
+        }
       }
     }
   }
@@ -369,7 +451,11 @@ class top_poop_eater_score {
     for (let i = 0; i < madot.length; i++) {
       madot[i].royalty = false;
     }
-    if (this.arr[0].poops != this.arr[1].poops) {
+    if (MATOJA > 1) {
+      if (this.arr[0].poops != this.arr[1].poops) {
+        madot[this.arr[0].Index].royalty = true;
+      }
+    } else {
       madot[this.arr[0].Index].royalty = true;
     }
   }
@@ -420,7 +506,11 @@ class top_apple_eater_score {
     for (let i = 0; i < madot.length; i++) {
       madot[i].appleRoyalty = false;
     }
-    if (this.arr[0].apples != this.arr[1].apples) {
+    if (MATOJA > 1) {
+      if (this.arr[0].apples != this.arr[1].apples) {
+        madot[this.arr[0].Index].appleRoyalty = true;
+      }
+    } else {
       madot[this.arr[0].Index].appleRoyalty = true;
     }
   }

@@ -23,6 +23,8 @@ function setup() {
   inp.size(18);
   inp.center();
   inp.input(InputMatoCount);
+  inp.changed(storeMenuData);
+
 
   let button = createButton('Start');
   button.position(width / 2, height / 2 + 20);
@@ -37,6 +39,23 @@ function setup() {
   slider = createSlider(3, 24, 8, 1);
   slider.position(10, 10);
   slider.style('width', '80px');
+  slider.changed(storeMenuData);
+
+
+  // INIT FROM MEMORY
+  initGD = getItem('Matopeli_GD');
+  initMatoCountBT = getItem('Matopeli_matoCountBT');
+
+  // if (initGD === !null) {
+  slider.value(initGD);
+  print('set slider ' + initGD);
+  // }
+
+  // if (initMatoCountBT === !null) {
+  matoCountBT = initMatoCountBT;
+  inp.value(initMatoCountBT);
+  print('set matoCountBT ' + initMatoCountBT);
+  // }
 
 
   //startup();
@@ -67,7 +86,7 @@ function draw() {
 
   if (GAMESTATE === 'MENU') {
     _MENU();
-  
+
 
 
   } else if (GAMESTATE === 'GAME') {
@@ -76,6 +95,7 @@ function draw() {
     // LAYER CLEAR
     L_HUD.clear(0, 0, 0, 0);
     L_pickup.clear(0, 0, 0, 0);
+    L_ghost.clear(0, 0, 0, 0);
     background(Beige);
     if (frameCount % 15 === 0) {
       L_ground.background(fadeColor);
@@ -99,6 +119,8 @@ function draw() {
 
 function InputMatoCount() {
   matoCountBT = this.value();
+  storeItem('Matopeli_matoCountBT', matoCountBT);
+  print('store matoCountBT');
 }
 
 function StartButton() {
@@ -130,5 +152,10 @@ function _MENU() {
 }
 
 function touchStarted() {
+}
+
+function storeMenuData() {
+  storeItem('Matopeli_GD', slider.value());
+  print('store items');
 }
 
