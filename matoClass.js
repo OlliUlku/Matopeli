@@ -55,11 +55,13 @@ class mato {
     this.poopsEaten = 0;
     this.applesEaten = 0;
     this.aliveDuration = 0;
+    this.ghostDurationScore = 0;
 
     // POOP ROYALTY
     this.royalty = false;
     this.appleRoyalty = false;
     this.aliveRoyalty = false;
+    this.ghostRoyalty = false;
 
     // TAIL SIZE
     this.tail = 2500;
@@ -184,6 +186,8 @@ class mato {
   }
 
   updateGhost() {
+    this.ghostDurationScore += 1 / FRAMERATE;
+
     if (!this.ghostTimer.expired()) {
       this.ghostMOD = map(sin(millis() / 13 + this.rndNum), -1, 1, .5, 3);
 
@@ -346,8 +350,16 @@ class mato {
         L_HUD.pop();
       }
       if (this.aliveRoyalty) {
-        L_HUD.image(img_align, round(this.pos.x / GD) * GD - Pixel * 1.5, round(this.pos.y / GD) * GD - Pixel * 1.4, Pixel * 5, Pixel * 5);
+        L_HUD.image(img_aliveRoyalty, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
       }
+
+      if (this.ghostRoyalty) {
+        L_HUD.image(img_ghostRoyalty, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
+      }
+
+      //DEBUG
+      //L_HUD.image(img_align, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
+
     }
     if (!this.ghostMode) {
       L_HUD.fill(White);

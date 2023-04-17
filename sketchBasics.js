@@ -128,7 +128,7 @@ function gameReadySetup() {
     //print('So called Pixels length X', array2d.length);
     //print('So called Pixels length Y', array2d[0].length);
     //print('Grid Division', GD);
-    //print('Pixel size', Pixel);
+    print('Pixel size', Pixel);
     //print('txtDiv', txtDivision);
     //print('txtPixel size', txtPixel);
     //print('MATOJA ' + MATOJA);
@@ -147,15 +147,17 @@ function gameReadySetup() {
 
     poopScore = new top_poop_eater_score();
     appleScore = new top_apple_eater_score();
-    aliveScore = new top_generic_score('aliveDuration', Yellow, txtPixel * 19 * 1);
+    aliveScore = new top_generic_score('aliveDuration', LightGreen, txtPixel * 19 * 1);
     ghostScore = new top_ghost_score('ghostDuration', SlateGrey, txtPixel * 19 * 2);
-    
+
     // IMAGES
 
     img_panicMode = createImg('panic_anim.png');
     img_kakkakruunu = loadImage('kakkakruunu.png');
     img_valtikka = loadImage('valtikka1.png');
     img_align = loadImage('align1.png');
+    img_ghostRoyalty = loadImage('ghostRoyalty.png')
+    img_aliveRoyalty = loadImage('aliveRoyalty.png')
 
     // STRESSCOLOR
     stressColor = color(Red);

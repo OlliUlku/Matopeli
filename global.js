@@ -125,6 +125,8 @@ let img_panicMode;
 let img_kakkakruunu;
 let img_valtikka;
 let img_align;
+let img_ghostRoyalty;
+let img_aliveRoyalty;
 
 // POOP/APPLE SCORE
 let poopScore;
@@ -142,4 +144,4 @@ let stressColor;
 let stressLevel = 0;
 
 // FRAMERATE
-let FRAMERATE = 24
+let FRAMERATE = 24;

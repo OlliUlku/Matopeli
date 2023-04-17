@@ -102,7 +102,10 @@ function draw() {
     }
 
     // THE BEEF
-    L_HUD.text(wormsCounter, 30,30);
+    L_HUD.fill(Black);
+    L_HUD.textAlign(LEFT, CENTER);
+    L_HUD.textSize(TextSize);
+    L_HUD.text('Worms alive: ' + wormsCounter, txtPixel * 4, txtPixel * 4);
 
     controllerUsed(); //checks all buttons and updates values
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
@@ -117,7 +120,6 @@ function draw() {
     _STRESS();
     _LAYERS();
     _GAME_END();
-    print(pickups_count)
   }
 }
 
