@@ -102,6 +102,8 @@ function draw() {
     }
 
     // THE BEEF
+    L_HUD.text(wormsCounter, 30,30);
+
     controllerUsed(); //checks all buttons and updates values
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
     _PICKUPS_UPDATE();
@@ -109,11 +111,12 @@ function draw() {
     _WORMS_UPDATE();
     _WORLD_UPDATE();
     //drawDebug(); // DEBUG STONE PLACEMENT
-    _PANIC_MODE();
+    //_PANIC_MODE();
     _ONSCREENKEYS();
     //_POINTS(); OLD
+    _STRESS();
     _LAYERS();
-    //_GAME_END(); // at one worm left
+    _GAME_END();
   }
 }
 
@@ -159,3 +162,9 @@ function storeMenuData() {
   print('store items');
 }
 
+function windowResized() {
+  if (GAMESTATE === 'MENU') {
+    resizeCanvas(windowWidth, windowHeight);
+    print('new width and height ' + width + ' ' + height);
+  }
+}

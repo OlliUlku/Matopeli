@@ -129,9 +129,16 @@ let img_align;
 // POOP/APPLE SCORE
 let poopScore;
 let appleScore;
+let aliveScore;
 
 // SPAWNRADIUS
 let spawnRadiusZeroX;
 let spawnRadiusZeroY;
 let spawnRadius;
 
+// STRESS
+let stressColor;
+let stressLevel = 0;
+
+// FRAMERATE
+let FRAMERATE = 24

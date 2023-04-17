@@ -3,7 +3,7 @@ function gameReadySetup() {
   if (SETUP) {
     resizeCanvas(round(windowWidth / GD - 1) * GD, round(windowHeight / GD - 1) * GD);
 
-    frameRate(24);
+    frameRate(FRAMERATE);
     fadeColor = color(Beige);
     fadeColor.setAlpha(20);
     background(Beige);
@@ -92,16 +92,16 @@ function gameReadySetup() {
     txtPixel = (width / GD / array2d.length * txtDivision);
 
     //GAMEPAD
-    
+
 
     for (let i = 0; i < matoCountBT; i++) {
       angleMode(RADIANS);
       let spawnX, spawnY;
       spawnX = sin(PI * 2 / MATOJA * i);
       spawnY = sin(PI * 2 / MATOJA * i + HALF_PI);
-      print(spawnX);
-      spawnX = map(spawnX, -1, 1, Pixel * 3, width - txtPixel * 3);
-      spawnY = map(spawnY, -1, 1, Pixel * 3, height - txtPixel * 3);
+      //print(spawnX);
+      spawnX = map(spawnX, -1, 1, Pixel * 6, width - txtPixel * 6);
+      spawnY = map(spawnY, -1, 1, Pixel * 6, height - txtPixel * 6);
       angleMode(DEGREES);
       madot[wormsCounter] = new mato(spawnX + random(-txtPixel * 3, txtPixel * 3), spawnY + random(-txtPixel * 3, txtPixel * 3), posca[wormsCounter], -360 / MATOJA * i + random(-10, 10), wormsCounter);
       wormsCounter++;
@@ -131,7 +131,7 @@ function gameReadySetup() {
     //print('Pixel size', Pixel);
     //print('txtDiv', txtDivision);
     //print('txtPixel size', txtPixel);
-    print('MATOJA ' + MATOJA);
+    //print('MATOJA ' + MATOJA);
 
 
     // wormname textsize
@@ -144,6 +144,7 @@ function gameReadySetup() {
 
     poopScore = new top_poop_eater_score();
     appleScore = new top_apple_eater_score();
+    aliveScore = new top_generic_score('aliveDuration', Yellow, txtPixel*19);
 
     // IMAGES
 
@@ -152,9 +153,12 @@ function gameReadySetup() {
     img_valtikka = loadImage('valtikka1.png');
     img_align = loadImage('align1.png');
 
+    // STRESSCOLOR
+    stressColor = color(Red);
+
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
-    print('GAME START!!!');
+    //print('GAME START!!!');
   }
 }
 
@@ -270,6 +274,7 @@ function _WORMS_UPDATE() {
     madot[i].update();
     madot[i].border();
     madot[i].show();
+    madot[i].showGhostHUD();
     madot[i].showHUD();
 
 
@@ -338,37 +343,62 @@ function _PANIC_MODE() {
 }
 
 function _GAME_END() {
-  if (wormsCounter <= 1) {
-    for (let i = 0; i < madot.length; i++) {
-      if (!madot[i].stop) {
-        L_HUD.rectMode(CENTER);
-        L_HUD.noStroke();
-        L_HUD.fill(249, 249, 249, 80);
-        L_HUD.rect(width / 2, height / 2, width, height);
-        L_top.textAlign(CENTER, CENTER);
-        L_top.fill(madot[i].color);
-        L_top.stroke(Black);
-        let ts = width / 12;
-        L_top.strokeWeight(ts / 18);
-        L_top.textSize(ts);
-        L_top.text(madot[i].name, width / 2, height / 2 + ts * 0.5);
-        L_top.textSize(ts * 0.6);
-        L_top.fill(Black);
-        L_top.noStroke();
-        L_top.textAlign(CENTER, TOP);
-        L_top.text('The Winner is:', width / 2, height / 2 - ts * 0.5);
-      }
-    }
+  if (wormsCounter <= 0) {
+    // for (let i = 0; i < madot.length; i++) {
+    //   if (!madot[i].stop) {
+    //     L_HUD.rectMode(CENTER);
+    //     L_HUD.noStroke();
+    //     L_HUD.fill(249, 249, 249, 80);
+    //     //L_HUD.rect(width / 2, height / 2, width, height);
+    //     L_top.textAlign(CENTER, CENTER);
+    //     L_top.fill(madot[i].color);
+    //     L_top.stroke(Black);
+    let ts = width / 12;
+    //     L_top.strokeWeight(ts / 18);
+    //     L_top.textSize(ts);
+    //     L_top.text(madot[i].name, width / 2, height / 2 + ts * 0.5);
+    //     L_top.textSize(ts * 0.6);
+    //     L_top.fill(Black);
+    //     L_top.noStroke();
+    //     L_top.textAlign(CENTER, TOP);
+    //     L_top.text('The Winner is:', width / 2, height / 2 - ts * 0.5);
+    //   }
+    // }
+
+    L_top.textSize(ts * 0.6);
+    L_top.fill(Black);
+    L_top.noStroke();
+    L_top.textAlign(CENTER, TOP);
+    L_top.text('GAME END', width / 2, height / 2 - ts * 0.5);
+
+
     background(Beige);
-    image(L_HUD, 0, 0);
+    image(L_ground, 0, 0);
     image(L_mato, 0, 0);
     image(L_pickup, 0, 0);
     image(L_stone, 0, 0);
-    image(L_HUD, 0, 0);
+    image(L_ghost, 0, 0);
+    image(L_grave, 0, 0);
     image(L_HUD, 0, 0);
     image(L_top, 0, 0);
     noLoop();
-    print('GAME END!!!');
+    //print('GAME END!!!');
+  }
+}
+
+function _STRESS() {
+  L_HUD.rectMode(CORNER);
+  L_HUD.noStroke();
+  let stressStrenght = map(stressLevel, 0, 300, -45, 0);
+  stressColor.setAlpha(map(sin(millis() / 3), -1, 1, 10 + stressStrenght, 45 + stressStrenght));
+  L_HUD.fill(stressColor);
+  L_HUD.rect(0, 0, width, height);
+  if (wormsCounter === 1) {
+    if (stressLevel < 300) {
+      stressLevel++;
+    }
+  } else if (stressLevel > 0) {
+    stressLevel -= 2;
   }
 }
 
@@ -395,7 +425,7 @@ function create2dArray() {
   //SAFETY EXTRA X
   array2d[array2d.length] = [];
   for (let _y = 0; _y < height / GD; _y++) {
-    array2d[array2d.length-1][_y] = [true, false];
+    array2d[array2d.length - 1][_y] = [true, false];
   }
 }
 
@@ -438,14 +468,15 @@ function _WORLD_UPDATE() {
               }
             }
           }
-
+          //BIG DEATH MOMENT!
         } else if (!madot[i].underground) {
-          madot[i].ghostMode = true;
+          madot[i].becomeGhost();
+          wormsCounter--;
+          print(madot[i].name + ' died! worms alive: ' + wormsCounter);
+
           //print('hit wall');
         }
       } else { // OUT OF BOUNDS // OLD???
-        //madot[i].stop = true;
-        //print('hit wall');
       }
       if (!madot[i].underground) {
         setTimeout(set2dArrayFalse, (1000 + panicCount + stoneDelay) * 8 / GD, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
@@ -456,6 +487,8 @@ function _WORLD_UPDATE() {
   poopScore.show();
   appleScore.update();
   appleScore.show();
+  aliveScore.update();
+  aliveScore.show();
 }
 
 function set2dArrayFalse(_x, _y, matoindex) {
@@ -525,7 +558,9 @@ function drawDebug() { //DEBUG PURPOSES
 }
 
 function pickupSpawner() {
-  pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 0);
-  pickups_count += 1;
-  setTimeout(pickupSpawner, pickups_newTime);
+  if (pickups.length < MATOJA) {
+    pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 0);
+    pickups_count += 1;
+    setTimeout(pickupSpawner, pickups_newTime);
+  }
 }
