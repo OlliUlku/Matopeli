@@ -111,7 +111,7 @@ let pooped;
 
 // PICKUPS
 let pickups = [];
-let pickups_newTime = 10000;
+let pickups_newTime = 2000; //10000
 let pickups_count = 0;
 
 // PRICES
@@ -130,6 +130,7 @@ let img_align;
 let poopScore;
 let appleScore;
 let aliveScore;
+let ghostScore;
 
 // SPAWNRADIUS
 let spawnRadiusZeroX;

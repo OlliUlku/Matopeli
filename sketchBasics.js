@@ -140,12 +140,16 @@ function gameReadySetup() {
     //PANIC COUNT
     panicCount = 1500 / 8 * GD;
 
-    pickupSpawner();
+
+    pickups_newTime = 5000;
+    setTimeout(pickupSpawner, pickups_newTime);
+
 
     poopScore = new top_poop_eater_score();
     appleScore = new top_apple_eater_score();
-    aliveScore = new top_generic_score('aliveDuration', Yellow, txtPixel*19);
-
+    aliveScore = new top_generic_score('aliveDuration', Yellow, txtPixel * 19 * 1);
+    ghostScore = new top_ghost_score('ghostDuration', SlateGrey, txtPixel * 19 * 2);
+    
     // IMAGES
 
     img_panicMode = createImg('panic_anim.png');
@@ -258,12 +262,6 @@ function _OHJAIMET() {
 }
 
 function _PICKUPS_UPDATE() {
-  if (pickups.length < 1) {
-    // PICKUPS (X,Y,TYPE)
-    pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 0);
-    pickups_count += 1;
-  }
-
   for (let i = 0; i < pickups.length; i++) {
     pickups[i].show();
   }
@@ -489,6 +487,8 @@ function _WORLD_UPDATE() {
   appleScore.show();
   aliveScore.update();
   aliveScore.show();
+  ghostScore.update();
+  ghostScore.show();
 }
 
 function set2dArrayFalse(_x, _y, matoindex) {
@@ -558,9 +558,9 @@ function drawDebug() { //DEBUG PURPOSES
 }
 
 function pickupSpawner() {
-  if (pickups.length < MATOJA) {
+  if (pickups_count < MATOJA / 2) {
     pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 0);
     pickups_count += 1;
-    setTimeout(pickupSpawner, pickups_newTime);
   }
+  setTimeout(pickupSpawner, pickups_newTime);
 }

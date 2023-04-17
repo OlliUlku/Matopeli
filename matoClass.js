@@ -108,7 +108,7 @@ class mato {
   }
 
   poopEaten() {
-    this.tail += 30000 / MATOJA;
+    this.tail += 20000 / MATOJA;
     this.poopsEaten++;
     this.PickupTurbo++;
     ////print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);

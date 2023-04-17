@@ -117,6 +117,7 @@ function draw() {
     _STRESS();
     _LAYERS();
     _GAME_END();
+    print(pickups_count)
   }
 }
 
