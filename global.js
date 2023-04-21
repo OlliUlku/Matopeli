@@ -70,6 +70,8 @@ let L_ground;
 let L_grave;
 let L_pickup;
 let L_ghost;
+let L_action;
+let L_poop;
 
 //FONT
 let _font;
@@ -111,7 +113,7 @@ let pooped;
 
 // PICKUPS
 let pickups = [];
-let pickups_newTime = 2000; //10000
+let pickups_newTime = 10000; //10000
 let pickups_count = 0;
 
 // PRICES
@@ -127,12 +129,16 @@ let img_valtikka;
 let img_align;
 let img_ghostRoyalty;
 let img_aliveRoyalty;
+let img_takeOutsRoyalty;
+let img_matoFace;
+let img_ghostFace;
 
 // POOP/APPLE SCORE
 let poopScore;
 let appleScore;
 let aliveScore;
 let ghostScore;
+let takeOutsScore;
 
 // SPAWNRADIUS
 let spawnRadiusZeroX;
@@ -145,3 +151,16 @@ let stressLevel = 0;
 
 // FRAMERATE
 let FRAMERATE = 24;
+
+// CENTER CANVAS
+let CNVS;
+
+// FLAMETHROWER
+let flameParticles = [];
+
+// POINTS WINNER
+let WINNER;
+
+// GLOBAL LENGTH ADD
+let LENGTHADD = 120000;
+let POOPLENGTHDIVIDER = 10;

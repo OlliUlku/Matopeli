@@ -1,7 +1,7 @@
 class mato {
   constructor(x, y, _color, rot, controllerIndex) {
     this.pos = createVector(x, y);
-    this.vel = createVector(0, -0.5 * speedMod / 8 * GD * 0.5);
+    this.vel = createVector(0, -0.5 * speedMod / 8 * GD);
     this.vel.rotate(rot);
     this.acc = createVector(0, -0.001 * speedMod / 8 * GD); // PANIC ACCELERATION
     this.acc.rotate(rot);
@@ -12,6 +12,7 @@ class mato {
     this.size = 2;
     this.stop = false;
     this.Rot;
+    this.rotation = rot;
 
     // TEST CONSTANT ACCELERATION
     this.acc_normal = createVector(0, -0.0007 * speedMod / 8 * GD); // poistin nollan!
@@ -20,11 +21,16 @@ class mato {
 
     //underground dive feature
     this.underground = false;
-    this.uGTimer = new Timer(random(UGtime, UGtime * 2), true);
+    this.uGTimer = new Timer(random(UGtime, UGtime * 2));
+    this.uGTimer.endTimer();
+    //this.uGTimer.pause();
+
     this.uGSize;
     this.uGR = 0.26;
     this.r = 0.6 * GD;
     this.UGStart = false;
+    this.diveTime = 6000;
+    this.alertTime = 1500;
 
     // TURBO
     this.turbo = false;
@@ -49,11 +55,11 @@ class mato {
     // HUD
     this.name = wormNames[wormsCounter];
 
-    // COLLECTIBLES // POOP // APPLES
+    // COLLECTIBLES // POOP // FRUITS
     this.poop = 0;
 
     this.poopsEaten = 0;
-    this.applesEaten = 0;
+    this.fruitsEaten = 0;
     this.aliveDuration = 0;
     this.ghostDurationScore = 0;
 
@@ -62,6 +68,9 @@ class mato {
     this.appleRoyalty = false;
     this.aliveRoyalty = false;
     this.ghostRoyalty = false;
+    this.takeOutsRoyalty = false;
+
+    this.VP = 0;
 
     // TAIL SIZE
     this.tail = 2500;
@@ -82,13 +91,16 @@ class mato {
     this.ghostMOD = 3;
     this.ghostVel = createVector(0, -0.5 * speedMod / 8 * GD * 0.5 * this.ghostMOD);
     this.ghostVel.rotate(rot);
-    this.ghostDuration = 10000;
+    this.ghostDuration = 15000;
     this.ghostDurationINIT = this.ghostDuration;
     this.ghostTimer = new Timer(1000, false);
     this.ghostTimer.pause();
     this.ghostsHappened = 0;
 
-
+    //FLAME AND TAKEOUTS
+    this.rndNum2 = floor(random(15));
+    this.takeOuts = 0;
+    this.chiliOil = 0;
 
   }
 
@@ -110,17 +122,34 @@ class mato {
   }
 
   poopEaten() {
-    this.tail += 20000 / MATOJA;
+    this.tail += LENGTHADD / POOPLENGTHDIVIDER / MATOJA;
     this.poopsEaten++;
     this.PickupTurbo++;
     ////print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
   }
 
   appleEaten() {
-    this.tail += 60000 / MATOJA;
-    this.applesEaten++;
-    this.PickupTurbo += omenaVal;
+    this.tail += LENGTHADD / MATOJA;
+    this.fruitsEaten++;
+    this.PickupTurbo += omenaVal * 11 / GD;
     //print(this.name + ' ate a fruit! New tail size: ' + this.tail);
+  }
+
+  chiliEaten() {
+    this.tail += LENGTHADD / MATOJA;
+    this.fruitsEaten++;
+    this.chiliOil = omenaVal;
+    //print(this.name + ' ate a fruit! New tail size: ' + this.tail);
+  }
+
+  spadeFruitEaten() {
+    this.tail += LENGTHADD / MATOJA;
+    this.fruitsEaten++;
+
+    this.uGTimer.endTimer();
+    this.uGTimer.reset();
+    this.uGTimer.setTimer(this.diveTime);
+    this.uGTimer.start();
   }
 
   border() {
@@ -163,6 +192,7 @@ class mato {
       this.accTurbo.rotate(-this.Rot * this.ghostMOD);
       this.acc.rotate(-this.Rot * this.ghostMOD);
       this.acc_normal.rotate(-this.Rot * this.ghostMOD);
+      this.rotation += (-this.Rot * this.ghostMOD);
     }
     if (this.RIGHT) {
       this.vel.rotate(this.Rot * this.ghostMOD);
@@ -171,22 +201,26 @@ class mato {
       this.accTurbo.rotate(this.Rot * this.ghostMOD);
       this.acc.rotate(this.Rot * this.ghostMOD);
       this.acc_normal.rotate(this.Rot * this.ghostMOD);
+      this.rotation += (this.Rot * this.ghostMOD);
     }
   }
 
   becomeGhost() {
-    this.ghostMode = true;
-    this.ghostTimer.endTimer();
-    this.ghostTimer.reset();
-    this.ghostTimer.setTimer(this.ghostDuration);
-    print(this.name + ' death duration:' + this.ghostDuration / 1000 + ' seconds');
-    this.ghostTimer.start();
-    this.ghostDuration += 4000;
-    this.ghostsHappened++;
+    if (!this.ghostMode) {
+      this.ghostMode = true;
+      this.ghostTimer.endTimer();
+      this.ghostTimer.reset();
+      this.ghostTimer.setTimer(this.ghostDuration);
+      this.ghostTimer.start();
+      //this.ghostDuration += 4000;
+      this.ghostsHappened++;
+      wormsCounter--;
+    }
   }
 
   updateGhost() {
     this.ghostDurationScore += 1 / FRAMERATE;
+    this.chiliOil -= costT / 150;
 
     if (!this.ghostTimer.expired()) {
       this.ghostMOD = map(sin(millis() / 13 + this.rndNum), -1, 1, .5, 3);
@@ -250,10 +284,22 @@ class mato {
     }
   }
 
+  flamethrower() {
+    if (!this.underground && this.chiliOil > 0) {
+      let p = new flameParticle(this.pos.x, this.pos.y, this.rotation, this.index);
+      flameParticles.push(p);
+      this.chiliOil -= costT / 3;
+    }
+  }
+
   update() {
     if (this.ghostMode) {
       this.updateGhost();
     } else {
+
+      this.flamethrower();
+
+
       this.aliveDuration += 1 / FRAMERATE;
 
       let rX = round(this.pos.x / GD) * GD;
@@ -293,25 +339,23 @@ class mato {
           //this.stop = true;
         }
         // UNDERGROUND
-        let diveTime = 4000 + panicCount; // move to this.
-        let alertTime = 1500;
 
         if (this.uGTimer.expired()) {
           this.underground = false;
-        } else if (this.uGTimer.getRemainingTime() < alertTime) {
+        } else if (this.uGTimer.getRemainingTime() < this.alertTime) {
           L_HUD.textSize(Pixel * 4);
           L_HUD.textAlign(CENTER, CENTER);
           L_HUD.fill(CacaoBrown);
           L_HUD.noStroke(Black);
           L_HUD.text('!', this.pos.x + Pixel * 3.7, this.pos.y + Pixel);
           this.underground = true;
-        } else if (this.uGTimer.getRemainingTime() < diveTime) {
+        } else if (this.uGTimer.getRemainingTime() < this.diveTime) {
           //if (!panicMode) {
           this.underground = true;
           //} else {
           //  this.underground = false;
           //}
-        } else if (this.uGTimer.getRemainingTime() < diveTime + alertTime) {
+        } else if (this.uGTimer.getRemainingTime() < this.diveTime + this.alertTime) {
           L_HUD.textSize(Pixel * 4);
           L_HUD.textAlign(CENTER, CENTER);
           L_HUD.fill(CacaoBrown);
@@ -323,38 +367,88 @@ class mato {
         }
 
         if (this.uGTimer.expired()) {
-          this.uGTimer.setTimer(UGtime);
-          this.uGTimer.start();
+          // this.uGTimer.setTimer(UGtime);
+          // this.uGTimer.start();
         }
 
-        if (this.uGTimer.getRemainingTime() > diveTime && this.UGStart && this.PickupTurbo >= costUG) {
+        if (this.uGTimer.getRemainingTime() > this.diveTime && this.UGStart && this.PickupTurbo >= costUG) {
           this.PickupTurbo -= costUG;
-          this.uGTimer.setTimer(diveTime);
+          this.uGTimer.setTimer(this.diveTime);
           this.uGTimer.start();
         }
       }
     }
   }
 
+  addVP() {
+    if (frameCount % 3 === 0) {
+
+      if (!this.stop) { //OLD
+        if (this.royalty) {
+          this.VP++;
+        }
+        if (this.appleRoyalty) {
+          this.VP++;
+        }
+        if (this.aliveRoyalty) {
+          this.VP++;
+        }
+        if (this.ghostRoyalty) {
+          this.VP++;
+        }
+        if (this.takeOutsRoyalty) {
+          this.VP++;
+        }
+      }
+    }
+  }
+
+  //HOX ALSO ADDS VP, NOT THE RIGHT PLACE???
   showHUD() {
     if (!this.stop) {
-      if (this.royalty) {
-        L_HUD.image(img_kakkakruunu, round(this.pos.x / GD) * GD - Pixel * 1.5, round(this.pos.y / GD) * GD - Pixel * 1.4, Pixel * 5, Pixel * 5);
-      }
-      if (this.appleRoyalty) {
-        L_HUD.push();
-        L_HUD.translate(round(this.pos.x / GD) * GD - Pixel, round(this.pos.y / GD) * GD - Pixel);
-        L_HUD.translate(-Pixel * 4, Pixel * 3.3);
-        L_HUD.rotate(-50);
-        L_HUD.image(img_valtikka, 0, 0, Pixel * 9, Pixel * 9);
-        L_HUD.pop();
-      }
-      if (this.aliveRoyalty) {
-        L_HUD.image(img_aliveRoyalty, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
-      }
+      //circleFACE
 
-      if (this.ghostRoyalty) {
-        L_HUD.image(img_ghostRoyalty, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
+      // if (!this.ghostMode && !this.underground) {
+      //   L_HUD.noStroke();
+      //   L_HUD.fill(this.color);
+      //   L_HUD.circle(this.pos.x + Pixel, this.pos.y + Pixel, this.size * 1.8 * Pixel);
+      // }
+
+      //ROYALTIES
+
+      // if (this.royalty) {
+      //   L_HUD.image(img_kakkakruunu, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
+      // }
+      // if (this.appleRoyalty) {
+      //   L_HUD.push();
+      //   L_HUD.translate(round(this.pos.x / GD) * GD - Pixel, round(this.pos.y / GD) * GD - Pixel);
+      //   L_HUD.translate(-Pixel * 4, Pixel * 3.3);
+      //   L_HUD.rotate(-50);
+      //   L_HUD.image(img_valtikka, 0, 0, Pixel * 9, Pixel * 9);
+      //   L_HUD.pop();
+      // }
+      // if (this.aliveRoyalty) {
+      //   L_HUD.image(img_aliveRoyalty, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
+      // }
+      // if (this.ghostRoyalty) {
+      //   L_HUD.image(img_ghostRoyalty, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
+      // }
+      // if (this.takeOutsRoyalty) {
+      //   L_HUD.image(img_takeOutsRoyalty, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
+      // }
+
+      //FACE
+
+      if (!this.underground) {
+        L_HUD.push();
+        L_HUD.translate(this.pos.x + Pixel, this.pos.y + Pixel);
+        L_HUD.rotate(this.rotation);
+        if (!this.ghostMode) {
+          L_HUD.image(img_matoFace, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
+        } else {
+          L_HUD.image(img_ghostFace, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
+        }
+        L_HUD.pop();
       }
 
       //DEBUG
@@ -374,7 +468,7 @@ class mato {
     let gamepadInd = this.index + 1 - onScreenCount;
     if (gamepadInd >= 1) {
       L_HUD.textSize(TextSize * 0.6);
-      L_HUD.text('P' + (gamepadInd), this.pos.x + Pixel, this.pos.y - TextSize * 1.9);
+      L_HUD.text('P' + (gamepadInd), this.pos.x + Pixel, this.pos.y - TextSize * 1.9 - txtPixel);
     }
     // HUD NAME
     if (!this.ghostMode) {
@@ -385,7 +479,7 @@ class mato {
       L_HUD.stroke(White);
     }
     L_HUD.textSize(TextSize);
-    L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize);
+    L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize - txtPixel);
     L_HUD.textAlign(LEFT, CENTER);
     let MiniTextS = TextSize * 0.65;
     L_HUD.textSize(MiniTextS);
@@ -432,7 +526,7 @@ class mato {
             }
 
             if (!panicMode) {
-              this.uGSize = random(0.5, 1);
+              this.uGSize = random(0.5, 1.2);
             } else {
               this.uGSize = random(0.7, 1.5);
               this.uGR = 0.36;
@@ -475,7 +569,7 @@ class mato {
           // L_top.fill(White);
           // L_top.text(this.name, width - this.SX * 1.9, this.SY * wormsCounter);
 
-          wormsCounter--;
+          //wormsCounter--;
           this.deathToggler = false;
 
         }
@@ -484,119 +578,84 @@ class mato {
   }
 }
 
-class top_poop_eater_score {
-  constructor() {
-    this.sizeX = txtPixel * 18;
-    this.sizeY = txtPixel * 20;
-    this.gapX = 0;
-    this.x = width - this.sizeX - this.gapX;
-    this.y = height - this.sizeY;
-    this.textSize = txtPixel * 1.4;
-    this.arr = [];
-    this.color = color(White);
-    this.color.setAlpha(110);
+class flameParticle {
+  constructor(_x, _y, _rotation, _matoIND) {
+    this.pos = createVector(_x + Pixel, _y + Pixel);
+    this.vel = createVector(0, -0.5 * speedMod / 8 * GD * 3.2 * random(1, 1.2));
+    this.vel.rotate(_rotation + random(-28, 28));
+    this.matoIND = _matoIND;
+    this.color_ = color(random(200, 255), random(0, 170), 10);
+    this.duration = random(34, 38);
+    this.durationINIT = this.duration;
+    this.activateTimer = 10;
+    this.activate = true;
+    this.hitStone = false;
   }
+
   update() {
-    for (let i = 0; i < madot.length; i++) {
-      this.arr[i] = { name: madot[i].name, poops: madot[i].poopsEaten, color: madot[i].colorINIT, Index: i };
-    }
-    this.arr.sort((firstItem, secondItem) => firstItem.poops - secondItem.poops);
-    reverse(this.arr);
-    this.sizeY = txtPixel * this.arr.length * 1.5 + 1.6 * txtPixel;
-    this.y = height - this.sizeY;
-
-
-    for (let i = 0; i < madot.length; i++) {
-      madot[i].royalty = false;
-    }
-    if (MATOJA > 1) {
-      if (this.arr[0].poops != this.arr[1].poops) {
-        madot[this.arr[0].Index].royalty = true;
+    this.pos.add(this.vel);
+    this.duration--;
+    let x = round(this.pos.x / GD);
+    let y = round(this.pos.y / GD);
+    if (x > 0 && x < width / GD && y > 0 && y < height / GD) {
+      if (!array2d[x][y][0]) {
+        this.hitStone = true;
       }
-    } else {
-      madot[this.arr[0].Index].royalty = true;
+    }
+    //OLD
+    // if (this.duration < this.durationINIT - this.activateTimer && !this.activate) {
+    //   this.activate = true;
+    // }
+  }
+
+  updateFinal() {
+    this.pos.add(this.vel);
+    this.duration--;
+
+    let x = round(this.pos.x / GD);
+    let y = round(this.pos.y / GD);
+
+    //WITHIN BOUNDS
+    if (x > 0 && x < width / GD && y > 0 && y < height / GD) {
+
+      if (!array2d[x][y][0]) {
+        this.hitStone = true;
+      }
+
+      if (this.activate) {
+        //set board to onFire
+        array2d[x][y][2] = true;
+        setTimeout(extinguish, deltaTime, x, y);
+        array2d[x][y][3] = this.matoIND;
+
+        // //DEBUG
+        // L_top.noStroke();
+        // L_top.fill(Black);
+        // L_top.rect(x * GD, y * GD, Pixel);
+      }
     }
   }
 
   show() {
-    L_HUD.rectMode(CORNER);
-    L_HUD.noStroke();
-    L_HUD.fill(this.color);
-    L_HUD.rect(this.x, this.y - txtPixel * 3, this.sizeX, this.sizeY + txtPixel * 3);
-    L_HUD.textSize(this.textSize * 1.5);
-    L_HUD.fill(Black);
-    L_HUD.textAlign(LEFT, CENTER);
-    L_HUD.text('Poop eaten:', this.x + txtPixel, this.y - txtPixel);
-    L_HUD.image(img_kakkakruunu, this.x + txtPixel * 12, this.y - txtPixel * 5, txtPixel * 8, txtPixel * 8);
-    L_HUD.textSize(this.textSize);
-    for (let i = 0; i < this.arr.length; i++) {
-      L_HUD.fill(this.arr[i].color);
-      L_HUD.textAlign(LEFT, TOP);
-      L_HUD.text(this.arr[i].name, this.x + txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
-      L_HUD.textAlign(RIGHT, TOP);
-      L_HUD.fill(Black);
-      L_HUD.text(this.arr[i].poops, this.x + this.sizeX - 1 * txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
-    }
-  }
-}
-
-class top_apple_eater_score {
-  constructor() {
-    this.sizeX = txtPixel * 18;
-    this.sizeY = txtPixel * 20;
-    this.gapX = 0;
-    this.scoreGap = this.sizeX + Pixel;
-    this.x = width - this.sizeX - this.gapX - this.scoreGap;
-    this.y = height - this.sizeY;
-    this.textSize = txtPixel * 1.4;
-    this.arr = [];
-    this.color = color(LightPink);
-    this.color.setAlpha(110);
-  }
-  update() {
-    for (let i = 0; i < madot.length; i++) {
-      this.arr[i] = { name: madot[i].name, apples: madot[i].applesEaten, color: madot[i].colorINIT, Index: i };
-    }
-    this.arr.sort((firstItem, secondItem) => firstItem.apples - secondItem.apples);
-    reverse(this.arr);
-    this.sizeY = txtPixel * this.arr.length * 1.5 + 1.6 * txtPixel;
-    this.y = height - this.sizeY;
-
-    for (let i = 0; i < madot.length; i++) {
-      madot[i].appleRoyalty = false;
-    }
-    if (MATOJA > 1) {
-      if (this.arr[0].apples != this.arr[1].apples) {
-        madot[this.arr[0].Index].appleRoyalty = true;
-      }
-    } else {
-      madot[this.arr[0].Index].appleRoyalty = true;
-    }
+    L_action.noStroke();
+    L_action.fill(this.color_);
+    L_action.rect(round(this.pos.x / GD) * GD, round(this.pos.y / GD) * GD, Pixel);
   }
 
-  show() {
-    L_HUD.rectMode(CORNER);
+  border() {
 
-    L_HUD.noStroke();
-    L_HUD.fill(this.color);
-    L_HUD.rect(this.x, this.y - txtPixel * 3, this.sizeX, this.sizeY + txtPixel * 3);
-    L_HUD.textSize(this.textSize * 1.5);
-    L_HUD.fill(Black);
-    L_HUD.textAlign(LEFT, CENTER);
-    L_HUD.text('Apples eaten:', this.x + txtPixel, this.y - txtPixel);
-    L_HUD.push();
-    L_HUD.translate(this.x + txtPixel * 9, this.y + txtPixel * 1);
-    L_HUD.rotate(-50);
-    L_HUD.image(img_valtikka, 0, 0, txtPixel * 14.5, txtPixel * 14.5);
-    L_HUD.pop();
-    L_HUD.textSize(this.textSize);
-    for (let i = 0; i < this.arr.length; i++) {
-      L_HUD.fill(this.arr[i].color);
-      L_HUD.textAlign(LEFT, TOP);
-      L_HUD.text(this.arr[i].name, this.x + txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
-      L_HUD.textAlign(RIGHT, TOP);
-      L_HUD.fill(Black);
-      L_HUD.text(this.arr[i].apples, this.x + this.sizeX - 1 * txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
+    if (this.pos.x < Pixel * 0.3) {
+      this.pos.x = width - (Pixel * 2);
+    } else if (this.pos.x >= width - 2 * Pixel) {
+      this.pos.x = Pixel * 0.3;
     }
+
+    if (this.pos.y < Pixel * 0.2) {
+      this.pos.y = height - (Pixel * 2);
+    } else if (this.pos.y >= height - 2 * Pixel) {
+      this.pos.y = Pixel * 0.2;
+    }
+
   }
+
 }

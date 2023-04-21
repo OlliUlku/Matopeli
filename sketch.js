@@ -13,7 +13,7 @@ let GD = 8; // Grid division, base 8, max 24
 
 function setup() {
   //fullscreen(true);
-  createCanvas(round(windowWidth / GD - 1) * GD, round(windowHeight / GD - 1) * GD);
+  CNVS = createCanvas(windowWidth, windowHeight);
 
   for (let element of document.getElementsByClassName("p5Canvas")) {
     element.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -86,6 +86,7 @@ function draw() {
 
   if (GAMESTATE === 'MENU') {
     _MENU();
+    _MENU_OHJAIMET();
 
 
 
@@ -94,34 +95,41 @@ function draw() {
 
     // LAYER CLEAR
     L_HUD.clear(0, 0, 0, 0);
+    L_action.clear(0, 0, 0, 0);
     L_pickup.clear(0, 0, 0, 0);
     L_ghost.clear(0, 0, 0, 0);
     background(Beige);
+
+    //background fader
+
     if (frameCount % 15 === 0) {
       L_ground.background(fadeColor);
     }
 
     // THE BEEF
-    L_HUD.fill(Black);
-    L_HUD.textAlign(LEFT, CENTER);
-    L_HUD.textSize(TextSize);
-    L_HUD.text('Worms alive: ' + wormsCounter, txtPixel * 4, txtPixel * 4);
 
     controllerUsed(); //checks all buttons and updates values
     _OHJAIMET(); //controllers controller8bitdo...(ohjaimet[]) class speaks to madot class
     _PICKUPS_UPDATE();
     //_SPEED_UP();
-    _WORMS_UPDATE();
+    _MADOT_UPDATE();
     _WORLD_UPDATE();
     //drawDebug(); // DEBUG STONE PLACEMENT
     //_PANIC_MODE();
     _ONSCREENKEYS();
-    //_POINTS(); OLD
-    _STRESS();
+    //_STRESS();
+
+    _SHOWWORMSALIVE();
+
+    //_POINTS();
+
     _LAYERS();
+    //_GAME_END_POINTS();
     _GAME_END();
   }
 }
+
+
 
 function InputMatoCount() {
   matoCountBT = this.value();
