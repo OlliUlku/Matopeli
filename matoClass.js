@@ -645,14 +645,14 @@ class flameParticle {
   border() {
 
     if (this.pos.x < Pixel * 0.3) {
-      this.pos.x = width - (Pixel * 2);
-    } else if (this.pos.x >= width - 2 * Pixel) {
+      this.pos.x = width - (Pixel * 1);
+    } else if (this.pos.x >= width - 1 * Pixel) {
       this.pos.x = Pixel * 0.3;
     }
 
     if (this.pos.y < Pixel * 0.2) {
-      this.pos.y = height - (Pixel * 2);
-    } else if (this.pos.y >= height - 2 * Pixel) {
+      this.pos.y = height - (Pixel * 1);
+    } else if (this.pos.y >= height - 1 * Pixel) {
       this.pos.y = Pixel * 0.2;
     }
 

@@ -564,7 +564,7 @@ function _WORLD_UPDATE() {
       let __x = round(madot[i].pos.x / GD);
       let __y = round(madot[i].pos.y / GD);
       // CHECK IF WITHIN BOUNDS
-      if (__x > 0 && __x < width / GD && __y > 0 && __y < height / GD) {
+      //if (__x > 0 && __x < width / GD && __y > 0 && __y < height / GD) {
 
         //PIXEL TOUCHES FLAME?
         let done = false;
@@ -617,7 +617,7 @@ function _WORLD_UPDATE() {
         if (!madot[i].underground) {
           setTimeout(set2dArrayFalse, (1000 + panicCount + stoneDelay) * 8 / GD, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
         }
-      }
+      //}
     }
   }
   poopScore.update();
