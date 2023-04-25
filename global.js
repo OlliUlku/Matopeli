@@ -67,7 +67,7 @@ let L_stone;
 let L_HUD;
 let L_mato;
 let L_ground;
-let L_grave;
+let L_fruits;
 let L_pickup;
 let L_ghost;
 let L_action;
@@ -113,8 +113,10 @@ let pooped;
 
 // PICKUPS
 let pickups = [];
-let pickups_newTime = 10000; //10000
+let pickups_newTime = 5000; //10000
+let pickups_newTimeINIT = 3000; //10000
 let pickups_count = 0;
+let PickupSpawnTime = pickups_newTime;
 
 // PRICES
 let startDollars = 0;
@@ -132,6 +134,9 @@ let img_aliveRoyalty;
 let img_takeOutsRoyalty;
 let img_matoFace;
 let img_ghostFace;
+let img_chiliPickup;
+let img_applePickup;
+let img_spadePickup;
 
 // POOP/APPLE SCORE
 let poopScore;
@@ -162,5 +167,8 @@ let flameParticles = [];
 let WINNER;
 
 // GLOBAL LENGTH ADD
-let LENGTHADD = 120000;
-let POOPLENGTHDIVIDER = 10;
+let LENGTHADD = 4000; //120000
+let POOPLENGTHDIVIDER = 30;
+
+// MENUMADOT
+let menuMadot = [];

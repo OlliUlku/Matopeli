@@ -39,9 +39,9 @@ function gameReadySetup() {
     L_ground.angleMode(DEGREES);
     L_ground.textAlign(CENTER, CENTER);
 
-    L_grave = createGraphics(pxDens * width, pxDens * height);
-    L_grave.angleMode(DEGREES);
-    L_grave.textAlign(CENTER, CENTER);
+    L_fruits = createGraphics(pxDens * width, pxDens * height);
+    L_fruits.angleMode(DEGREES);
+    L_fruits.textAlign(CENTER, CENTER);
 
     L_pickup = createGraphics(pxDens * width, pxDens * height);
     L_pickup.angleMode(DEGREES);
@@ -65,21 +65,13 @@ function gameReadySetup() {
     // L_top.textFont(_font);
     // L_HUD.textFont(_font);
 
-    //CONTROLLERS
-    addConnection();
 
-    for (let i = 0; i < matoCountBT; i++) {
-      ohjaimet[i] = new Controller_8BitDoZero2(i);
-    }
 
     // array that checks whether a (x,y) location has been 'used' etc..
     create2dArray();
     //setBorderToFalse(); //safeguard...
 
-    posca.splice(14, 1); // removes Beige (#dbc48e) which is background color, from array
-
-    //shuffle(posca, true);
-    shuffle(wormNames, true);
+   
 
 
 
@@ -154,8 +146,7 @@ function gameReadySetup() {
     panicCount = 1500 / 8 * GD;
 
 
-    pickups_newTime = 5000;
-    setTimeout(pickupSpawner, pickups_newTime);
+    setTimeout(pickupSpawner, pickups_newTimeINIT);
 
 
     poopScore = new top_poop_eater_score();
@@ -176,6 +167,9 @@ function gameReadySetup() {
     img_takeOutsRoyalty = loadImage('takeOutsRoyalty.png');
     img_matoFace = loadImage('matoFace.png');
     img_ghostFace = loadImage('ghostFace.png');
+    img_chiliPickup = loadImage('chiliPickup.png');
+    img_applePickup = loadImage('applePickup.png');
+    img_spadePickup = loadImage('spadePickup.png');
 
     // STRESSCOLOR
     stressColor = color(Red);
@@ -196,14 +190,18 @@ function _ONSCREENKEYS() {
   }
 }
 
+
+
 function _MENU_OHJAIMET() {
   let ctrl_i;
   for (let i = 0; i < ohjaimet.length; i++) {
 
     ctrl_i = i;
 
+
     if (ohjaimet[ctrl_i].LEFT || ohjaimet[ctrl_i].LEFT2) {
       ohjaimet[ctrl_i].LEFT2 = false; //Turn button off
+
     } else {
     }
 
@@ -214,7 +212,9 @@ function _MENU_OHJAIMET() {
 
     if (ohjaimet[ctrl_i].B) {
       ohjaimet[ctrl_i].B = false; // turns button OFF
+      menuMadot[ctrl_i].highlight = true;
     } else {
+      menuMadot[ctrl_i].highlight = false;
     }
 
     if (ohjaimet[ctrl_i].A) {
@@ -308,20 +308,54 @@ function _OHJAIMET() {
     }
 
     if (ohjaimet[ctrl_i].L) {
-      madot[i].gear = 'slow';
-      ohjaimet[ctrl_i].L = false; // turns button OFF
+      ohjaimet[ctrl_i].L = false;
+      if (ohjaimet[ctrl_i].Lonce) {
+
+        if (madot[i].gear > 1) {
+          madot[i].gear--;
+          print(madot[i].gear);
+        }
+
+        ohjaimet[ctrl_i].Lonce = false;
+        setTimeout(turnTrue, 1000, 'L', ctrl_i);
+      }
     }
 
     if (ohjaimet[ctrl_i].R) {
-      madot[i].gear = 'fast';
-      ohjaimet[ctrl_i].R = false; // turns button OFF
+      ohjaimet[ctrl_i].R = false;
+      if (ohjaimet[ctrl_i].Ronce) {
+
+        if (madot[i].gear < 6) {
+          madot[i].gear++;
+          print(madot[i].gear);
+        }
+
+        ohjaimet[ctrl_i].Ronce = false;
+        setTimeout(turnTrue, 1000, 'R', ctrl_i);
+      }
     }
+  }
+}
+
+function turnTrue(LorR, ctrl_ID) {
+  if (LorR === 'L') {
+    ohjaimet[ctrl_ID].Lonce = true;
+  } else if (LorR === 'R') {
+    ohjaimet[ctrl_ID].Ronce = true;
   }
 }
 
 function _PICKUPS_UPDATE() {
   for (let i = 0; i < pickups.length; i++) {
     pickups[i].show();
+    for (let k = 0; k < pickups.length; k++) {
+
+      //MASSIVE PERFORMANCE ISSUE???
+      if (pickups[i].rx === pickups[k].rx && pickups[i].ry === pickups[k].ry && i != k) {
+        pickups[i].move();
+        pickups[k].move();
+      }
+    }
   }
 }
 
@@ -446,7 +480,13 @@ function _GAME_END() {
     L_top.textAlign(CENTER, TOP);
     L_top.text('GAME END', width / 2, height / 2 - ts * 0.5);
 
+    poopScore.show();
+    appleScore.show();
+    aliveScore.show();
+    ghostScore.show();
+    takeOutsScore.show();
 
+    image(L_HUD, 0, 0);
     image(L_top, 0, 0);
     noLoop();
     print('GAME END!!!');
@@ -491,7 +531,7 @@ function _GAME_END_POINTS() {
   image(L_pickup, 0, 0);
   image(L_stone, 0, 0);
   image(L_ghost, 0, 0);
-  image(L_grave, 0, 0);
+  image(L_fruits, 0, 0);
   image(L_HUD, 0, 0);
   image(L_top, 0, 0);
   noLoop();
@@ -524,7 +564,7 @@ function _LAYERS() {
   image(L_pickup, 0, 0);
   image(L_stone, 0, 0);
   image(L_ghost, 0, 0);
-  image(L_grave, 0, 0);
+  image(L_fruits, 0, 0);
   image(L_HUD, 0, 0);
   image(L_top, 0, 0);
 }
@@ -566,70 +606,68 @@ function _WORLD_UPDATE() {
       // CHECK IF WITHIN BOUNDS
       //if (__x > 0 && __x < width / GD && __y > 0 && __y < height / GD) {
 
-        //PIXEL TOUCHES FLAME?
-        let done = false;
-        for (let dx = 0; dx <= 1; dx++) {
-          for (let dy = 0; dy <= 1; dy++) {
-            if (array2d[__x + dx][__y + dy][2]) {
-              //NOT THE OWNER OF THE FLAME AND NOT UNDERGROUND
-              if (i != array2d[__x + dx][__y + dy][3] && !madot[i].underground) {
-                print('touch fire?');
-                madot[i].becomeGhost();
-                madot[array2d[__x + dx][__y + dy][3]].takeOuts++;
-                print(madot[array2d[__x + dx][__y + dy][3]].name, madot[array2d[__x + dx][__y + dy][3]].takeOuts);
-              }
+      //PIXEL TOUCHES FLAME?
+      let done = false;
+      for (let dx = 0; dx <= 1; dx++) {
+        for (let dy = 0; dy <= 1; dy++) {
+          if (array2d[__x + dx][__y + dy][2]) {
+            //NOT THE OWNER OF THE FLAME AND NOT UNDERGROUND
+            if (i != array2d[__x + dx][__y + dy][3] && !madot[i].underground) {
+              print('touch fire?');
+              madot[i].becomeGhost();
+              madot[array2d[__x + dx][__y + dy][3]].takeOuts++;
+              print(madot[array2d[__x + dx][__y + dy][3]].name, madot[array2d[__x + dx][__y + dy][3]].takeOuts);
             }
           }
         }
+      }
 
-        // NO STONE AND NO UNDERGROUND
-        if (!madot[i].underground) {
-          if (array2d[__x][__y][0]
-            && array2d[__x + 1][__y][0]
-            && array2d[__x][__y + 1][0]
-            && array2d[__x + 1][__y + 1][0]) {
-            // HAS POOP
-            for (let dx = 0; dx <= 1; dx++) {
-              for (let dy = 0; dy <= 1; dy++) {
-                if (array2d[__x + dx][__y + dy][1]) {
-                  array2d[__x + dx][__y + dy][1] = false;
-                  madot[i].poopEaten();
-                  if (madot[i].underground) {
-                    L_poop.erase();
-                    L_poop.rect((__x + dx) * GD, (__y + dy) * GD, Pixel);
-                    L_poop.noErase();
-                  }
-                }
+      // NO STONE AND NO UNDERGROUND
+      if (!madot[i].underground) {
+        if (array2d[__x][__y][0]
+          && array2d[__x + 1][__y][0]
+          && array2d[__x][__y + 1][0]
+          && array2d[__x + 1][__y + 1][0]) {
+          // HAS POOP
+          for (let dx = 0; dx <= 1; dx++) {
+            for (let dy = 0; dy <= 1; dy++) {
+              if (array2d[__x + dx][__y + dy][1]) {
+                array2d[__x + dx][__y + dy][1] = false;
+                madot[i].poopEaten();
+                L_poop.erase();
+                L_poop.rect((__x + dx) * GD - 1, (__y + dy) * GD - 1, Pixel + 2);
+                L_poop.noErase();
               }
             }
-            //BIG DEATH MOMENT!
-          } else if (!madot[i].underground) {
-
-
-
-            madot[i].becomeGhost();
-            //print(madot[i].name + ' died! worms alive: ' + wormsCounter);
-
-            //print('hit wall');
           }
-        } else { // OUT OF BOUNDS // OLD???
+          //BIG DEATH MOMENT!
+        } else if (!madot[i].underground) {
+
+
+
+          madot[i].becomeGhost();
+          //print(madot[i].name + ' died! worms alive: ' + wormsCounter);
+
+          //print('hit wall');
         }
-        if (!madot[i].underground) {
-          setTimeout(set2dArrayFalse, (1000 + panicCount + stoneDelay) * 8 / GD, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
-        }
+      } else { // OUT OF BOUNDS // OLD???
+      }
+      if (!madot[i].underground) {
+        setTimeout(set2dArrayFalse, (1000 + panicCount + stoneDelay) * 8 / GD, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
+      }
       //}
     }
   }
   poopScore.update();
-  poopScore.show();
   appleScore.update();
-  appleScore.show();
   aliveScore.update();
-  aliveScore.show();
   ghostScore.update();
-  ghostScore.show();
   takeOutsScore.update();
-  takeOutsScore.show();
+  //poopScore.show();
+  //appleScore.show();
+  //aliveScore.show();
+  //ghostScore.show();
+  //takeOutsScore.show();
 }
 
 function set2dArrayFalse(_x, _y, matoindex) {
@@ -654,7 +692,8 @@ function removeStone(_x, _y, kakka, matoindex) {
   let Perc, pooped;
   pooped = kakka;
   if (pooped) {
-    Perc = 0.95;
+    Perc = 0.999;
+    //HOX!!!!!! KAKKA säätö (ALLA)
   } else if (!pooped) {
     Perc = 1;
   }
@@ -674,11 +713,11 @@ function removeStone(_x, _y, kakka, matoindex) {
       let matoIND = matoindex;
       L_poop.fill(Brown);
       L_poop.noStroke();
-      L_poop.rect(_x * GD, _y * GD, GD);
+      L_poop.rect(_x * GD, _y * GD, Pixel);
       array2d[_x][_y][1] = true; // set poop[eli 1] true
       madot[matoIND].poop++;
       if (!madot[matoIND].stop) {
-        //print(madot[matoIND].name, 'pooped. Poopcount:', madot[matoIND].poop);
+        print(madot[matoIND].name, 'pooped. Poopcount:', madot[matoIND].poop);
       }
     }
   }
@@ -704,10 +743,10 @@ function drawDebug() { //DEBUG PURPOSES
 }
 
 function pickupSpawner() {
-  //if (pickups_count < MATOJA / 2) {
-  pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), floor(random(3)));
-  pickups_count += 1;
-  //}
+  if (pickups_count < MATOJA / 2 + 1) {
+    pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), floor(random(3)));
+    pickups_count += 1;
+  }
   setTimeout(pickupSpawner, pickups_newTime);
 }
 
