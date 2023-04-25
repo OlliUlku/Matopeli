@@ -1,3 +1,38 @@
+class menuMato {
+  constructor(x, y, _color, rot, controllerIndex) {
+    this.pos = createVector(x, y);
+    this.rotation = rot;
+    this.color = color(_color);
+    this.colorINIT = color(_color);
+    this.size = 4;
+    this.index = controllerIndex;
+    this.name = wormNames[controllerIndex];
+
+    this.highlight = false;
+    print('created menumato ' + this.index + this.name);
+  }
+  show() {
+    fill(this.color);
+    noStroke();
+    if (this.highlight) {
+      stroke(Pink);
+      strokeWeight(5);
+    }
+    rect(this.pos.x, this.pos.y, this.size * 8);
+
+
+    TextSize = 10;
+    Pixel = this.size / 2;
+    txtPixel = 5;
+
+    fill(White);
+    stroke(DeepGrey);
+    textSize(TextSize);
+    text(this.name, this.pos.x + Pixel, this.pos.y - TextSize - txtPixel);
+    textAlign(LEFT, CENTER);
+  }
+}
+
 class mato {
   constructor(x, y, _color, rot, controllerIndex) {
     this.pos = createVector(x, y);
@@ -79,7 +114,8 @@ class mato {
     this.PickupTurbo = startDollars;
 
     //GEAR
-    this.gear = 'fast';
+    this.gear = 2;
+
 
 
     // GHOST
@@ -125,21 +161,23 @@ class mato {
     this.tail += LENGTHADD / POOPLENGTHDIVIDER / MATOJA;
     this.poopsEaten++;
     this.PickupTurbo++;
-    ////print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
+    print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
   }
 
   appleEaten() {
     this.tail += LENGTHADD / MATOJA;
     this.fruitsEaten++;
-    this.PickupTurbo += omenaVal * 11 / GD;
-    //print(this.name + ' ate a fruit! New tail size: ' + this.tail);
+    //this.PickupTurbo += omenaVal * 11 / GD;
+    this.PickupTurbo += omenaVal * 4 / GD;
+
+    print(this.name + ' ate a fruit! New tail size: ' + this.tail);
   }
 
   chiliEaten() {
     this.tail += LENGTHADD / MATOJA;
     this.fruitsEaten++;
     this.chiliOil = omenaVal;
-    //print(this.name + ' ate a fruit! New tail size: ' + this.tail);
+    print(this.name + ' ate a fruit! New tail size: ' + this.tail);
   }
 
   spadeFruitEaten() {
@@ -150,6 +188,8 @@ class mato {
     this.uGTimer.reset();
     this.uGTimer.setTimer(this.diveTime);
     this.uGTimer.start();
+    print(this.name + ' ate a spade! New tail size: ' + this.tail);
+
   }
 
   border() {
@@ -227,7 +267,7 @@ class mato {
 
       this.ghostVel.add(this.ghostVel); // adds 'infinite speed' to be limited later
       let ghostSPEED = map(this.ghostMOD, .5, 3, .5, 4);
-      this.ghostVel.limit(ghostSPEED);
+      this.ghostVel.limit(ghostSPEED * GD / 11 * 1.7);
 
       let rX = round(this.pos.x / GD) * GD;
       let rY = round(this.pos.y / GD) * GD;
@@ -321,18 +361,23 @@ class mato {
             this.PickupTurbo -= costT;
           }
 
-          else {
-            if (!this.turbo || this.underground || this.PickupTurbo <= costT) {
-              this.pos.add(this.vel);
-              if (this.gear === 'fast') {
-                this.pos.add(this.vel);
-              }
-            }
+          // BASIC POS.ADD
+          if (!this.turbo || this.underground || this.PickupTurbo <= costT) {
 
+            for (let k = 0; k < this.gear; k++) {
+              this.pos.add(this.vel);
+            }
           }
+
+          //DOES THIS EVER FIRE XD
         } else {
           this.pos.add(this.vel);
+          print('firing out of bounds???');
           if (this.gear === 'fast') {
+            this.pos.add(this.vel);
+          }
+          if (this.gear === 'supaFast') {
+            this.pos.add(this.vel);
             this.pos.add(this.vel);
           }
           //OLD
@@ -448,6 +493,21 @@ class mato {
         } else {
           L_HUD.image(img_ghostFace, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
         }
+        L_HUD.pop();
+      } else if (this.uGTimer.getRemainingTime() < this.alertTime * 0.5) {
+        L_HUD.push();
+        L_HUD.translate(this.pos.x + Pixel, this.pos.y + Pixel);
+        L_HUD.rotate(this.rotation);
+        L_HUD.image(img_matoFace, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
+        L_HUD.pop();
+
+      } else if (this.uGTimer.getRemainingTime() < this.diveTime - this.alertTime * 0.5) {
+
+      } else if (this.uGTimer.getRemainingTime() < this.diveTime) {
+        L_HUD.push();
+        L_HUD.translate(this.pos.x + Pixel, this.pos.y + Pixel);
+        L_HUD.rotate(this.rotation);
+        L_HUD.image(img_matoFace, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
         L_HUD.pop();
       }
 
@@ -599,6 +659,7 @@ class flameParticle {
     let y = round(this.pos.y / GD);
     if (x > 0 && x < width / GD && y > 0 && y < height / GD) {
       if (!array2d[x][y][0]) {
+        removeStone(x, y, false, undefined);
         this.hitStone = true;
       }
     }
@@ -619,6 +680,7 @@ class flameParticle {
     if (x > 0 && x < width / GD && y > 0 && y < height / GD) {
 
       if (!array2d[x][y][0]) {
+        removeStone(x, y, false, undefined);
         this.hitStone = true;
       }
 

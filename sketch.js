@@ -79,12 +79,36 @@ function setup() {
     }
   }, false);
 
+  posca.splice(14, 1); // removes Beige (#dbc48e) which is background color, from array
+
+  shuffle(posca, true);
+  shuffle(wormNames, true);
+
+  //CONTROLLERS
+  addConnection();
+
+  for (let i = 0; i < matoCountBT; i++) {
+    ohjaimet[i] = new Controller_8BitDoZero2(i);
+  }
+
+  for (let i = 0; i < matoCountBT; i++) {
+    angleMode(RADIANS);
+    let spawnX, spawnY;
+    spawnX = sin(PI * 2 / matoCountBT * i);
+    spawnY = sin(PI * 2 / matoCountBT * i + HALF_PI);
+    //print(spawnX);
+    spawnX = map(spawnX, -1, 1, 60, width - 60);
+    spawnY = map(spawnY, -1, 1, 60, height - 60);
+    angleMode(DEGREES);
+    menuMadot[i] = new menuMato(spawnX, spawnY, posca[i], -360 / matoCountBT * i, i);
+  }
 }
 
 
 function draw() {
 
   if (GAMESTATE === 'MENU') {
+    controllerUsed(); //checks all buttons and updates values
     _MENU();
     _MENU_OHJAIMET();
 
@@ -95,6 +119,7 @@ function draw() {
 
     // LAYER CLEAR
     L_HUD.clear(0, 0, 0, 0);
+    L_fruits.clear(0, 0, 0, 0);
     L_action.clear(0, 0, 0, 0);
     L_pickup.clear(0, 0, 0, 0);
     L_ghost.clear(0, 0, 0, 0);
@@ -105,6 +130,8 @@ function draw() {
     if (frameCount % 15 === 0) {
       L_ground.background(fadeColor);
     }
+    // if (frameCount % 15 === 0) {
+    // }
 
     // THE BEEF
 
@@ -126,6 +153,8 @@ function draw() {
     _LAYERS();
     //_GAME_END_POINTS();
     _GAME_END();
+
+    LENGTHADD += MATOJA * 5;
   }
 }
 
@@ -149,7 +178,8 @@ function StartButton2() {
 }
 
 function _MENU() {
-  background(RedWine);
+  noStroke()
+  background(Black);
   textAlign(CENTER, CENTER);
   fill(LightPink);
   text('How many worms? (Bluetooth)', width / 2, height / 2 - 22);
@@ -157,12 +187,16 @@ function _MENU() {
   text('Commit ProjectionTest', width / 2, 30);
 
   textAlign(LEFT, TOP);
-  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Survive the longest! Oh no your tail turns into STONE!! if you touch this stone you lose!! Please touch everything else, even other worms!!  Every 7 seconds or so (Didnt remember exact time!!) your worm DIVES underground for a couple of seconds! This lets you DIVE under the rocks and emerge on the other side!  LEFT to steer your worm left, RIGHT to steer right! B (button name varies per gamepad...) for UNLIMITED TURBO! (No TURBO while underground though!!) That might be everything but this text could be outdated!! Good luck love you kisses!!! Oh right when there is only 60% of worms left you enter PANIC mode!!';
+  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Survive the longest! Oh no your tail turns into STONE!! LEFT to steer your worm left, RIGHT to steer right! Good luck love you kisses!!!';
   text(thisText, 10, 30, width / 2 - 100, height);
 
   let valS = slider.value();
   GD = valS;
   text(GD + ' x larger pixels', 100, 13);
+
+  for (let i = 0; i < menuMadot.length; i++) {
+    menuMadot[i].show();
+  }
 }
 
 function touchStarted() {

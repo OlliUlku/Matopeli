@@ -58,11 +58,11 @@ function controllerUsed() {
                             ohjaimet[controller.index].RIGHT2 = true;
                         }
 
-                        if (btn === 4) { // NOT ON ZERO 2
+                        if (btn === 4) {
                             ohjaimet[controller.index].L = true;
                         }
 
-                        if (btn === 5) { // NOT ON ZERO 2
+                        if (btn === 5) {
                             ohjaimet[controller.index].R = true;
                         }
 
@@ -82,7 +82,6 @@ function controllerUsed() {
                 if (axis === 0) {
                     if (val < -0.5) { // <- HOX
                         ohjaimet[controller.index].LEFT = true;
-                        //print(controller, 'Left pressed');
 
                     } else {
                         ohjaimet[controller.index].LEFT = false;
@@ -127,7 +126,9 @@ class Controller_8BitDoZero2 {
         this.Y = false;
         this.X = false;
         this.L = false;
+        this.Lonce = true;
         this.R = false;
+        this.Ronce = true;
         this.LEFT = false;
         this.RIGHT = false;
         this.UP = false;
