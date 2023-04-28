@@ -22,14 +22,15 @@ class menuMato {
 
 
     TextSize = 10;
-    Pixel = this.size / 2;
+    Pixel = this.size * 4;
     txtPixel = 5;
 
     fill(White);
+    strokeWeight(2);
     stroke(DeepGrey);
     textSize(TextSize);
+    textAlign(CENTER, CENTER);
     text(this.name, this.pos.x + Pixel, this.pos.y - TextSize - txtPixel);
-    textAlign(LEFT, CENTER);
   }
 }
 
@@ -89,6 +90,7 @@ class mato {
 
     // HUD
     this.name = wormNames[wormsCounter];
+    this.showHudInfo = true;
 
     // COLLECTIBLES // POOP // FRUITS
     this.poop = 0;
@@ -127,7 +129,7 @@ class mato {
     this.ghostMOD = 3;
     this.ghostVel = createVector(0, -0.5 * speedMod / 8 * GD * 0.5 * this.ghostMOD);
     this.ghostVel.rotate(rot);
-    this.ghostDuration = 15000;
+    this.ghostDuration = 7500;
     this.ghostDurationINIT = this.ghostDuration;
     this.ghostTimer = new Timer(1000, false);
     this.ghostTimer.pause();
@@ -152,7 +154,7 @@ class mato {
 
   }
 
-  speedUP() { // NEED TO ADD ALL THE NEEDED VECTORS...
+  speedUP() {
     this.vel.add(this.acc_normal);
     this.velTurbo.add(this.acc_normal);
   }
@@ -167,7 +169,6 @@ class mato {
   appleEaten() {
     this.tail += LENGTHADD / MATOJA;
     this.fruitsEaten++;
-    //this.PickupTurbo += omenaVal * 11 / GD;
     this.PickupTurbo += omenaVal * 4 / GD;
 
     print(this.name + ' ate a fruit! New tail size: ' + this.tail);
@@ -326,7 +327,7 @@ class mato {
 
   flamethrower() {
     if (!this.underground && this.chiliOil > 0) {
-      let p = new flameParticle(this.pos.x, this.pos.y, this.rotation, this.index);
+      let p = new flameParticle(this.pos.x, this.pos.y, this.rotation, this.index, this.vel);
       flameParticles.push(p);
       this.chiliOil -= costT / 3;
     }
@@ -369,7 +370,7 @@ class mato {
             }
           }
 
-          //DOES THIS EVER FIRE XD
+          //DOES THIS EVER FIRE XD DONT THINK SO DELETE?
         } else {
           this.pos.add(this.vel);
           print('firing out of bounds???');
@@ -515,38 +516,41 @@ class mato {
       //L_HUD.image(img_align, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
 
     }
-    if (!this.ghostMode) {
-      L_HUD.fill(White);
-      L_HUD.stroke(Black);
-    } else {
-      L_HUD.fill(DeepGrey);
-      L_HUD.stroke(White);
+  }
+
+  showName() {
+    if (this.showHudInfo) {
+      if (!this.ghostMode) {
+        L_HUD.fill(White);
+        L_HUD.stroke(Black);
+      } else {
+        L_HUD.fill(DeepGrey);
+        L_HUD.stroke(White);
+      }
+      L_HUD.strokeWeight(txtPixel * 0.3);
+      L_HUD.textAlign(CENTER, CENTER);
+      // HUD INDEX
+      let gamepadInd = this.index + 1 - onScreenCount;
+      if (gamepadInd >= 1) {
+        L_HUD.textSize(TextSize * 0.6);
+        L_HUD.text('P' + (gamepadInd), this.pos.x + Pixel, this.pos.y - TextSize * 1.9 - txtPixel);
+      }
+      // HUD NAME
+      if (!this.ghostMode) {
+        L_HUD.fill(White);
+        L_HUD.stroke(Black);
+      } else {
+        L_HUD.fill(DeepGrey);
+        L_HUD.stroke(White);
+      }
+      L_HUD.textSize(TextSize);
+      L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize - txtPixel);
+      L_HUD.textAlign(LEFT, CENTER);
+      let MiniTextS = TextSize * 0.65;
+      L_HUD.textSize(MiniTextS);
+      L_HUD.fill(Black);
+      L_HUD.noStroke();
     }
-    L_HUD.strokeWeight(txtPixel * 0.3);
-    L_HUD.textAlign(CENTER, CENTER);
-    // HUD INDEX
-    let gamepadInd = this.index + 1 - onScreenCount;
-    if (gamepadInd >= 1) {
-      L_HUD.textSize(TextSize * 0.6);
-      L_HUD.text('P' + (gamepadInd), this.pos.x + Pixel, this.pos.y - TextSize * 1.9 - txtPixel);
-    }
-    // HUD NAME
-    if (!this.ghostMode) {
-      L_HUD.fill(White);
-      L_HUD.stroke(Black);
-    } else {
-      L_HUD.fill(DeepGrey);
-      L_HUD.stroke(White);
-    }
-    L_HUD.textSize(TextSize);
-    L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize - txtPixel);
-    L_HUD.textAlign(LEFT, CENTER);
-    let MiniTextS = TextSize * 0.65;
-    L_HUD.textSize(MiniTextS);
-    L_HUD.fill(Black);
-    L_HUD.noStroke();
-    //POOPDOLLARS
-    //L_HUD.text('poop eaten: ' + floor(this.poopsEaten), this.pos.x + Pixel + Pixel * 3, this.pos.y + Pixel);
   }
 
   show() {
@@ -639,10 +643,12 @@ class mato {
 }
 
 class flameParticle {
-  constructor(_x, _y, _rotation, _matoIND) {
+  constructor(_x, _y, _rotation, _matoIND, matoVel) {
     this.pos = createVector(_x + Pixel, _y + Pixel);
     this.vel = createVector(0, -0.5 * speedMod / 8 * GD * 3.2 * random(1, 1.2));
-    this.vel.rotate(_rotation + random(-28, 28));
+    this.vel.rotate(_rotation);
+    //this.vel.add(matoVel);
+    this.vel.rotate(random(-28, 28));
     this.matoIND = _matoIND;
     this.color_ = color(random(200, 255), random(0, 170), 10);
     this.duration = random(34, 38);

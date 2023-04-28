@@ -123,6 +123,7 @@ class Controller_8BitDoZero2 {
     constructor() {
         this.A = false;
         this.B = false;
+        this.Bonce = true;
         this.Y = false;
         this.X = false;
         this.L = false;

@@ -71,7 +71,7 @@ function gameReadySetup() {
     create2dArray();
     //setBorderToFalse(); //safeguard...
 
-   
+
 
 
 
@@ -293,21 +293,23 @@ function _OHJAIMET() {
       madot[i].RIGHT = false;
     }
 
-    if (ohjaimet[ctrl_i].B || keyIsDown(UP_ARROW)) {
-      madot[i].turbo = true;
+    if (ohjaimet[ctrl_i].B || keyIsDown(ENTER)) {
       ohjaimet[ctrl_i].B = false; // turns button OFF
+      if (ohjaimet[ctrl_i].Bonce) {
+        madot[i].showHudInfo = !madot[i].showHudInfo;
+
+        ohjaimet[ctrl_i].Bonce = false;
+        setTimeout(turnTrue, 300, 'B', ctrl_i);
+      }
     } else {
-      madot[i].turbo = false;
     }
 
     if (ohjaimet[ctrl_i].A || keyIsDown(DOWN_ARROW)) {
-      madot[i].UGStart = true;
       ohjaimet[ctrl_i].A = false; // turns button OFF
     } else {
-      madot[i].UGStart = false;
     }
 
-    if (ohjaimet[ctrl_i].L) {
+    if (ohjaimet[ctrl_i].L|| keyIsDown(DOWN_ARROW)) {
       ohjaimet[ctrl_i].L = false;
       if (ohjaimet[ctrl_i].Lonce) {
 
@@ -321,7 +323,7 @@ function _OHJAIMET() {
       }
     }
 
-    if (ohjaimet[ctrl_i].R) {
+    if (ohjaimet[ctrl_i].R || keyIsDown(UP_ARROW)) {
       ohjaimet[ctrl_i].R = false;
       if (ohjaimet[ctrl_i].Ronce) {
 
@@ -342,6 +344,8 @@ function turnTrue(LorR, ctrl_ID) {
     ohjaimet[ctrl_ID].Lonce = true;
   } else if (LorR === 'R') {
     ohjaimet[ctrl_ID].Ronce = true;
+  } else if (LorR === 'B') {
+    ohjaimet[ctrl_ID].Bonce = true;
   }
 }
 
@@ -367,6 +371,7 @@ function _MADOT_UPDATE() {
     madot[i].show();
     madot[i].showGhostHUD();
     madot[i].showHUD();
+    madot[i].showName();
 
 
 

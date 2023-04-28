@@ -97,7 +97,7 @@ function setup() {
     spawnX = sin(PI * 2 / matoCountBT * i);
     spawnY = sin(PI * 2 / matoCountBT * i + HALF_PI);
     //print(spawnX);
-    spawnX = map(spawnX, -1, 1, 60, width - 60);
+    spawnX = map(spawnX, -1, 1, 100, width - 100);
     spawnY = map(spawnY, -1, 1, 60, height - 60);
     angleMode(DEGREES);
     menuMadot[i] = new menuMato(spawnX, spawnY, posca[i], -360 / matoCountBT * i, i);
@@ -179,12 +179,12 @@ function StartButton2() {
 
 function _MENU() {
   noStroke()
-  background(Black);
+  background(40);
   textAlign(CENTER, CENTER);
   fill(LightPink);
   text('How many worms? (Bluetooth)', width / 2, height / 2 - 22);
   textAlign(LEFT, TOP);
-  text('Commit ProjectionTest', width / 2, 30);
+  //text('Commit ProjectionTest', width / 2, 30);
 
   textAlign(LEFT, TOP);
   let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Survive the longest! Oh no your tail turns into STONE!! LEFT to steer your worm left, RIGHT to steer right! Good luck love you kisses!!!';

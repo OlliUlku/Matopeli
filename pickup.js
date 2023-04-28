@@ -49,7 +49,7 @@ class pickup {
         this.border();
 
         // testaa ettei 4x4 alueella ole 2x2 ruudulle tilaa
-       if (this.x < width && this.y < height && this.x > 0 && this.y > 0) {
+        if (this.x < width && this.y < height && this.x > 0 && this.y > 0) {
             if (this.movement) {
 
                 if (!array2d[x - 1][y - 1][0]
@@ -93,7 +93,7 @@ class pickup {
                 L_pickup.rect(round(this.x / GD) * GD, round(this.y / GD) * GD, this.size * GD);
 
                 L_fruits.push();
-                L_fruits.translate(this.x + Pixel, this.y + Pixel);
+                L_fruits.translate(x * GD + Pixel, y * GD + Pixel);
                 L_fruits.rotate(this.rotation);
                 L_fruits.image(img_applePickup, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
                 L_fruits.pop();
@@ -106,7 +106,7 @@ class pickup {
                 L_pickup.rect(round(this.x / GD) * GD, round(this.y / GD) * GD, this.size * GD);
 
                 L_fruits.push();
-                L_fruits.translate(this.x + Pixel, this.y + Pixel);
+                L_fruits.translate(x * GD + Pixel, y * GD + Pixel);
                 L_fruits.rotate(this.rotation);
                 L_fruits.image(img_chiliPickup, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
                 L_fruits.pop();
@@ -122,7 +122,7 @@ class pickup {
                 L_pickup.rect(round(this.x / GD) * GD, round(this.y / GD) * GD, this.size * GD);
 
                 L_fruits.push();
-                L_fruits.translate(this.x + Pixel, this.y + Pixel);
+                L_fruits.translate(x * GD + Pixel, y * GD + Pixel);
                 L_fruits.rotate(this.rotation);
                 L_fruits.image(img_spadePickup, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
                 L_fruits.pop();
