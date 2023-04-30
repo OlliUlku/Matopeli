@@ -62,7 +62,7 @@ class mato {
     //this.uGTimer.pause();
 
     this.uGSize;
-    this.uGR = 0.26;
+    this.uGR = 0.76;
     this.r = 0.6 * GD;
     this.UGStart = false;
     this.diveTime = 6000;
@@ -154,6 +154,24 @@ class mato {
 
   }
 
+  gearUp() {
+    this.gear++;
+    if (this.gear != 6) {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Gear ' + this.gear);
+    } else {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Gear ' + this.gear + '! Vroom Vroom!!');
+    }
+  }
+
+  gearDown() {
+    this.gear--;
+    if (this.gear != 1) {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Gear ' + this.gear);
+    } else {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Gear ' + this.gear + ', I will take my time...');
+    }
+  }
+
   speedUP() {
     this.vel.add(this.acc_normal);
     this.velTurbo.add(this.acc_normal);
@@ -163,13 +181,15 @@ class mato {
     this.tail += LENGTHADD / POOPLENGTHDIVIDER / MATOJA;
     this.poopsEaten++;
     this.PickupTurbo++;
-    print(this.name + ' ate some poop, poops eaten: ' + this.poopsEaten + '. Tail size: ' + this.tail);
+    popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' found some poop, great job! :)');
   }
 
   appleEaten() {
     this.tail += LENGTHADD / MATOJA;
     this.fruitsEaten++;
     this.PickupTurbo += omenaVal * 4 / GD;
+
+    popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' ate an apple! :)');
 
     print(this.name + ' ate a fruit! New tail size: ' + this.tail);
   }
@@ -178,6 +198,7 @@ class mato {
     this.tail += LENGTHADD / MATOJA;
     this.fruitsEaten++;
     this.chiliOil = omenaVal;
+    popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' just had a chili! Hot!!');
     print(this.name + ' ate a fruit! New tail size: ' + this.tail);
   }
 
@@ -189,6 +210,10 @@ class mato {
     this.uGTimer.reset();
     this.uGTimer.setTimer(this.diveTime);
     this.uGTimer.start();
+
+    popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' ate a delicious spade!');
+
+
     print(this.name + ' ate a spade! New tail size: ' + this.tail);
 
   }
@@ -249,6 +274,15 @@ class mato {
   becomeGhost() {
     if (!this.ghostMode) {
       this.ghostMode = true;
+      if (random() < 0.25) {
+        popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Ouch!!!');
+      } else if (random() < 0.25) {
+        popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Ouchie!');
+      } else if (random() < 0.25) {
+        popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Oof!');
+      } else {
+        popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Oww! :<');
+      }
       this.ghostTimer.endTimer();
       this.ghostTimer.reset();
       this.ghostTimer.setTimer(this.ghostDuration);
@@ -327,13 +361,18 @@ class mato {
 
   flamethrower() {
     if (!this.underground && this.chiliOil > 0) {
-      let p = new flameParticle(this.pos.x, this.pos.y, this.rotation, this.index, this.vel);
-      flameParticles.push(p);
-      this.chiliOil -= costT / 3;
+      for (let i = 0; i < 2; i++) {
+        let p = new flameParticle(this.pos.x, this.pos.y, this.rotation, this.index, this.vel);
+        flameParticles.push(p);
+      }
     }
   }
 
   update() {
+    if (this.chiliOil > 0) {
+      this.chiliOil -= costT / 3;
+    }
+
     if (this.ghostMode) {
       this.updateGhost();
     } else {
@@ -392,7 +431,7 @@ class mato {
           L_HUD.textSize(Pixel * 4);
           L_HUD.textAlign(CENTER, CENTER);
           L_HUD.fill(CacaoBrown);
-          L_HUD.noStroke(Black);
+          L_HUD.noStroke();
           L_HUD.text('!', this.pos.x + Pixel * 3.7, this.pos.y + Pixel);
           this.underground = true;
         } else if (this.uGTimer.getRemainingTime() < this.diveTime) {
@@ -648,7 +687,7 @@ class flameParticle {
     this.vel = createVector(0, -0.5 * speedMod / 8 * GD * 3.2 * random(1, 1.2));
     this.vel.rotate(_rotation);
     //this.vel.add(matoVel);
-    this.vel.rotate(random(-28, 28));
+    this.vel.rotate(random(-33, 33));
     this.matoIND = _matoIND;
     this.color_ = color(random(200, 255), random(0, 170), 10);
     this.duration = random(34, 38);

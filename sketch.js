@@ -79,6 +79,9 @@ function setup() {
     }
   }, false);
 
+  // PEEPO = loadFont('Peepo.ttf');
+  // textFont(PEEPO)
+
   posca.splice(14, 1); // removes Beige (#dbc48e) which is background color, from array
 
   shuffle(posca, true);
@@ -178,7 +181,7 @@ function StartButton2() {
 }
 
 function _MENU() {
-  noStroke()
+  noStroke();
   background(40);
   textAlign(CENTER, CENTER);
   fill(LightPink);

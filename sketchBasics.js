@@ -30,6 +30,7 @@ function gameReadySetup() {
     L_HUD = createGraphics(pxDens * width, pxDens * height);
     L_HUD.angleMode(DEGREES);
     L_HUD.textAlign(CENTER, CENTER);
+    //L_HUD.textFont(PEEPO);
 
     L_mato = createGraphics(pxDens * width, pxDens * height);
     L_mato.angleMode(DEGREES);
@@ -158,7 +159,7 @@ function gameReadySetup() {
 
     // IMAGES
 
-    img_panicMode = createImg('panic_anim.png');
+    //img_panicMode = createImg('panic_anim.png');
     img_kakkakruunu = loadImage('poopRoyalty2.png');
     img_valtikka = loadImage('valtikka1.png');
     img_align = loadImage('align1.png');
@@ -174,11 +175,20 @@ function gameReadySetup() {
     // STRESSCOLOR
     stressColor = color(Red);
 
-    // FLAMETHROWER
+    setTimeout(turnNamesOffOnce, 8000);
+
+
+
 
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
-    //print('GAME START!!!');
+    print('GAME START!!!');
+  }
+}
+
+function turnNamesOffOnce() {
+  for (let i = 0; i < madot.length; i++) {
+    madot[i].showHudInfo = false;
   }
 }
 
@@ -309,12 +319,12 @@ function _OHJAIMET() {
     } else {
     }
 
-    if (ohjaimet[ctrl_i].L|| keyIsDown(DOWN_ARROW)) {
+    if (ohjaimet[ctrl_i].L || keyIsDown(DOWN_ARROW)) {
       ohjaimet[ctrl_i].L = false;
       if (ohjaimet[ctrl_i].Lonce) {
 
         if (madot[i].gear > 1) {
-          madot[i].gear--;
+          madot[i].gearDown();
           print(madot[i].gear);
         }
 
@@ -328,7 +338,7 @@ function _OHJAIMET() {
       if (ohjaimet[ctrl_i].Ronce) {
 
         if (madot[i].gear < 6) {
-          madot[i].gear++;
+          madot[i].gearUp();
           print(madot[i].gear);
         }
 
@@ -410,7 +420,7 @@ function _MADOT_UPDATE() {
     }
   }
 
-  for (let i = flameParticles.length - 1; i > 0; i--) {
+  for (let i = flameParticles.length - 1; i >= 0; i--) {
     flameParticles[i].show();
     flameParticles[i].update();
     flameParticles[i].show();
@@ -422,7 +432,15 @@ function _MADOT_UPDATE() {
     if (flameParticles[i].duration <= 0 || flameParticles[i].hitStone) {
       flameParticles.splice(i, 1);
     }
+  }
 
+  for (let i = popUpTexts.length - 1; i >= 0; i--) {
+    print('animationloopaction');
+    popUpTexts[i].show();
+    popUpTexts[i].update();
+    if (popUpTexts[i].duration <= 0) {
+      popUpTexts.splice(i, 1);
+    }
   }
 }
 
@@ -658,7 +676,7 @@ function _WORLD_UPDATE() {
       } else { // OUT OF BOUNDS // OLD???
       }
       if (!madot[i].underground) {
-        setTimeout(set2dArrayFalse, (1000 + panicCount + stoneDelay) * 8 / GD, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
+        setTimeout(set2dArrayFalse, (2500 + panicCount + stoneDelay) / madot[i].gear * 8 / GD, madot[i].pos.x, madot[i].pos.y, i); // tehokkuus -> pysäytä tän looppaaminen...
       }
       //}
     }

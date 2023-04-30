@@ -113,8 +113,8 @@ let pooped;
 
 // PICKUPS
 let pickups = [];
-let pickups_newTime = 5000; //5000
-let pickups_newTimeINIT = 3000; //3000
+let pickups_newTime = 1000; //5000
+let pickups_newTimeINIT = 300; //3000
 let pickups_count = 0;
 let PickupSpawnTime = pickups_newTime;
 
@@ -172,3 +172,9 @@ let POOPLENGTHDIVIDER = 30;
 
 // MENUMADOT
 let menuMadot = [];
+
+// POP UP TEXTS
+let popUpTexts = []
+
+// FONT
+let PEEPO;
