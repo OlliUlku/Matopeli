@@ -531,8 +531,7 @@ class mato {
         this.VP++;
       }
       if (this.aliveRoyalty) {
-        this.VP++;
-        this.VP++;
+        this.VP += 1;
       }
       if (this.ghostRoyalty) {
         this.VP++;

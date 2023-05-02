@@ -15,9 +15,9 @@ function setup() {
   //fullscreen(true);
   CNVS = createCanvas(windowWidth, windowHeight);
 
-  for (let element of document.getElementsByClassName("p5Canvas")) {
-    element.addEventListener("contextmenu", (e) => e.preventDefault());
-  }
+  // for (let element of document.getElementsByClassName("p5Canvas")) {
+  //   element.addEventListener("contextmenu", (e) => e.preventDefault());
+  // }
 
   let inp = createInput(matoCountBT);
   inp.size(18);
@@ -31,10 +31,12 @@ function setup() {
   button.center('horizontal');
   button.mousePressed(StartButton);
 
-  let button2 = createButton('Start with on-screen controls (2x)');
-  button2.position(width / 2, height / 2 + 20 + 30);
-  button2.center('horizontal');
-  button2.mousePressed(StartButton2);
+  //OLDIE onscreenctrlstuff...
+
+  // let button2 = createButton('Start with on-screen controls (2x)');
+  // button2.position(width / 2, height / 2 + 20 + 30);
+  // button2.center('horizontal');
+  // button2.mousePressed(StartButton2);
 
   slider = createSlider(3, 24, 8, 1);
   slider.position(10, 10);
@@ -63,21 +65,21 @@ function setup() {
 
 
   // Prevent scrolling when touching the canvas
-  document.body.addEventListener("touchstart", function (e) {
-    if (e.target == canvas) {
-      e.preventDefault();
-    }
-  }, false);
-  document.body.addEventListener("touchend", function (e) {
-    if (e.target == canvas) {
-      e.preventDefault();
-    }
-  }, false);
-  document.body.addEventListener("touchmove", function (e) {
-    if (e.target == canvas) {
-      e.preventDefault();
-    }
-  }, false);
+  // document.body.addEventListener("touchstart", function (e) {
+  //   if (e.target == canvas) {
+  //     e.preventDefault();
+  //   }
+  // }, false);
+  // document.body.addEventListener("touchend", function (e) {
+  //   if (e.target == canvas) {
+  //     e.preventDefault();
+  //   }
+  // }, false);
+  // document.body.addEventListener("touchmove", function (e) {
+  //   if (e.target == canvas) {
+  //     e.preventDefault();
+  //   }
+  // }, false);
 
   // PEEPO = loadFont('Peepo.ttf');
   // textFont(PEEPO)
@@ -105,6 +107,7 @@ function setup() {
     angleMode(DEGREES);
     menuMadot[i] = new menuMato(spawnX, spawnY, posca[i], -360 / matoCountBT * i, i);
   }
+
 }
 
 
@@ -221,18 +224,22 @@ function StartButton2() {
 function _MENU() {
   noStroke();
   background(40);
+  textSize(TextSize * 1.3);
   textAlign(CENTER, CENTER);
   fill(LightPink);
-  text('How many worms? (Bluetooth)', width / 2, height / 2 - 22);
+  text('How many worms? (Bluetooth)', width / 2, height / 2 - 28);
   textAlign(LEFT, TOP);
   //text('Commit ProjectionTest', width / 2, 30);
-
-  textAlign(LEFT, TOP);
-  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Survive the longest! Oh no your tail turns into STONE!! LEFT to steer your worm left, RIGHT to steer right! Good luck love you kisses!!!';
-  text(thisText, 10, 30, width / 2 - 100, height);
+  textSize(TextSize * 1.7);
+  textAlign(CENTER, CENTER);
+  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Oh no your tail turns into STONE!! Avoid STONE (and FLAMES!!) or you turn into a GHOST! (Only to revive in 7 seconds) Press LEFT to steer your worm left, RIGHT to steer right! L or R buttons to shift your GEARS to go slower or faster, respectively! B (or X) button to show and hide your name.. ...The game ends when all the worms are ghosts at the same time for a period of time... Winner is the player holding the most throphies on the scoreboards (1 point per trophy...) Good luck, love you!!!';
+  text(thisText, width / 2 - width / 2 / 2, height / 2 - 50, width / 2, height / 2);
 
   let valS = slider.value();
   GD = valS;
+  textSize(TextSize * 1.3);
+  textAlign(LEFT, TOP);
+
   text(GD + ' x larger pixels', 100, 13);
 
   for (let i = 0; i < menuMadot.length; i++) {
@@ -244,8 +251,34 @@ function touchStarted() {
 }
 
 function storeMenuData() {
+  //way more than storing... :D
+
+  shuffle(posca, true);
+  shuffle(wormNames, true);
+
+  ohjaimet = [];
+  menuMadot = [];
+
+  for (let i = 0; i < matoCountBT; i++) {
+    ohjaimet[i] = new Controller_8BitDoZero2(i);
+  }
+
+
+  for (let i = 0; i < matoCountBT; i++) {
+    angleMode(RADIANS);
+    let spawnX, spawnY;
+    spawnX = sin(PI * 2 / matoCountBT * i);
+    spawnY = sin(PI * 2 / matoCountBT * i + HALF_PI);
+    //print(spawnX);
+    spawnX = map(spawnX, -1, 1, 100, width - 100);
+    spawnY = map(spawnY, -1, 1, 60, height - 60);
+    angleMode(DEGREES);
+    menuMadot[i] = new menuMato(spawnX, spawnY, posca[i], -360 / matoCountBT * i, i);
+  }
+
   storeItem('Matopeli_GD', slider.value());
   print('store items');
+
 }
 
 function windowResized() {
