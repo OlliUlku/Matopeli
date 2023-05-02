@@ -21,14 +21,14 @@ class top_poop_eater_score {
 
 
         for (let i = 0; i < madot.length; i++) {
-            madot[i].royalty = false;
+            madot[i].poopRoyalty = false;
         }
         if (MATOJA > 1) {
             if (this.arr[0].poops != this.arr[1].poops) {
-                madot[this.arr[0].Index].royalty = true;
+                madot[this.arr[0].Index].poopRoyalty = true;
             }
         } else {
-            madot[this.arr[0].Index].royalty = true;
+            madot[this.arr[0].Index].poopRoyalty = true;
         }
     }
 
@@ -136,8 +136,10 @@ class top_generic_score {
         for (let i = 0; i < madot.length; i++) {
             this.arr[i] = { name: madot[i].name, scoreItem: madot[i].aliveDuration, color: madot[i].colorINIT, Index: i };
         }
+
         this.arr.sort((firstItem, secondItem) => firstItem.scoreItem - secondItem.scoreItem);
         reverse(this.arr);
+
         this.sizeY = txtPixel * this.arr.length * 2 + 1.6 * txtPixel;
         this.y = height - this.sizeY;
 
@@ -147,9 +149,14 @@ class top_generic_score {
         if (MATOJA > 1) {
             if (this.arr[0].scoreItem != this.arr[1].scoreItem) {
                 madot[this.arr[0].Index].aliveRoyalty = true;
+
             }
         } else {
             madot[this.arr[0].Index].aliveRoyalty = true;
+        }
+
+        for (let i = 1; i < this.arr.length - 1; i++) {
+            madot[this.arr[i].Index].aliveRoyaltyOnce = true;
         }
     }
 
@@ -162,7 +169,7 @@ class top_generic_score {
         L_HUD.textSize(this.textSize * 1.5);
         L_HUD.fill(Black);
         L_HUD.textAlign(LEFT, CENTER);
-        L_HUD.text('Time alive:', this.x + txtPixel, this.y - txtPixel);
+        L_HUD.text('Time alive: (2pts)', this.x + txtPixel, this.y - txtPixel);
         L_HUD.push();
         L_HUD.translate(this.x - txtPixel * 20 / 2 + this.sizeX - txtPixel * 3, this.y - txtPixel * 20 / 2 - txtPixel * 5.5);
         //L_HUD.rotate(-50);
@@ -198,8 +205,10 @@ class top_ghost_score {
         for (let i = 0; i < madot.length; i++) {
             this.arr[i] = { name: madot[i].name, scoreItem: madot[i].ghostsHappened, color: madot[i].colorINIT, Index: i };
         }
+
         this.arr.sort((firstItem, secondItem) => firstItem.scoreItem - secondItem.scoreItem);
         reverse(this.arr);
+
         this.sizeY = txtPixel * this.arr.length * 2 + 1.6 * txtPixel;
         this.y = height - this.sizeY;
 
@@ -212,6 +221,9 @@ class top_ghost_score {
             }
         } else {
             madot[this.arr[0].Index].ghostRoyalty = true;
+        }
+        for (let i = 1; i < this.arr.length - 1; i++) {
+            madot[this.arr[i].Index].ghostRoyaltyOnce = true;
         }
     }
 

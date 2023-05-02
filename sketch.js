@@ -144,24 +144,62 @@ function draw() {
     //_SPEED_UP();
     _MADOT_UPDATE();
     _WORLD_UPDATE();
+    _SHOWSCORES();
     //drawDebug(); // DEBUG STONE PLACEMENT
     //_PANIC_MODE();
     _ONSCREENKEYS();
-    //_STRESS();
-
-    _SHOWWORMSALIVE();
-
-    //_POINTS();
-
+    _IFZEROWORMS();
+    //_SHOWWORMSALIVE();
     _LAYERS();
-    //_GAME_END_POINTS();
+    // _GAME_END_POINTS();
     _GAME_END();
 
     LENGTHADD += MATOJA * 5;
   }
 }
 
+function _SHOWSCORES() {
+  poopScore.show();
+  appleScore.show();
+  aliveScore.show();
+  ghostScore.show();
+  takeOutsScore.show();
+}
 
+
+function _IFZEROWORMS() {
+
+  L_HUD.rectMode(CORNER);
+  L_HUD.noStroke();
+  stressStrenght = map(finishCountdown, 0, finishCountdownINIT, 0, -85);
+  stressColor.setAlpha(map(sin(millis() / 3), -1, 1, 10 + stressStrenght, 45 + stressStrenght));
+  L_HUD.fill(stressColor);
+  L_HUD.rect(0, 0, width, height);
+  if (wormsCounter === 0) {
+    if (stressLevel < 300) {
+      stressLevel++;
+    }
+  } else if (stressLevel > 0) {
+    stressLevel -= 1 / 10;
+  }
+
+
+  if (wormsCounter <= 0) {
+    finishCountdown--;
+    if (finishCountdown <= 0) {
+      FINISHED = true;
+    }
+  } else if (finishCountdown <= finishCountdownINIT) {
+    finishCountdown += 1 / 10;
+  }
+
+  let gameEndBar = map(finishCountdown, 0, finishCountdownINIT, 0, width);
+  let _color = color(White);
+  _color.setAlpha(map(stressLevel, 0, 300, 0, 600));
+  L_HUD.noStroke();
+  L_HUD.fill(_color);
+  L_HUD.rect(0, 0, gameEndBar, TextSize * 1.2);
+}
 
 function InputMatoCount() {
   matoCountBT = this.value();

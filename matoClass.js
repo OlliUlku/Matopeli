@@ -9,7 +9,7 @@ class menuMato {
     this.name = wormNames[controllerIndex];
 
     this.highlight = false;
-    print('created menumato ' + this.index + this.name);
+    // print('created menumato ' + this.index + this.name);
   }
   show() {
     fill(this.color);
@@ -100,12 +100,18 @@ class mato {
     this.aliveDuration = 0;
     this.ghostDurationScore = 0;
 
-    // POOP ROYALTY
-    this.royalty = false;
+    // ROYALTY
+    this.poopRoyalty = false;
     this.appleRoyalty = false;
     this.aliveRoyalty = false;
     this.ghostRoyalty = false;
     this.takeOutsRoyalty = false;
+
+    this.poopRoyaltyOnce = true;
+    this.appleRoyaltyOnce = true;
+    this.aliveRoyaltyOnce = true;
+    this.ghostRoyaltyOnce = true;
+    this.takeOutsRoyaltyOnce = true;
 
     this.VP = 0;
 
@@ -182,24 +188,27 @@ class mato {
     this.poopsEaten++;
     this.PickupTurbo++;
     popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' found some poop, great job! :)');
+    this.poopRoyaltyOnce = true;
   }
 
   appleEaten() {
     this.tail += LENGTHADD / MATOJA;
     this.fruitsEaten++;
     this.PickupTurbo += omenaVal * 4 / GD;
+    this.appleRoyaltyOnce = true;
+
 
     popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' ate an apple! :)');
-
-    print(this.name + ' ate a fruit! New tail size: ' + this.tail);
   }
 
   chiliEaten() {
     this.tail += LENGTHADD / MATOJA;
     this.fruitsEaten++;
-    this.chiliOil = omenaVal;
+    this.chiliOil = omenaVal * 0.75;
+    this.appleRoyaltyOnce = true;
+
+
     popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' just had a chili! Hot!!');
-    print(this.name + ' ate a fruit! New tail size: ' + this.tail);
   }
 
   spadeFruitEaten() {
@@ -210,30 +219,73 @@ class mato {
     this.uGTimer.reset();
     this.uGTimer.setTimer(this.diveTime);
     this.uGTimer.start();
+    this.appleRoyaltyOnce = true;
+
 
     popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' ate a delicious spade!');
+  }
 
+  grillAnother() {
+    this.takeOuts++;
+    if (random() < 0.33) {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Take that!!');
+    } else if (random() < 0.33) {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Burn!!');
+    } else {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Take this!!!');
+    }
+    this.takeOutsRoyaltyOnce = true;
 
-    print(this.name + ' ate a spade! New tail size: ' + this.tail);
+  }
 
+  royaltiesText() {
+    if (this.aliveRoyaltyOnce && this.aliveRoyalty) {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y - Pixel * 4, this.name + ' has spent the longest time alive!!', AquaGreen, 100);
+      this.aliveRoyaltyOnce = false;
+    }
+
+    if (this.ghostRoyaltyOnce && this.ghostRoyalty) {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y - Pixel * 4, this.name + ' has turned into a ghost the most!', Violet, 100);
+      this.ghostRoyaltyOnce = false;
+    }
+
+    if (this.poopRoyaltyOnce && this.poopRoyalty) {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y - Pixel * 4, this.name + ' is the leading poop collector!', Brown, 100);
+      this.poopRoyaltyOnce = false;
+
+    }
+    if (this.appleRoyaltyOnce && this.appleRoyalty) {
+      this.fruitRoyaltyText();
+      this.appleRoyaltyOnce = false;
+
+    }
+    if (this.takeOutsRoyaltyOnce && this.takeOutsRoyalty) {
+      popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y - Pixel * 4, this.name + ' is the GrillMaster', Red, 100);
+      this.takeOutsRoyaltyOnce = false;
+    }
+
+  }
+
+  fruitRoyaltyText() {
+    popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y - Pixel * 4, this.name + ' is the leading fruit picker!!', Pink, 100);
   }
 
   border() {
 
     if (this.pos.x < Pixel * 0.3) {
       this.pos.x = width - (Pixel * 2);
-      // //print(this.name + ' used teleport!!');
+      // //// print(this.name + ' used teleport!!');
     } else if (this.pos.x >= width - 2 * Pixel) {
       this.pos.x = Pixel * 0.3;
-      // //print(this.name + ' used teleport!!');
+      // //// print(this.name + ' used teleport!!');
     }
 
     if (this.pos.y < Pixel * 0.2) {
       this.pos.y = height - (Pixel * 2);
-      // //print(this.name + ' used teleport!!');
+      // //// print(this.name + ' used teleport!!');
     } else if (this.pos.y >= height - 2 * Pixel) {
       this.pos.y = Pixel * 0.2;
-      // //print(this.name + ' used teleport!!');
+      // //// print(this.name + ' used teleport!!');
     }
 
   }
@@ -290,6 +342,9 @@ class mato {
       //this.ghostDuration += 4000;
       this.ghostsHappened++;
       wormsCounter--;
+      this.ghostRoyaltyOnce = true;
+
+
     }
   }
 
@@ -335,7 +390,7 @@ class mato {
     } else {
       this.ghostMode = false;
       wormsCounter++;
-      print(this.name + ' revived! worms alive: ' + wormsCounter);
+      // print(this.name + ' revived! worms alive: ' + wormsCounter);
 
     }
   }
@@ -367,6 +422,8 @@ class mato {
       }
     }
   }
+
+
 
   update() {
     if (this.chiliOil > 0) {
@@ -412,7 +469,7 @@ class mato {
           //DOES THIS EVER FIRE XD DONT THINK SO DELETE?
         } else {
           this.pos.add(this.vel);
-          print('firing out of bounds???');
+          // print('firing out of bounds???');
           if (this.gear === 'fast') {
             this.pos.add(this.vel);
           }
@@ -466,26 +523,25 @@ class mato {
   }
 
   addVP() {
-    if (frameCount % 3 === 0) {
-
-      if (!this.stop) { //OLD
-        if (this.royalty) {
-          this.VP++;
-        }
-        if (this.appleRoyalty) {
-          this.VP++;
-        }
-        if (this.aliveRoyalty) {
-          this.VP++;
-        }
-        if (this.ghostRoyalty) {
-          this.VP++;
-        }
-        if (this.takeOutsRoyalty) {
-          this.VP++;
-        }
+    if (!this.stop) { //OLD
+      if (this.poopRoyalty) {
+        this.VP++;
+      }
+      if (this.appleRoyalty) {
+        this.VP++;
+      }
+      if (this.aliveRoyalty) {
+        this.VP++;
+        this.VP++;
+      }
+      if (this.ghostRoyalty) {
+        this.VP++;
+      }
+      if (this.takeOutsRoyalty) {
+        this.VP++;
       }
     }
+
   }
 
   //HOX ALSO ADDS VP, NOT THE RIGHT PLACE???
@@ -501,26 +557,26 @@ class mato {
 
       //ROYALTIES
 
-      // if (this.royalty) {
-      //   L_HUD.image(img_kakkakruunu, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
-      // }
-      // if (this.appleRoyalty) {
-      //   L_HUD.push();
-      //   L_HUD.translate(round(this.pos.x / GD) * GD - Pixel, round(this.pos.y / GD) * GD - Pixel);
-      //   L_HUD.translate(-Pixel * 4, Pixel * 3.3);
-      //   L_HUD.rotate(-50);
-      //   L_HUD.image(img_valtikka, 0, 0, Pixel * 9, Pixel * 9);
-      //   L_HUD.pop();
-      // }
-      // if (this.aliveRoyalty) {
-      //   L_HUD.image(img_aliveRoyalty, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
-      // }
-      // if (this.ghostRoyalty) {
-      //   L_HUD.image(img_ghostRoyalty, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
-      // }
-      // if (this.takeOutsRoyalty) {
-      //   L_HUD.image(img_takeOutsRoyalty, round(this.pos.x / GD) * GD - Pixel * 4, round(this.pos.y / GD) * GD - Pixel * 4, Pixel * 10, Pixel * 10);
-      // }
+      if (this.poopRoyalty) {
+        L_HUD.image(img_kakkakruunu, this.pos.x - Pixel * 4, this.pos.y - Pixel * 4, Pixel * 10, Pixel * 10);
+      }
+      if (this.appleRoyalty) {
+        L_HUD.push();
+        L_HUD.translate(this.pos.x - Pixel, this.pos.y - Pixel);
+        L_HUD.translate(-Pixel * 4, Pixel * 3.3);
+        L_HUD.rotate(-50);
+        L_HUD.image(img_valtikka, 0, 0, Pixel * 9, Pixel * 9);
+        L_HUD.pop();
+      }
+      if (this.aliveRoyalty) {
+        L_HUD.image(img_aliveRoyalty, this.pos.x - Pixel * 4, this.pos.y - Pixel * 4, Pixel * 10, Pixel * 10);
+      }
+      if (this.ghostRoyalty) {
+        L_HUD.image(img_ghostRoyalty, this.pos.x - Pixel * 4, this.pos.y - Pixel * 4, Pixel * 10, Pixel * 10);
+      }
+      if (this.takeOutsRoyalty) {
+        L_HUD.image(img_takeOutsRoyalty, this.pos.x - Pixel * 4, this.pos.y - Pixel * 4, Pixel * 10, Pixel * 10);
+      }
 
       //FACE
 
@@ -571,7 +627,7 @@ class mato {
       // HUD INDEX
       let gamepadInd = this.index + 1 - onScreenCount;
       if (gamepadInd >= 1) {
-        L_HUD.textSize(TextSize * 0.6);
+        L_HUD.textSize(TextSize * 0.9);
         L_HUD.text('P' + (gamepadInd), this.pos.x + Pixel, this.pos.y - TextSize * 1.9 - txtPixel);
       }
       // HUD NAME
@@ -582,21 +638,26 @@ class mato {
         L_HUD.fill(DeepGrey);
         L_HUD.stroke(White);
       }
-      L_HUD.textSize(TextSize);
+      L_HUD.textSize(TextSize * 1.2);
       L_HUD.text(this.name, this.pos.x + Pixel, this.pos.y - TextSize - txtPixel);
       L_HUD.textAlign(LEFT, CENTER);
-      let MiniTextS = TextSize * 0.65;
-      L_HUD.textSize(MiniTextS);
-      L_HUD.fill(Black);
-      L_HUD.noStroke();
+      // let MiniTextS = TextSize * 0.65;
+      // L_HUD.textSize(MiniTextS);
+      // L_HUD.fill(Black);
+      // L_HUD.noStroke();
     }
   }
 
   show() {
+    this.royaltiesText();
+
     if (this.ghostMode) {
       this.showGhost();
+
     } else {
       if (!this.stop) { // IF DIDNT HIT STONE... (in array2d -> false)
+
+
 
         if (!this.underground) {
           this.color.setAlpha(255);

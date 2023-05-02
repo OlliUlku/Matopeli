@@ -49,21 +49,29 @@ class pickup {
         this.border();
 
         // testaa ettei 4x4 alueella ole 2x2 ruudulle tilaa
-        if (this.x < width && this.y < height && this.x > 0 && this.y > 0) {
+        if (this.x < width - Pixel * 3 && this.y < height - Pixel * 3 && this.x > Pixel && this.y > Pixel) {
             if (this.movement) {
-
-                if (!array2d[x - 1][y - 1][0]
-                    || !array2d[x + 1][y - 1][0]
-                    || !array2d[x + 2][y - 1][0]
-                    || !array2d[x][y][0]
-                    || !array2d[x - 1][y + 1][0]
-                    || !array2d[x + 2][y + 1][0]
-                    || !array2d[x - 1][y + 2][0]
-                    || !array2d[x + 1][y + 2][0]
-                    || !array2d[x + 2][y + 2][0]) {
-                    this.move();
-                } else {
-                    this.movement = false;
+                try {
+                    if (!array2d[x - 1][y - 1][0]
+                        || !array2d[x + 1][y - 1][0]
+                        || !array2d[x + 2][y - 1][0]
+                        || !array2d[x][y][0]
+                        || !array2d[x][y + 1][0]
+                        || !array2d[x][y - 1][0]
+                        || !array2d[x + 1][y][0]
+                        || !array2d[x - 1][y][0]
+                        || !array2d[x - 1][y + 1][0]
+                        || !array2d[x + 2][y + 1][0]
+                        || !array2d[x - 1][y + 2][0]
+                        || !array2d[x + 1][y + 2][0]
+                        || !array2d[x + 2][y + 2][0]) {
+                        this.move();
+                    } else {
+                        this.movement = false;
+                    }
+                } catch (err) {
+                    print('error caught');
+                    this.move;
                 }
 
                 //checks if something is directly on top

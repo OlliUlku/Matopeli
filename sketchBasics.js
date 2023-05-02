@@ -105,7 +105,7 @@ function gameReadySetup() {
       let spawnX, spawnY;
       spawnX = sin(PI * 2 / MATOJA * i);
       spawnY = sin(PI * 2 / MATOJA * i + HALF_PI);
-      //print(spawnX);
+      //// print(spawnX);
       spawnX = map(spawnX, -1, 1, Pixel * 6, width - txtPixel * 6);
       spawnY = map(spawnY, -1, 1, Pixel * 6, height - txtPixel * 6);
       angleMode(DEGREES);
@@ -129,15 +129,15 @@ function gameReadySetup() {
 
 
     //PRINT INFO FOR DEBUG?
-    //print('Max colors', posca.length);
-    //print('Max Names', wormNames.length);
-    //print('So called Pixels length X', array2d.length);
-    //print('So called Pixels length Y', array2d[0].length);
-    //print('Grid Division', GD);
-    print('Pixel size', Pixel);
-    //print('txtDiv', txtDivision);
-    //print('txtPixel size', txtPixel);
-    //print('MATOJA ' + MATOJA);
+    //// print('Max colors', posca.length);
+    //// print('Max Names', wormNames.length);
+    //// print('So called Pixels length X', array2d.length);
+    //// print('So called Pixels length Y', array2d[0].length);
+    //// print('Grid Division', GD);
+    // print('Pixel size', Pixel);
+    //// print('txtDiv', txtDivision);
+    //// print('txtPixel size', txtPixel);
+    //// print('MATOJA ' + MATOJA);
 
 
     // wormname textsize
@@ -182,7 +182,7 @@ function gameReadySetup() {
 
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
-    print('GAME START!!!');
+    // print('GAME START!!!');
   }
 }
 
@@ -325,7 +325,7 @@ function _OHJAIMET() {
 
         if (madot[i].gear > 1) {
           madot[i].gearDown();
-          print(madot[i].gear);
+          // print(madot[i].gear);
         }
 
         ohjaimet[ctrl_i].Lonce = false;
@@ -339,7 +339,7 @@ function _OHJAIMET() {
 
         if (madot[i].gear < 6) {
           madot[i].gearUp();
-          print(madot[i].gear);
+          // print(madot[i].gear);
         }
 
         ohjaimet[ctrl_i].Ronce = false;
@@ -376,7 +376,6 @@ function _PICKUPS_UPDATE() {
 function _MADOT_UPDATE() {
   for (let i = 0; i < madot.length; i++) {
     madot[i].update();
-    madot[i].addVP();
     madot[i].border();
     madot[i].show();
     madot[i].showGhostHUD();
@@ -435,7 +434,6 @@ function _MADOT_UPDATE() {
   }
 
   for (let i = popUpTexts.length - 1; i >= 0; i--) {
-    print('animationloopaction');
     popUpTexts[i].show();
     popUpTexts[i].update();
     if (popUpTexts[i].duration <= 0) {
@@ -459,13 +457,14 @@ function _SHOWWORMSALIVE() {
 
 function _POINTS() {
   for (let i = 0; i < madot.length; i++) {
+    madot[i].addVP();
     L_top.noStroke();
     L_top.fill(madot[i].colorINIT);
-    L_top.rect(round(madot[i].VP / GD) * GD, i * txtPixel, txtPixel);
-    if (round(madot[i].VP / GD) * GD >= width) {
-      WINNER = madot[i].name;
-      _GAME_END();
-    }
+    L_top.rect(0, i * (txtPixel * 1.3), madot[i].VP * 5 * txtPixel, txtPixel);
+    L_top.fill(Black);
+    L_top.textAlign(LEFT, TOP);
+    L_top.textSize(txtPixel);
+    L_top.text(madot[i].name + ', ' + madot[i].VP + 'points', madot[i].VP * 5 * txtPixel, i * (txtPixel * 1.3));
   }
 }
 
@@ -493,10 +492,11 @@ function _PANIC_MODE() {
 }
 
 function _GAME_END() {
-  if (wormsCounter <= 0) {
+  if (FINISHED) {
 
     let ts = width / 14;
 
+    _POINTS();
     L_top.textSize(ts * 0.6);
     L_top.fill(Black);
     L_top.noStroke();
@@ -512,7 +512,7 @@ function _GAME_END() {
     image(L_HUD, 0, 0);
     image(L_top, 0, 0);
     noLoop();
-    print('GAME END!!!');
+    // print('GAME END!!!');
 
   }
 }
@@ -558,25 +558,13 @@ function _GAME_END_POINTS() {
   image(L_HUD, 0, 0);
   image(L_top, 0, 0);
   noLoop();
-  print('GAME END!!!');
+  // print('GAME END!!!');
 
   //}
 }
 
 function _STRESS() {
-  L_HUD.rectMode(CORNER);
-  L_HUD.noStroke();
-  let stressStrenght = map(stressLevel, 0, 300, -45, 0);
-  stressColor.setAlpha(map(sin(millis() / 3), -1, 1, 10 + stressStrenght, 45 + stressStrenght));
-  L_HUD.fill(stressColor);
-  L_HUD.rect(0, 0, width, height);
-  if (wormsCounter === 1) {
-    if (stressLevel < 300) {
-      stressLevel++;
-    }
-  } else if (stressLevel > 0) {
-    stressLevel -= 2;
-  }
+
 }
 
 function _LAYERS() {
@@ -635,11 +623,11 @@ function _WORLD_UPDATE() {
         for (let dy = 0; dy <= 1; dy++) {
           if (array2d[__x + dx][__y + dy][2]) {
             //NOT THE OWNER OF THE FLAME AND NOT UNDERGROUND
-            if (i != array2d[__x + dx][__y + dy][3] && !madot[i].underground) {
-              print('touch fire?');
+            if (i != array2d[__x + dx][__y + dy][3] && !madot[i].underground && !madot[i].ghostMode) {
+              // print('touch fire?');
               madot[i].becomeGhost();
-              madot[array2d[__x + dx][__y + dy][3]].takeOuts++;
-              print(madot[array2d[__x + dx][__y + dy][3]].name, madot[array2d[__x + dx][__y + dy][3]].takeOuts);
+              madot[array2d[__x + dx][__y + dy][3]].grillAnother();
+              // print(madot[array2d[__x + dx][__y + dy][3]].name, madot[array2d[__x + dx][__y + dy][3]].takeOuts);
             }
           }
         }
@@ -669,9 +657,9 @@ function _WORLD_UPDATE() {
 
 
           madot[i].becomeGhost();
-          //print(madot[i].name + ' died! worms alive: ' + wormsCounter);
+          //// print(madot[i].name + ' died! worms alive: ' + wormsCounter);
 
-          //print('hit wall');
+          //// print('hit wall');
         }
       } else { // OUT OF BOUNDS // OLD???
       }
@@ -740,7 +728,7 @@ function removeStone(_x, _y, kakka, matoindex) {
       array2d[_x][_y][1] = true; // set poop[eli 1] true
       madot[matoIND].poop++;
       if (!madot[matoIND].stop) {
-        print(madot[matoIND].name, 'pooped. Poopcount:', madot[matoIND].poop);
+        // print(madot[matoIND].name, 'pooped. Poopcount:', madot[matoIND].poop);
       }
     }
   }
@@ -784,5 +772,5 @@ function extinguish(x, y) {
   // L_top.fill(Black);
   // L_top.rect(x * GD, y * GD, Pixel);
   // L_top.noErase();
-  // print('extinguish');
+  // // print('extinguish');
 }
