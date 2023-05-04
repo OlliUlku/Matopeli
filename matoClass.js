@@ -146,6 +146,8 @@ class mato {
     this.takeOuts = 0;
     this.chiliOil = 0;
 
+    // CLASSIC MODE
+    this.checkBorder = false;
   }
 
   speedUP_PANIC() {
@@ -272,20 +274,30 @@ class mato {
 
   border() {
 
+    this.checkBorder = false;
+
     if (this.pos.x < Pixel * 0.3) {
       this.pos.x = width - (Pixel * 2);
       // //// print(this.name + ' used teleport!!');
+      this.checkBorder = true;
     } else if (this.pos.x >= width - 2 * Pixel) {
       this.pos.x = Pixel * 0.3;
       // //// print(this.name + ' used teleport!!');
+      this.checkBorder = true;
     }
 
     if (this.pos.y < Pixel * 0.2) {
       this.pos.y = height - (Pixel * 2);
       // //// print(this.name + ' used teleport!!');
+      this.checkBorder = true;
     } else if (this.pos.y >= height - 2 * Pixel) {
       this.pos.y = Pixel * 0.2;
       // //// print(this.name + ' used teleport!!');
+      this.checkBorder = true;
+    }
+
+    if (classicMode && this.checkBorder) {
+      this.becomeGhost();
     }
 
   }
@@ -326,7 +338,7 @@ class mato {
   becomeGhost() {
     if (!this.ghostMode) {
       this.ghostMode = true;
-      this.gear = 1
+      this.gear = 1;
       if (random() < 0.25) {
         popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Ouch!!!');
       } else if (random() < 0.25) {
@@ -344,7 +356,7 @@ class mato {
       this.ghostsHappened++;
       wormsCounter--;
       this.ghostRoyaltyOnce = true;
-      
+
 
 
     }
@@ -526,19 +538,20 @@ class mato {
 
   addVP() {
     if (!this.stop) { //OLD
-      if (this.poopRoyalty) {
+
+      if (this.poopRoyalty && !classicMode) {
         this.VP++;
       }
-      if (this.appleRoyalty) {
+      if (this.appleRoyalty && !classicMode) {
         this.VP++;
       }
       if (this.aliveRoyalty) {
         this.VP += 1;
       }
-      if (this.ghostRoyalty) {
+      if (this.ghostRoyalty && !classicMode) {
         this.VP++;
       }
-      if (this.takeOutsRoyalty) {
+      if (this.takeOutsRoyalty && !classicMode) {
         this.VP++;
       }
     }
@@ -824,7 +837,6 @@ class flameParticle {
     } else if (this.pos.y >= height - 1 * Pixel) {
       this.pos.y = Pixel * 0.2;
     }
-
   }
 
 }

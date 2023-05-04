@@ -33,10 +33,10 @@ function setup() {
 
   //OLDIE onscreenctrlstuff...
 
-  // let button2 = createButton('Start with on-screen controls (2x)');
-  // button2.position(width / 2, height / 2 + 20 + 30);
-  // button2.center('horizontal');
-  // button2.mousePressed(StartButton2);
+  let button2 = createButton('Start Classic mode');
+  button2.position(width / 2, height / 2 + 20 + 30);
+  button2.center('horizontal');
+  button2.mousePressed(StartButton2);
 
   slider = createSlider(3, 24, 8, 1);
   slider.position(10, 10);
@@ -217,7 +217,9 @@ function StartButton() {
 
 function StartButton2() {
   removeElements();
-  onScreenToggle = true;
+  //OLD ONSCREENBUTTONS
+  //onScreenToggle = true;
+  classicMode = true
   GAMESTATE = 'GAME';
 }
 

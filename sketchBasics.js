@@ -1,7 +1,7 @@
 function gameReadySetup() {
   // RUNS ONCE THEN TURNS SETUP variable OFF
   if (SETUP) {
-    resizeCanvas(floor(windowWidth / GD - 5) * GD, floor(windowHeight / GD - 5) * GD);
+    resizeCanvas(floor(windowWidth / GD - 3) * GD, floor(windowHeight / GD - 3) * GD);
 
     let newWindowX = (windowWidth - width) / 2;
     let newWindowY = (windowHeight - height) / 2;
@@ -146,9 +146,9 @@ function gameReadySetup() {
     //PANIC COUNT
     panicCount = 1500 / 8 * GD;
 
-
-    setTimeout(pickupSpawner, pickups_newTimeINIT);
-
+    if (!classicMode) {
+      setTimeout(pickupSpawner, pickups_newTimeINIT);
+    }
 
     poopScore = new top_poop_eater_score();
     appleScore = new top_apple_eater_score();
@@ -692,7 +692,9 @@ function set2dArrayFalse(_x, _y, matoindex) {
         array2d[_x + dx][_y + dy][0] = false;
         L_stone.fill(random(80, 120));
         L_stone.rect((_x + dx) * GD, (_y + dy) * GD, GD);
-        setTimeout(removeStone, madot[matoindex].tail + remTime, _x + dx, _y + dy, true, matoindex);
+        if (!classicMode) {
+          setTimeout(removeStone, madot[matoindex].tail + remTime, _x + dx, _y + dy, true, matoindex);
+        }
       }
     }
   }
