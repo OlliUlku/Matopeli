@@ -106,10 +106,10 @@ function gameReadySetup() {
       spawnX = sin(PI * 2 / MATOJA * i);
       spawnY = sin(PI * 2 / MATOJA * i + HALF_PI);
       //// print(spawnX);
-      spawnX = map(spawnX, -1, 1, Pixel * 6, width - txtPixel * 6);
-      spawnY = map(spawnY, -1, 1, Pixel * 6, height - txtPixel * 6);
+      spawnX = map(spawnX, -1, 1, txtPixel * (4 + 5), width - txtPixel * (6 + 5));
+      spawnY = map(spawnY, -1, 1, txtPixel * (4 + 5), height - txtPixel * (6 + 5));
       angleMode(DEGREES);
-      madot[wormsCounter] = new mato(spawnX + random(-txtPixel * 3, txtPixel * 3), spawnY + random(-txtPixel * 3, txtPixel * 3), posca[wormsCounter], -360 / MATOJA * i + random(-10, 10), wormsCounter);
+      madot[wormsCounter] = new mato(spawnX + random(-txtPixel * 1, txtPixel * 1), spawnY + random(-txtPixel * 1, txtPixel * 1), posca[wormsCounter], -360 / MATOJA * i + random(-13, 13), wormsCounter);
       wormsCounter++;
     }
 
@@ -175,7 +175,14 @@ function gameReadySetup() {
     // STRESSCOLOR
     stressColor = color(Red);
 
-    setTimeout(turnNamesOffOnce, 8000);
+
+
+    if (classicMode) {
+      finishCountdown = 1;
+      finishCountdownINIT = finishCountdown;
+    } else {
+      setTimeout(turnNamesOffOnce, 8000);
+    }
 
 
 
@@ -323,7 +330,7 @@ function _OHJAIMET() {
       ohjaimet[ctrl_i].L = false;
       if (ohjaimet[ctrl_i].Lonce) {
 
-        if (madot[i].gear > 1) {
+        if (madot[i].gear > 1 && !classicMode) {
           madot[i].gearDown();
           // print(madot[i].gear);
         }
@@ -337,7 +344,7 @@ function _OHJAIMET() {
       ohjaimet[ctrl_i].R = false;
       if (ohjaimet[ctrl_i].Ronce) {
 
-        if (madot[i].gear < 6) {
+        if (madot[i].gear < 3 && !classicMode) {
           madot[i].gearUp();
           // print(madot[i].gear);
         }

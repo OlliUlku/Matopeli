@@ -185,4 +185,5 @@ let finishCountdown = 4000 / 24;
 let finishCountdownINIT = finishCountdown;
 let stressStrenght;
 
+// CLASSICMODE
 let classicMode = false;

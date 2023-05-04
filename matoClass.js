@@ -246,7 +246,7 @@ class mato {
       this.aliveRoyaltyOnce = false;
     }
 
-    if (this.ghostRoyaltyOnce && this.ghostRoyalty) {
+    if (this.ghostRoyaltyOnce && this.ghostRoyalty && !classicMode) {
       popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y - Pixel * 4, this.name + ' has turned into a ghost the most!', Violet, 100);
       this.ghostRoyaltyOnce = false;
     }
@@ -277,22 +277,29 @@ class mato {
     this.checkBorder = false;
 
     if (this.pos.x < Pixel * 0.3) {
-      this.pos.x = width - (Pixel * 2);
-      // //// print(this.name + ' used teleport!!');
+      if (!classicMode) {
+        this.pos.x = width - (Pixel * 2);
+      }
       this.checkBorder = true;
+
     } else if (this.pos.x >= width - 2 * Pixel) {
-      this.pos.x = Pixel * 0.3;
-      // //// print(this.name + ' used teleport!!');
+
+      if (!classicMode) {
+        this.pos.x = Pixel * 0.3;
+      }
       this.checkBorder = true;
     }
 
     if (this.pos.y < Pixel * 0.2) {
-      this.pos.y = height - (Pixel * 2);
-      // //// print(this.name + ' used teleport!!');
+      if (!classicMode) {
+        this.pos.y = height - (Pixel * 2);
+      }
       this.checkBorder = true;
+
     } else if (this.pos.y >= height - 2 * Pixel) {
-      this.pos.y = Pixel * 0.2;
-      // //// print(this.name + ' used teleport!!');
+      if (!classicMode) {
+        this.pos.y = Pixel * 0.2;
+      }
       this.checkBorder = true;
     }
 
@@ -348,10 +355,12 @@ class mato {
       } else {
         popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Oww! :<');
       }
-      this.ghostTimer.endTimer();
-      this.ghostTimer.reset();
-      this.ghostTimer.setTimer(this.ghostDuration);
-      this.ghostTimer.start();
+      if (!classicMode) {
+        this.ghostTimer.endTimer();
+        this.ghostTimer.reset();
+        this.ghostTimer.setTimer(this.ghostDuration);
+        this.ghostTimer.start();
+      }
       //this.ghostDuration += 4000;
       this.ghostsHappened++;
       wormsCounter--;
@@ -363,63 +372,67 @@ class mato {
   }
 
   updateGhost() {
-    this.ghostDurationScore += 1 / FRAMERATE;
-    this.chiliOil -= costT / 150;
+    if (!classicMode) {
+      this.ghostDurationScore += 1 / FRAMERATE;
+      this.chiliOil -= costT / 150;
 
-    if (!this.ghostTimer.expired()) {
-      this.ghostMOD = map(sin(millis() / 13 + this.rndNum), -1, 1, .5, 3);
+      if (!this.ghostTimer.expired()) {
+        this.ghostMOD = map(sin(millis() / 13 + this.rndNum), -1, 1, .5, 3);
 
-      this.ghostVel.add(this.ghostVel); // adds 'infinite speed' to be limited later
-      let ghostSPEED = map(this.ghostMOD, .5, 3, .5, 4);
-      this.ghostVel.limit(ghostSPEED * GD / 11 * 1.7);
+        this.ghostVel.add(this.ghostVel); // adds 'infinite speed' to be limited later
+        let ghostSPEED = map(this.ghostMOD, .5, 3, .5, 4);
+        this.ghostVel.limit(ghostSPEED * GD / 11 * 1.7);
 
-      let rX = round(this.pos.x / GD) * GD;
-      let rY = round(this.pos.y / GD) * GD;
+        let rX = round(this.pos.x / GD) * GD;
+        let rY = round(this.pos.y / GD) * GD;
 
-      // UPDATE POSITION
+        // UPDATE POSITION
 
-      // SET ROTATION
-      this.rotate();
+        // SET ROTATION
+        this.rotate();
 
-      if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
+        if (this.pos.x > 0 && this.pos.x < width && this.pos.y > 0 && this.pos.y < height) {
 
-        if (this.PickupTurbo >= costT) {
-          // TURBO
-          this.pos.add(this.ghostVel);
-          this.pos.add(this.ghostVel);
-          this.PickupTurbo -= costT;
-        }
-
-        else {
-          if (!this.turbo || this.underground || this.PickupTurbo <= costT) {
+          if (this.PickupTurbo >= costT) {
+            // TURBO
             this.pos.add(this.ghostVel);
             this.pos.add(this.ghostVel);
+            this.PickupTurbo -= costT;
           }
 
+          else {
+            if (!this.turbo || this.underground || this.PickupTurbo <= costT) {
+              this.pos.add(this.ghostVel);
+              this.pos.add(this.ghostVel);
+            }
+
+          }
+        } else {
+          this.pos.add(this.ghostVel);
+          this.pos.add(this.ghostVel);
         }
       } else {
-        this.pos.add(this.ghostVel);
-        this.pos.add(this.ghostVel);
-      }
-    } else {
-      this.ghostMode = false;
-      wormsCounter++;
-      // print(this.name + ' revived! worms alive: ' + wormsCounter);
+        this.ghostMode = false;
+        wormsCounter++;
+        // print(this.name + ' revived! worms alive: ' + wormsCounter);
 
+      }
     }
   }
 
   showGhost() {
-    this.color.setAlpha(map(sin(millis() / 13 + this.rndNum), -1, 1, -1, 100));
-    this.ghostColor.setAlpha(map(sin(millis() / 13 + this.rndNum), -1, 1, -1, 100));
-    L_ghost.fill(this.color);
-    L_ghost.stroke(this.ghostColor);
-    L_ghost.strokeWeight(Pixel * .2);
-    L_ghost.rect(round(this.pos.x / GD) * GD, round(this.pos.y / GD) * GD, this.size * GD);
+    if (!classicMode) {
+      this.color.setAlpha(map(sin(millis() / 13 + this.rndNum), -1, 1, -1, 100));
+      this.ghostColor.setAlpha(map(sin(millis() / 13 + this.rndNum), -1, 1, -1, 100));
+      L_ghost.fill(this.color);
+      L_ghost.stroke(this.ghostColor);
+      L_ghost.strokeWeight(Pixel * .2);
+      L_ghost.rect(round(this.pos.x / GD) * GD, round(this.pos.y / GD) * GD, this.size * GD);
+    }
   }
 
   showGhostHUD() {
-    if (this.ghostMode) {
+    if (this.ghostMode && !classicMode) {
       let _cw = map(this.ghostTimer.getRemainingTime(), 0, this.ghostDurationINIT, 0, Pixel * 8);
       L_HUD.stroke(this.ghostColor);
       L_HUD.noFill();

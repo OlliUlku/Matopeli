@@ -162,11 +162,15 @@ function draw() {
 }
 
 function _SHOWSCORES() {
-  poopScore.show();
-  appleScore.show();
-  aliveScore.show();
-  ghostScore.show();
-  takeOutsScore.show();
+ if (!classicMode) {
+   poopScore.show();
+   appleScore.show();
+   aliveScore.show();
+   ghostScore.show();
+   takeOutsScore.show();
+ } else {
+  aliveScore.showClassic();
+ }
 }
 
 
