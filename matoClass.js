@@ -326,6 +326,7 @@ class mato {
   becomeGhost() {
     if (!this.ghostMode) {
       this.ghostMode = true;
+      this.gear = 1
       if (random() < 0.25) {
         popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Ouch!!!');
       } else if (random() < 0.25) {
@@ -343,6 +344,7 @@ class mato {
       this.ghostsHappened++;
       wormsCounter--;
       this.ghostRoyaltyOnce = true;
+      
 
 
     }
