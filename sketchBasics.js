@@ -510,11 +510,15 @@ function _GAME_END() {
     L_top.textAlign(CENTER, TOP);
     L_top.text('GAME END', width / 2, height / 2 - ts * 0.5);
 
-    poopScore.show();
-    appleScore.show();
-    aliveScore.show();
-    ghostScore.show();
-    takeOutsScore.show();
+    if (!classicMode) {
+      poopScore.show();
+      appleScore.show();
+      aliveScore.show();
+      ghostScore.show();
+      takeOutsScore.show();
+    } else {
+      aliveScore.showClassic();
+    }
 
     image(L_HUD, 0, 0);
     image(L_top, 0, 0);
