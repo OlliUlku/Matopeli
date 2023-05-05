@@ -19,8 +19,8 @@ function setup() {
   //   element.addEventListener("contextmenu", (e) => e.preventDefault());
   // }
 
-  let inp = createInput(matoCountBT);
-  inp.size(18);
+  let inp = createSlider(1,30,2,1);
+  inp.size(width/3);
   inp.center();
   inp.input(InputMatoCount);
   inp.changed(storeMenuData);
@@ -182,7 +182,7 @@ function _IFZEROWORMS() {
   stressColor.setAlpha(map(sin(millis() / 3), -1, 1, 10 + stressStrenght, 45 + stressStrenght));
   L_HUD.fill(stressColor);
   L_HUD.rect(0, 0, width, height);
-  if (wormsCounter === 0) {
+  if (wormsCounter < MATOJA/2) {
     if (stressLevel < 300) {
       stressLevel++;
     }
@@ -191,7 +191,7 @@ function _IFZEROWORMS() {
   }
 
 
-  if (wormsCounter <= 0) {
+  if (wormsCounter < MATOJA/2) {
     finishCountdown--;
     if (finishCountdown <= 0) {
       FINISHED = true;
@@ -233,12 +233,12 @@ function _MENU() {
   textSize(TextSize * 1.3);
   textAlign(CENTER, CENTER);
   fill(LightPink);
-  text('How many worms? (Bluetooth)', width / 2, height / 2 - 28);
+  text('Number of players/worms: ' + matoCountBT, width / 2, height / 2 - 28);
   textAlign(LEFT, TOP);
   //text('Commit ProjectionTest', width / 2, 30);
   textSize(TextSize * 1.7);
   textAlign(CENTER, CENTER);
-  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Oh no your tail turns into STONE!! Avoid STONE (and FLAMES!!) or you turn into a GHOST! (Only to revive in 7 seconds) Press LEFT to steer your worm left, RIGHT to steer right! L or R buttons to shift your GEARS to go slower or faster, respectively! B (or X) button to show and hide your name.. ...The game ends when all the worms are ghosts at the same time for a period of time... Winner is the player holding the most throphies on the scoreboards (1 point per trophy...) Good luck, love you!!!';
+  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Oh no your tail turns into STONE!! Avoid STONE (and FLAMES!!) or you turn into a GHOST! (Only to revive in 7 seconds) Press LEFT to steer your worm left, RIGHT to steer right! L or R buttons to shift your GEARS to go slower or faster, respectively! B (or X) button to show and hide your name.. ...The game ends when there is too much scary ghosts at the same time for too long...! Winner is the player holding the most throphies on the scoreboards (1 point per trophy...) Good luck, love you!!!';
   text(thisText, width / 2 - width / 2 / 2, height / 2 - 50, width / 2, height / 2);
 
   let valS = slider.value();

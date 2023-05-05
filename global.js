@@ -181,7 +181,7 @@ let PEEPO;
 
 // GAME END
 let FINISHED = false;
-let finishCountdown = 4000 / 24;
+let finishCountdown = 7000 / 24;
 let finishCountdownINIT = finishCountdown;
 let stressStrenght;
 

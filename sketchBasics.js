@@ -467,11 +467,11 @@ function _POINTS() {
     madot[i].addVP();
     L_top.noStroke();
     L_top.fill(madot[i].colorINIT);
-    L_top.rect(0, i * (txtPixel * 1.3), madot[i].VP * 5 * txtPixel, txtPixel);
+    L_top.rect(0, i * (txtPixel * 3 * 1.3), madot[i].VP * 5 * txtPixel, txtPixel * 3);
     L_top.fill(Black);
     L_top.textAlign(LEFT, TOP);
-    L_top.textSize(txtPixel);
-    L_top.text(madot[i].name + ', ' + madot[i].VP + 'points', madot[i].VP * 5 * txtPixel, i * (txtPixel * 1.3));
+    L_top.textSize(txtPixel * 3);
+    L_top.text(madot[i].name + ', ' + madot[i].VP + ' points', madot[i].VP * 5 * txtPixel, i * (txtPixel * 3 * 1.3));
   }
 }
 
@@ -634,7 +634,7 @@ function _WORLD_UPDATE() {
         for (let dy = 0; dy <= 1; dy++) {
           if (array2d[__x + dx][__y + dy][2]) {
             //NOT THE OWNER OF THE FLAME AND NOT UNDERGROUND
-            if (i != array2d[__x + dx][__y + dy][3] && !madot[i].underground && !madot[i].ghostMode) {
+            if (i != array2d[__x + dx][__y + dy][3] && !madot[i].underground && !madot[i].ghostMode && !madot[i].invulnerable) {
               // print('touch fire?');
               madot[i].becomeGhost();
               madot[array2d[__x + dx][__y + dy][3]].grillAnother();
@@ -663,14 +663,8 @@ function _WORLD_UPDATE() {
             }
           }
           //BIG DEATH MOMENT!
-        } else if (!madot[i].underground) {
-
-
-
+        } else if (!madot[i].underground && !madot[i].invulnerable) {
           madot[i].becomeGhost();
-          //// print(madot[i].name + ' died! worms alive: ' + wormsCounter);
-
-          //// print('hit wall');
         }
       } else { // OUT OF BOUNDS // OLD???
       }

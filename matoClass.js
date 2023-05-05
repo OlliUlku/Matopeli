@@ -129,6 +129,7 @@ class mato {
     // GHOST
     this.ghostMode = false;
     this.ghostColor = color(White);
+    this.ghostColor2 = color(White);
     // for different ghost flicker time
     this.rndNum = random(1000);
 
@@ -148,6 +149,9 @@ class mato {
 
     // CLASSIC MODE
     this.checkBorder = false;
+
+    // INVULNERABILITY
+    this.invulnerable = false;
   }
 
   speedUP_PANIC() {
@@ -412,6 +416,7 @@ class mato {
           this.pos.add(this.ghostVel);
         }
       } else {
+        this.becomeInvulnerable();
         this.ghostMode = false;
         wormsCounter++;
         // print(this.name + ' revived! worms alive: ' + wormsCounter);
@@ -433,8 +438,10 @@ class mato {
 
   showGhostHUD() {
     if (this.ghostMode && !classicMode) {
-      let _cw = map(this.ghostTimer.getRemainingTime(), 0, this.ghostDurationINIT, 0, Pixel * 8);
-      L_HUD.stroke(this.ghostColor);
+      let _cw = map(this.ghostTimer.getRemainingTime(), 0, this.ghostDurationINIT, 0, Pixel * 16);
+      let _alpha = map(this.ghostTimer.getRemainingTime(), 0, this.ghostDurationINIT, 255, -355);
+      this.ghostColor2.setAlpha(_alpha);
+      L_HUD.stroke(this.ghostColor2);
       L_HUD.noFill();
       L_HUD.strokeWeight(Pixel * 0.2);
       L_HUD.circle(round(this.pos.x / GD) * GD + Pixel, round(this.pos.y / GD) * GD + Pixel, _cw);
@@ -549,6 +556,15 @@ class mato {
     }
   }
 
+  becomeInvulnerable() {
+    this.invulnerable = true;
+    setTimeout(() => {
+      this.invulnerable = false;
+    }, 4000);
+  }
+
+
+
   addVP() {
     if (!this.stop) { //OLD
 
@@ -559,7 +575,7 @@ class mato {
         this.VP++;
       }
       if (this.aliveRoyalty) {
-        this.VP += 1;
+        this.VP += 1.5;
       }
       if (this.ghostRoyalty && !classicMode) {
         this.VP++;
@@ -691,6 +707,12 @@ class mato {
           L_mato.fill(this.color);
           L_mato.noStroke();
           L_mato.rect(round(this.pos.x / GD) * GD, round(this.pos.y / GD) * GD, this.size * GD);
+          if (this.invulnerable) {
+            L_HUD.strokeWeight(Pixel * 0.8);
+            L_HUD.stroke(120, 120, 255, 100);
+            L_HUD.fill(120, 120, 255, 30);
+            L_HUD.circle(this.pos.x + Pixel, this.pos.y + Pixel, Pixel * 4);
+          }
 
           // ALIGN AND ROTATE EXAMPLE!
 
