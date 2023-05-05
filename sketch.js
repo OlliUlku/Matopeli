@@ -19,8 +19,8 @@ function setup() {
   //   element.addEventListener("contextmenu", (e) => e.preventDefault());
   // }
 
-  let inp = createSlider(1,30,2,1);
-  inp.size(width/3);
+  let inp = createSlider(1, 25, 2, 1);
+  inp.size(width / 3);
   inp.center();
   inp.input(InputMatoCount);
   inp.changed(storeMenuData);
@@ -162,27 +162,29 @@ function draw() {
 }
 
 function _SHOWSCORES() {
- if (!classicMode) {
-   poopScore.show();
-   appleScore.show();
-   aliveScore.show();
-   ghostScore.show();
-   takeOutsScore.show();
- } else {
-  aliveScore.showClassic();
- }
+  if (!classicMode) {
+    poopScore.show();
+    appleScore.show();
+    aliveScore.show();
+    ghostScore.show();
+    takeOutsScore.show();
+  } else {
+    aliveScore.showClassic();
+  }
 }
 
 
 function _IFZEROWORMS() {
 
-  L_HUD.rectMode(CORNER);
-  L_HUD.noStroke();
-  stressStrenght = map(finishCountdown, 0, finishCountdownINIT, 0, -85);
-  stressColor.setAlpha(map(sin(millis() / 3), -1, 1, 10 + stressStrenght, 45 + stressStrenght));
-  L_HUD.fill(stressColor);
-  L_HUD.rect(0, 0, width, height);
-  if (wormsCounter < MATOJA/2) {
+  if (!FINISHED) {
+    L_HUD.rectMode(CORNER);
+    L_HUD.noStroke();
+    stressStrenght = map(finishCountdown, 0, finishCountdownINIT, 0, -85);
+    stressColor.setAlpha(map(sin(millis() / 3), -1, 1, 10 + stressStrenght, 45 + stressStrenght));
+    L_HUD.fill(stressColor);
+    L_HUD.rect(0, 0, width, height);
+  }
+  if (wormsCounter < MATOJA / 2) {
     if (stressLevel < 300) {
       stressLevel++;
     }
@@ -191,7 +193,7 @@ function _IFZEROWORMS() {
   }
 
 
-  if (wormsCounter < MATOJA/2) {
+  if (wormsCounter < MATOJA / 2) {
     finishCountdown--;
     if (finishCountdown <= 0) {
       FINISHED = true;
@@ -223,7 +225,7 @@ function StartButton2() {
   removeElements();
   //OLD ONSCREENBUTTONS
   //onScreenToggle = true;
-  classicMode = true
+  classicMode = true;
   GAMESTATE = 'GAME';
 }
 
