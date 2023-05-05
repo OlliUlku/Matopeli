@@ -500,15 +500,37 @@ function _PANIC_MODE() {
 
 function _GAME_END() {
   if (FINISHED) {
+    _POINTS();
+
+    winnerArr = [];
+
+    for (let i = 0; i < madot.length; i++) {
+      winnerArr[i] = { name: madot[i].name, scoreItem: madot[i].VP, color: madot[i].colorINIT, Index: i };
+    }
+
+    winnerArr.sort((firstItem, secondItem) => firstItem.scoreItem - secondItem.scoreItem);
+
+    reverse(winnerArr);
+
+    if (winnerArr[0].scoreItem != winnerArr[1].scoreItem) {
+      WINNER = winnerArr[0].name;
+      WINNERCOLOR = winnerArr[0].color;
+    } else {
+      WINNER = 'I\'s a tie!!!';
+      WINNERCOLOR = Black;
+    }
 
     let ts = width / 14;
 
-    _POINTS();
     L_top.textSize(ts * 0.6);
     L_top.fill(Black);
     L_top.noStroke();
     L_top.textAlign(CENTER, TOP);
-    L_top.text('GAME END', width / 2, height / 2 - ts * 0.5);
+    L_top.text('GAME END, THE WINNER IS', width / 2, height / 2 - ts * 0.5);
+    L_top.stroke(GRAY);
+    L_top.fill(WINNERCOLOR);
+    L_top.strokeWeight(txtPixel * 0.5);
+    L_top.text(WINNER, width / 2, height / 2 - ts * 0.5 + ts * 0.7);
 
     if (!classicMode) {
       poopScore.show();

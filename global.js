@@ -113,7 +113,7 @@ let pooped;
 
 // PICKUPS
 let pickups = [];
-let pickups_newTime = 1500; //5000
+let pickups_newTime = 3500; //5000
 let pickups_newTimeINIT = 8000; //3000
 let pickups_count = 0;
 let PickupSpawnTime = pickups_newTime;
@@ -165,6 +165,8 @@ let flameParticles = [];
 
 // POINTS WINNER
 let WINNER;
+let winnerArr;
+let WINNERCOLOR;
 
 // GLOBAL LENGTH ADD
 let LENGTHADD = 4000; //120000

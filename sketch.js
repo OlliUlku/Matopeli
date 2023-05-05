@@ -176,6 +176,16 @@ function _SHOWSCORES() {
 
 function _IFZEROWORMS() {
 
+  if (wormsCounter < MATOJA / 2) {
+    finishCountdown--;
+    if (finishCountdown <= 0) {
+      FINISHED = true;
+    }
+  } else if (finishCountdown <= finishCountdownINIT) {
+    finishCountdown += 1 / 10;
+  }
+
+
   if (!FINISHED) {
     L_HUD.rectMode(CORNER);
     L_HUD.noStroke();
@@ -190,16 +200,6 @@ function _IFZEROWORMS() {
     }
   } else if (stressLevel > 0) {
     stressLevel -= 1 / 10;
-  }
-
-
-  if (wormsCounter < MATOJA / 2) {
-    finishCountdown--;
-    if (finishCountdown <= 0) {
-      FINISHED = true;
-    }
-  } else if (finishCountdown <= finishCountdownINIT) {
-    finishCountdown += 1 / 10;
   }
 
   let gameEndBar = map(finishCountdown, 0, finishCountdownINIT, 0, width);

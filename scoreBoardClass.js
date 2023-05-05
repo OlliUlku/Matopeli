@@ -180,7 +180,7 @@ class top_generic_score {
             L_HUD.text(this.arr[i].name, this.x + txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
             L_HUD.textAlign(RIGHT, TOP);
             L_HUD.fill(Black);
-            L_HUD.text(floor(this.arr[i].scoreItem), this.x + this.sizeX - 1 * txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
+            L_HUD.text(nfc(round(this.arr[i].scoreItem, 1), 1), this.x + this.sizeX - 1 * txtPixel, this.y + txtPixel + this.textSize * 1.5 * i);
         }
     }
     showClassic() {
