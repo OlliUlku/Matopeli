@@ -168,9 +168,9 @@ class top_generic_score {
         L_HUD.textSize(this.textSize * 1.5);
         L_HUD.fill(Black);
         L_HUD.textAlign(LEFT, CENTER);
-        L_HUD.text('Time alive:', this.x + txtPixel, this.y - txtPixel);
+        L_HUD.text('Time alive: (1.5p)', this.x + txtPixel, this.y - txtPixel);
         L_HUD.push();
-        L_HUD.translate(this.x - txtPixel * 20 / 2 + this.sizeX - txtPixel * 3, this.y - txtPixel * 20 / 2 - txtPixel * 5.5);
+        L_HUD.translate(this.x - txtPixel * 20 / 2 + this.sizeX - txtPixel * 3, this.y - txtPixel * 20 / 2 - txtPixel * 5.5 - txtPixel* 2);
         L_HUD.image(img_aliveRoyalty, 0, 0, txtPixel * 20, txtPixel * 20);
         L_HUD.pop();
         L_HUD.textSize(this.textSize);
