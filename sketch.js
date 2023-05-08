@@ -175,14 +175,24 @@ function _SHOWSCORES() {
 
 
 function _IFZEROWORMS() {
-
-  if (wormsCounter < MATOJA / 2) {
-    finishCountdown--;
-    if (finishCountdown <= 0) {
-      FINISHED = true;
+  if (!classicMode) {
+    if (wormsCounter < MATOJA / 2) {
+      finishCountdown--;
+      if (finishCountdown <= 0) {
+        FINISHED = true;
+      }
+    } else if (finishCountdown <= finishCountdownINIT) {
+      finishCountdown += 1 / 10;
     }
-  } else if (finishCountdown <= finishCountdownINIT) {
-    finishCountdown += 1 / 10;
+  } else {
+    if (wormsCounter <= 1) {
+      finishCountdown--;
+      if (finishCountdown <= 0) {
+        FINISHED = true;
+      }
+    } else if (finishCountdown <= finishCountdownINIT) {
+      finishCountdown += 1 / 10;
+    }
   }
 
 
