@@ -167,6 +167,7 @@ let flameParticles = [];
 let WINNER;
 let winnerArr;
 let WINNERCOLOR;
+let pointsArr;
 
 // GLOBAL LENGTH ADD
 let LENGTHADD = 4000; //120000

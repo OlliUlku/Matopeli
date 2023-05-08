@@ -465,13 +465,6 @@ function _SHOWWORMSALIVE() {
 function _POINTS() {
   for (let i = 0; i < madot.length; i++) {
     madot[i].addVP();
-    L_top.noStroke();
-    L_top.fill(madot[i].colorINIT);
-    L_top.rect(0, i * (txtPixel * 3 * 1.3), madot[i].VP * 5 * txtPixel, txtPixel * 3);
-    L_top.fill(Black);
-    L_top.textAlign(LEFT, TOP);
-    L_top.textSize(txtPixel * 3);
-    L_top.text(madot[i].name + ', ' + madot[i].VP + ' points', madot[i].VP * 5 * txtPixel, i * (txtPixel * 3 * 1.3));
   }
 }
 
@@ -511,6 +504,16 @@ function _GAME_END() {
     winnerArr.sort((firstItem, secondItem) => firstItem.scoreItem - secondItem.scoreItem);
 
     reverse(winnerArr);
+
+    for (let i = 0; i < winnerArr.length; i++) {
+      L_top.noStroke();
+      L_top.fill(winnerArr[i].color);
+      L_top.rect(0, i * (txtPixel * 3 * 1.3), winnerArr[i].scoreItem * 5 * txtPixel, txtPixel * 3);
+      L_top.fill(Black);
+      L_top.textAlign(LEFT, TOP);
+      L_top.textSize(txtPixel * 3);
+      L_top.text(winnerArr[i].name + ', ' + winnerArr[i].scoreItem + ' points', winnerArr[i].scoreItem * 5 * txtPixel, i * (txtPixel * 3 * 1.3));
+    }
 
     if (winnerArr[0].scoreItem != winnerArr[1].scoreItem) {
       WINNER = winnerArr[0].name;
