@@ -29,13 +29,19 @@ class pickup {
             this.timerPickupSpawn = new Timer(PickupSpawnTime, true);
 
         } else if (type === 3) {
-            this.spawningColor = color(Black);
+            this.spawningColor = color(Yellow);
+            this.spawningColor2 = color(Black);
             this.timerPickupSpawn = new Timer(PickupSpawnTimeBlack, true);
         }
 
 
+        if (this.type != 3) {
+            this.spawningColor.setAlpha(120);
+        } else {
+            this.spawningColor.setAlpha(0);
+            this.spawningColor2.setAlpha(0);
+        }
 
-        this.spawningColor.setAlpha(120);
         this.bgCol = color(White);
         this.bgCol.setAlpha(85);
         this.rotation = random(360);
@@ -102,7 +108,21 @@ class pickup {
             L_pickup.noFill();
             L_pickup.stroke(this.spawningColor);
             L_pickup.strokeWeight(Pixel * .2);
-            L_pickup.circle(round(this.x / GD) * GD + Pixel, round(this.y / GD) * GD + Pixel, map(this.timerPickupSpawn.getPercentageRemaining(), 0, 1, 0, Pixel * 8));
+            if (this.type != 3) {
+                L_pickup.circle(round(this.x / GD) * GD + Pixel, round(this.y / GD) * GD + Pixel, map(this.timerPickupSpawn.getPercentageRemaining(), 0, 1, 0, Pixel * 8));
+            } else {
+                this.spawningColor.setAlpha(map(this.timerPickupSpawn.getPercentageRemaining(), 0, 1, 200, -20));
+                this.spawningColor2.setAlpha(map(this.timerPickupSpawn.getPercentageRemaining(), 0, 1, 200, -20));
+                L_pickup.stroke(this.spawningColor);
+                L_pickup.strokeWeight(Pixel * 0.5);
+                L_pickup.circle(round(this.x / GD) * GD + Pixel, round(this.y / GD) * GD + Pixel, map(this.timerPickupSpawn.getPercentageRemaining(), 0, 1, 0, Pixel * (24 + 8)));
+                L_pickup.stroke(this.spawningColor2);
+                L_pickup.strokeWeight(Pixel * .2);
+                L_pickup.circle(round(this.x / GD) * GD + Pixel, round(this.y / GD) * GD + Pixel, map(this.timerPickupSpawn.getPercentageRemaining(), 0, 1, 0, Pixel * (27 + 8)));
+                L_pickup.circle(round(this.x / GD) * GD + Pixel, round(this.y / GD) * GD + Pixel, map(this.timerPickupSpawn.getPercentageRemaining(), 0, 1, 0, Pixel * (21 + 8)));
+
+
+            }
         }
         if (this.type === 0) {
             if (this.timerPickupSpawn.expired()) {
@@ -149,7 +169,14 @@ class pickup {
         if (this.type === 3) {
             if (this.timerPickupSpawn.expired()) {
                 L_pickup.noStroke();
+                if (frameCount % 12 === 0) {
+                    this.bgCol = color(posca[floor(random(0, posca.length))]);
+                }
+
+                this.bgCol.setAlpha(map(sin(millis() / 2), -1, 1, 40, 250));
                 L_pickup.fill(this.bgCol);
+                L_pickup.stroke(Yellow);
+                L_pickup.strokeWeight(Pixel * 0.3);
                 L_pickup.rect(round(this.x / GD) * GD, round(this.y / GD) * GD, this.size * GD);
 
                 L_fruits.push();

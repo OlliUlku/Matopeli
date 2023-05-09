@@ -412,9 +412,13 @@ function _MADOT_UPDATE() {
                   if (!done) {
                     if (pickups[k].timerPickupSpawn.expired()) {
                       pickups[k].grab(i);
+                      if (pickups[k].type === 3) {
+                        setTimeout(pointPickupSpawner, 30);
+                      }
                       pickups.splice(k, 1);
                       pickups_count -= 1;
                       done = true;
+
                     }
                   }
                 }
@@ -509,11 +513,11 @@ function _GAME_END() {
     for (let i = 0; i < winnerArr.length; i++) {
       L_top.noStroke();
       L_top.fill(winnerArr[i].color);
-      L_top.rect(0, i * (txtPixel * 3 * 1.3), winnerArr[i].scoreItem * 5 * txtPixel, txtPixel * 3);
+      L_top.rect(0, i * (txtPixel * 3 * 1.3), winnerArr[i].scoreItem * 2 * txtPixel, txtPixel * 3);
       L_top.fill(Black);
       L_top.textAlign(LEFT, TOP);
       L_top.textSize(txtPixel * 3);
-      L_top.text(winnerArr[i].name + ', ' + winnerArr[i].scoreItem + ' points', winnerArr[i].scoreItem * 5 * txtPixel, i * (txtPixel * 3 * 1.3));
+      L_top.text(winnerArr[i].name + ', ' + winnerArr[i].scoreItem + ' points', winnerArr[i].scoreItem * 2 * txtPixel, i * (txtPixel * 3 * 1.3));
     }
 
     if (winnerArr[0].scoreItem != winnerArr[1].scoreItem) {
@@ -795,10 +799,10 @@ function pickupSpawner() {
 }
 
 function pointPickupSpawner() {
-  if (pickups_count < MATOJA / 2 + 1) {
-    pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 3);
-    pickups_count += 1;
-  }
+  //if (pickups_count < MATOJA / 2 + 1) {
+  pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 3);
+  pickups_count += 1;
+  //}
 }
 
 function extinguish(x, y) {
