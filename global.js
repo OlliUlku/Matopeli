@@ -107,6 +107,7 @@ let fadeColor;
 
 // menu DOM buttons etc.
 let slider;
+let sliderGear;
 
 //POOP
 let pooped;
@@ -117,6 +118,7 @@ let pickups_newTime = 3500; //5000
 let pickups_newTimeINIT = 8000; //3000
 let pickups_count = 0;
 let PickupSpawnTime = pickups_newTime;
+let PickupSpawnTimeBlack = 10000;
 
 // PRICES
 let startDollars = 0;
@@ -137,6 +139,7 @@ let img_ghostFace;
 let img_chiliPickup;
 let img_applePickup;
 let img_spadePickup;
+let img_pointPickup;
 
 // POOP/APPLE SCORE
 let poopScore;
@@ -144,6 +147,12 @@ let appleScore;
 let aliveScore;
 let ghostScore;
 let takeOutsScore;
+
+let poopVP = 3;
+let fruitVP = 4;
+let aliveVP = 5;
+let ghostVP = 2;
+let takeOutsVP = 1;
 
 // SPAWNRADIUS
 let spawnRadiusZeroX;
@@ -188,3 +197,11 @@ let stressStrenght;
 
 // CLASSICMODE
 let classicMode = false;
+
+// SPEED / GEAR
+let gearINIT = 2;
+let gearToggle = false;
+
+// MENU STUFF...
+let menuPosY;
+let checkboxGear;

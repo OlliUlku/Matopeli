@@ -19,7 +19,7 @@ function setup() {
   //   element.addEventListener("contextmenu", (e) => e.preventDefault());
   // }
 
-  let inp = createSlider(1, 25, 2, 1);
+  let inp = createSlider(2, 25, 2, 1);
   inp.size(width / 3);
   inp.center();
   inp.input(InputMatoCount);
@@ -38,27 +38,40 @@ function setup() {
   button2.center('horizontal');
   button2.mousePressed(StartButton2);
 
-  slider = createSlider(3, 24, 8, 1);
-  slider.position(10, 10);
-  slider.style('width', '80px');
+  menuPosY = 22;
+
+  slider = createSlider(7, 24, 8, 1);
+  slider.position(10, menuPosY);
+  slider.style('width', '120px');
   slider.changed(storeMenuData);
+
+  sliderGear = createSlider(1, 6, 2, 1);
+  sliderGear.position(10, menuPosY * 2);
+  sliderGear.style('width', '120px');
+  sliderGear.changed(storeMenuDataGear);
+
+  let initGearCheckbox = getItem('Matopeli_gearsCheckbox');
+  gearToggle = initGearCheckbox;
+  checkboxGear = createCheckbox('  Gears', initGearCheckbox);
+  checkboxGear.changed(gearCheckboxChanged);
+  checkboxGear.position(115, menuPosY * 3);
+  checkboxGear.style('color', LightPink);
 
 
   // INIT FROM MEMORY
   initGD = getItem('Matopeli_GD');
   initMatoCountBT = getItem('Matopeli_matoCountBT');
+  let initGear = getItem('Matopeli_Gear');
 
-  // if (initGD === !null) {
   slider.value(initGD);
   print('set slider ' + initGD);
-  // }
 
-  // if (initMatoCountBT === !null) {
   matoCountBT = initMatoCountBT;
   inp.value(initMatoCountBT);
   print('set matoCountBT ' + initMatoCountBT);
-  // }
 
+  gearINIT = initGear;
+  sliderGear.value(gearINIT);
 
   //startup();
   // document.addEventListener("DOMContentLoaded", startup);
@@ -250,15 +263,17 @@ function _MENU() {
   //text('Commit ProjectionTest', width / 2, 30);
   textSize(TextSize * 1.7);
   textAlign(CENTER, CENTER);
-  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Oh no your tail turns into STONE!! Avoid STONE (and FLAMES!!) or you turn into a GHOST! (Only to revive in 7 seconds) Press LEFT to steer your worm left, RIGHT to steer right! L or R buttons to shift your GEARS to go slower or faster, respectively! B (or X) button to show and hide your name.. ...The game ends when there is too much scary ghosts at the same time for too long...! Winner is the player holding the most throphies on the scoreboards (1 point per trophy...) Good luck, love you!!!';
+  let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Oh no your tail turns into STONE!! Avoid STONE (and FLAMES!!) or you turn into a GHOST! (Only to revive in 7 seconds) Press LEFT to steer your worm left, RIGHT to steer right! L or R buttons to shift your GEARS to go slower or faster, respectively! B (or X) button to show and hide your name.. ...The game ends when there is too much scary ghosts at the same time for too long...! Good luck, love you!!!';
   text(thisText, width / 2 - width / 2 / 2, height / 2 - 50, width / 2, height / 2);
 
   let valS = slider.value();
   GD = valS;
+  gearINIT = sliderGear.value();
   textSize(TextSize * 1.3);
   textAlign(LEFT, TOP);
 
-  text(GD + ' x larger pixels', 100, 13);
+  text(GD - 6 + ' x pixel Size (Use bigger sizes for bigger screens, smaller sizes for longer games etc.)', 10 + 130, menuPosY);
+  text(gearINIT + ' x speed', 10 + 130, menuPosY * 2);
 
   for (let i = 0; i < menuMadot.length; i++) {
     menuMadot[i].show();
@@ -296,8 +311,26 @@ function storeMenuData() {
 
   storeItem('Matopeli_GD', slider.value());
   print('store items');
-
 }
+
+function storeMenuDataGear() {
+  storeItem('Matopeli_Gear', sliderGear.value());
+  print('store items');
+}
+
+
+function gearCheckboxChanged() {
+  if (checkboxGear.checked()) {
+    storeItem('Matopeli_gearsCheckbox', true);
+    gearToggle = true;
+    // console.log('Checking!');
+  } else {
+    storeItem('Matopeli_gearsCheckbox', false);
+    gearToggle = false;
+    // console.log('Unchecking!');
+  }
+}
+
 
 function windowResized() {
   if (GAMESTATE === 'MENU') {

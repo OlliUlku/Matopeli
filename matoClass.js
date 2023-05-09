@@ -122,7 +122,7 @@ class mato {
     this.PickupTurbo = startDollars;
 
     //GEAR
-    this.gear = 2;
+    this.gear = gearINIT;
 
 
 
@@ -229,6 +229,15 @@ class mato {
 
 
     popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' ate a delicious spade!');
+  }
+
+  pointFruitEaten() {
+    this.tail += LENGTHADD / MATOJA;
+    //this.fruitsEaten++;
+    this.VP++
+    //this.appleRoyaltyOnce = true;
+
+    popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' collected a victory point!');
   }
 
   grillAnother() {
@@ -349,7 +358,9 @@ class mato {
   becomeGhost() {
     if (!this.ghostMode) {
       this.ghostMode = true;
-      this.gear = 1;
+      if (gearToggle) {
+        this.gear = 1;
+      }
       if (random() < 0.25) {
         popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, 'Ouch!!!');
       } else if (random() < 0.25) {
@@ -569,19 +580,19 @@ class mato {
     if (!this.stop) { //OLD
 
       if (this.poopRoyalty && !classicMode) {
-        this.VP++;
+        this.VP += poopVP;
       }
       if (this.appleRoyalty && !classicMode) {
-        this.VP++;
+        this.VP += fruitVP;
       }
       if (this.aliveRoyalty) {
-        this.VP += 1.5;
+        this.VP += aliveVP;
       }
       if (this.ghostRoyalty && !classicMode) {
-        this.VP++;
+        this.VP += ghostVP;
       }
       if (this.takeOutsRoyalty && !classicMode) {
-        this.VP++;
+        this.VP += takeOutsVP;
       }
     }
 

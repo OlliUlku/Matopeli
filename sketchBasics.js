@@ -146,9 +146,6 @@ function gameReadySetup() {
     //PANIC COUNT
     panicCount = 1500 / 8 * GD;
 
-    if (!classicMode) {
-      setTimeout(pickupSpawner, pickups_newTimeINIT);
-    }
 
     poopScore = new top_poop_eater_score();
     appleScore = new top_apple_eater_score();
@@ -171,6 +168,13 @@ function gameReadySetup() {
     img_chiliPickup = loadImage('chiliPickup.png');
     img_applePickup = loadImage('applePickup.png');
     img_spadePickup = loadImage('spadePickup.png');
+    img_pointPickup = loadImage('pointPickup.png');
+
+    // PICKUPS
+    if (!classicMode) {
+      setTimeout(pickupSpawner, pickups_newTimeINIT);
+      setTimeout(pointPickupSpawner, 10);
+    }
 
     // STRESSCOLOR
     stressColor = color(Red);
@@ -190,6 +194,7 @@ function gameReadySetup() {
     //TURN SETUP OFF SO IT WONT RUN AGAIN
     SETUP = false;
     // print('GAME START!!!');
+    print(gearToggle);
   }
 }
 
@@ -330,7 +335,7 @@ function _OHJAIMET() {
       ohjaimet[ctrl_i].L = false;
       if (ohjaimet[ctrl_i].Lonce) {
 
-        if (madot[i].gear > 1 && !classicMode) {
+        if (madot[i].gear > 1 && gearToggle) {
           madot[i].gearDown();
           // print(madot[i].gear);
         }
@@ -344,7 +349,7 @@ function _OHJAIMET() {
       ohjaimet[ctrl_i].R = false;
       if (ohjaimet[ctrl_i].Ronce) {
 
-        if (madot[i].gear < 3 && !classicMode) {
+        if (madot[i].gear < gearINIT && gearToggle) {
           madot[i].gearUp();
           // print(madot[i].gear);
         }
@@ -388,10 +393,6 @@ function _MADOT_UPDATE() {
     madot[i].showGhostHUD();
     madot[i].showHUD();
     madot[i].showName();
-
-
-
-
 
     if (!madot[i].ghostMode && !madot[i].underground) {
       // TOUCHING PICKUP?
@@ -791,6 +792,13 @@ function pickupSpawner() {
     pickups_count += 1;
   }
   setTimeout(pickupSpawner, pickups_newTime);
+}
+
+function pointPickupSpawner() {
+  if (pickups_count < MATOJA / 2 + 1) {
+    pickups[pickups_count] = new pickup(random(Pixel * 3, width - (Pixel * 3)), random(30, height - 30), 3);
+    pickups_count += 1;
+  }
 }
 
 function extinguish(x, y) {

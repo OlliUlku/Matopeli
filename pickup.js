@@ -15,15 +15,25 @@ class pickup {
             this.rotDir = -1;
         }
 
-        this.timerPickupSpawn = new Timer(PickupSpawnTime, true);
 
         if (type === 0) {
             this.spawningColor = color(Green);
+            this.timerPickupSpawn = new Timer(PickupSpawnTime, true);
+
         } else if (type === 1) {
             this.spawningColor = color(Red);
+            this.timerPickupSpawn = new Timer(PickupSpawnTime, true);
+
         } else if (type === 2) {
             this.spawningColor = color(Brown);
+            this.timerPickupSpawn = new Timer(PickupSpawnTime, true);
+
+        } else if (type === 3) {
+            this.spawningColor = color(Black);
+            this.timerPickupSpawn = new Timer(PickupSpawnTimeBlack, true);
         }
+
+
 
         this.spawningColor.setAlpha(120);
         this.bgCol = color(White);
@@ -136,6 +146,20 @@ class pickup {
                 L_fruits.pop();
             }
         }
+        if (this.type === 3) {
+            if (this.timerPickupSpawn.expired()) {
+                L_pickup.noStroke();
+                L_pickup.fill(this.bgCol);
+                L_pickup.rect(round(this.x / GD) * GD, round(this.y / GD) * GD, this.size * GD);
+
+                L_fruits.push();
+                L_fruits.translate(x * GD + Pixel, y * GD + Pixel);
+                L_fruits.rotate(this.rotation);
+                L_fruits.image(img_pointPickup, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
+                L_fruits.pop();
+            }
+        }
+
         // DEBUG
         //         L_HUD.fill(this.debugColor);
         //         L_HUD.noStroke();
@@ -187,6 +211,9 @@ class pickup {
         }
         if (this.type === 2) {
             madot[matoIND].spadeFruitEaten();
+        }
+        if (this.type === 3) {
+            madot[matoIND].pointFruitEaten();
         }
     }
 }
