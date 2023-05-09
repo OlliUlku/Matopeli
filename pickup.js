@@ -179,11 +179,11 @@ class pickup {
                 L_pickup.strokeWeight(Pixel * 0.3);
                 L_pickup.rect(round(this.x / GD) * GD, round(this.y / GD) * GD, this.size * GD);
 
-                L_fruits.push();
-                L_fruits.translate(x * GD + Pixel, y * GD + Pixel);
-                L_fruits.rotate(this.rotation);
-                L_fruits.image(img_pointPickup, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
-                L_fruits.pop();
+                // L_fruits.push();
+                // L_fruits.translate(x * GD + Pixel, y * GD + Pixel);
+                // L_fruits.rotate(this.rotation);
+                // L_fruits.image(img_pointPickup, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
+                // L_fruits.pop();
             }
         }
 

@@ -10,6 +10,22 @@ let GD = 8; // Grid division, base 8, max 24
 //   print("Initialized.");
 // }
 
+function preload() {
+  // IMAGES
+  img_kakkakruunu = loadImage('poopRoyalty2.png');
+  img_valtikka = loadImage('valtikka1.png');
+  img_align = loadImage('align1.png');
+  img_ghostRoyalty = loadImage('ghostRoyalty.png');
+  img_aliveRoyalty = loadImage('aliveRoyalty.png');
+  img_takeOutsRoyalty = loadImage('takeOutsRoyalty.png');
+  img_matoFace = loadImage('matoFace.png');
+  img_ghostFace = loadImage('ghostFace.png');
+  img_chiliPickup = loadImage('chiliPickup.png');
+  img_applePickup = loadImage('applePickup.png');
+  img_spadePickup = loadImage('spadePickup.png');
+  //img_pointPickup = loadImage('pointPickup.png');
+}
+
 
 function setup() {
   //fullscreen(true);
@@ -189,7 +205,7 @@ function _SHOWSCORES() {
 
 function _IFZEROWORMS() {
   if (!classicMode) {
-    if (wormsCounter < MATOJA / 2) {
+    if (wormsCounter < MATOJA / 3) {
       finishCountdown--;
       if (finishCountdown <= 0) {
         FINISHED = true;
