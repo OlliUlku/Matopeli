@@ -621,7 +621,12 @@ class mato {
       //ROYALTIES
 
       if (this.poopRoyalty) {
-        L_HUD.image(img_kakkakruunu, this.pos.x - Pixel * 4, this.pos.y - Pixel * 4, Pixel * 10, Pixel * 10);
+        // L_HUD.image(img_kakkakruunu, this.pos.x - Pixel * 4, this.pos.y - Pixel * 4, Pixel * 10, Pixel * 10);
+        L_HUD.push();
+        L_HUD.translate(this.pos.x + Pixel, this.pos.y + Pixel);
+        L_HUD.rotate(this.rotation + 28);
+        L_HUD.image(img_kakkakruunu, -Pixel * 6, -Pixel * 6, Pixel * 12, Pixel * 12);
+        L_HUD.pop();
       }
       if (this.appleRoyalty) {
         L_HUD.push();
@@ -637,9 +642,7 @@ class mato {
       if (this.ghostRoyalty) {
         L_HUD.image(img_ghostRoyalty, this.pos.x - Pixel * 4, this.pos.y - Pixel * 4, Pixel * 10, Pixel * 10);
       }
-      if (this.takeOutsRoyalty) {
-        L_HUD.image(img_takeOutsRoyalty, this.pos.x - Pixel * 4, this.pos.y - Pixel * 4, Pixel * 10, Pixel * 10);
-      }
+
 
       //FACE
 
@@ -667,6 +670,15 @@ class mato {
         L_HUD.translate(this.pos.x + Pixel, this.pos.y + Pixel);
         L_HUD.rotate(this.rotation);
         L_HUD.image(img_matoFace, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
+        L_HUD.pop();
+      }
+
+      if (this.takeOutsRoyalty) {
+        //L_HUD.image(img_takeOutsRoyalty, this.pos.x - Pixel * 4, this.pos.y - Pixel * 4, Pixel * 10, Pixel * 10);
+        L_HUD.push();
+        L_HUD.translate(this.pos.x + Pixel, this.pos.y + Pixel);
+        L_HUD.rotate(this.rotation - 180);
+        L_HUD.image(img_takeOutsRoyalty, -Pixel * 5, -Pixel * 5, Pixel * 10, Pixel * 10);
         L_HUD.pop();
       }
 

@@ -518,10 +518,10 @@ function _GAME_END() {
     image(L_top, 0, 0);
 
 
-    // replayButton = createButton('Replay');
-    // replayButton.position(width / 2, height / 4 * 3);
-    // replayButton.center('horizontal');
-    // replayButton.mousePressed(replayButtonPress);
+    replayButton = createButton('Replay');
+    replayButton.position(0, height / 4 * 3);
+    replayButton.center('horizontal');
+    replayButton.mousePressed(replayButtonPress);
     noLoop();
     // print('GAME END!!!');
 
@@ -563,7 +563,7 @@ function SCORES() {
       L_HUD.fill(Black);
       L_HUD.textAlign(LEFT, TOP);
       L_HUD.textSize(_sizeY);
-      L_HUD.text(winnerArr[i].name + ', ' + winnerArr[i].scoreItem + 'pts', _blockWidth + txtPixel, i * (_sizeY * 1.3));
+      L_HUD.text(winnerArr[i].name + ': ' + winnerArr[i].scoreItem + 'pts', _blockWidth + txtPixel, i * (_sizeY * 1.3));
       L_HUD.pop();
     }
   }
@@ -830,11 +830,6 @@ function extinguish(x, y) {
   // // print('extinguish');
 }
 
-// function replayButtonPress() {
-//   GAMESTATE = 'MENU';
-//   loop();
-//   SETUP = true;
-//   removeElements();
-  
-// //   menuSetup();
-// }
+function replayButtonPress() {
+  window.location.reload(); 
+}
