@@ -28,13 +28,17 @@ function preload() {
 
 
 function setup() {
-  //fullscreen(true);
+  menuSetup();
+}
+
+
+function menuSetup() {
   CNVS = createCanvas(windowWidth, windowHeight);
+  //CNVS = resizeCanvas(windowWidth, windowHeight);
 
   // for (let element of document.getElementsByClassName("p5Canvas")) {
   //   element.addEventListener("contextmenu", (e) => e.preventDefault());
   // }
-
   let inp = createSlider(2, 25, 2, 1);
   inp.size(width / 3);
   inp.center();
@@ -48,7 +52,6 @@ function setup() {
   button.mousePressed(StartButton);
 
   //OLDIE onscreenctrlstuff...
-
   let button2 = createButton('Start Classic mode');
   button2.position(width / 2, height / 2 + 20 + 30);
   button2.center('horizontal');
@@ -56,7 +59,7 @@ function setup() {
 
   menuPosY = 22;
 
-  slider = createSlider(7, 24, 8, 1);
+  slider = createSlider(7, 19, 8, 3);
   slider.position(10, menuPosY);
   slider.style('width', '120px');
   slider.changed(storeMenuData);
@@ -91,8 +94,6 @@ function setup() {
 
   //startup();
   // document.addEventListener("DOMContentLoaded", startup);
-
-
   // Prevent scrolling when touching the canvas
   // document.body.addEventListener("touchstart", function (e) {
   //   if (e.target == canvas) {
@@ -109,10 +110,8 @@ function setup() {
   //     e.preventDefault();
   //   }
   // }, false);
-
   // PEEPO = loadFont('Peepo.ttf');
   // textFont(PEEPO)
-
   posca.splice(14, 1); // removes Beige (#dbc48e) which is background color, from array
 
   shuffle(posca, true);
@@ -136,9 +135,7 @@ function setup() {
     angleMode(DEGREES);
     menuMadot[i] = new menuMato(spawnX, spawnY, posca[i], -360 / matoCountBT * i, i);
   }
-
 }
-
 
 function draw() {
 

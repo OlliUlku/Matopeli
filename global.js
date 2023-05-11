@@ -205,3 +205,6 @@ let gearToggle = false;
 // MENU STUFF...
 let menuPosY;
 let checkboxGear;
+
+// restart???
+let replayButton;

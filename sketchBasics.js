@@ -536,6 +536,12 @@ function _GAME_END() {
 
     image(L_HUD, 0, 0);
     image(L_top, 0, 0);
+
+
+    // replayButton = createButton('Replay');
+    // replayButton.position(width / 2, height / 4 * 3);
+    // replayButton.center('horizontal');
+    // replayButton.mousePressed(replayButtonPress);
     noLoop();
     // print('GAME END!!!');
 
@@ -802,3 +808,12 @@ function extinguish(x, y) {
   // L_top.noErase();
   // // print('extinguish');
 }
+
+// function replayButtonPress() {
+//   GAMESTATE = 'MENU';
+//   loop();
+//   SETUP = true;
+//   removeElements();
+  
+// //   menuSetup();
+// }
