@@ -38,7 +38,7 @@ class top_poop_eater_score {
         L_HUD.noStroke();
         L_HUD.fill(this.color);
         L_HUD.rect(this.x, this.y - txtPixel * 3, this.sizeX, this.sizeY + txtPixel * 3);
-        L_HUD.textSize(this.textSize * 1.5);
+        L_HUD.textSize(this.textSize * 1.4);
         L_HUD.fill(Black);
         L_HUD.textAlign(LEFT, CENTER);
         L_HUD.text('Poop eaten: (' + poopVP + 'pts)', this.x + txtPixel, this.y - txtPixel);
@@ -46,8 +46,8 @@ class top_poop_eater_score {
         L_HUD.translate(this.x + txtPixel * 13, this.y - txtPixel * 2);
         L_HUD.rotate(200);
         L_HUD.image(img_kakkakruunu, -txtPixel * 10, -txtPixel * 10, txtPixel * 20, txtPixel * 20);
-        L_HUD.textSize(this.textSize);
         L_HUD.pop();
+        L_HUD.textSize(this.textSize);
         for (let i = 0; i < this.arr.length; i++) {
             L_HUD.fill(this.arr[i].color);
             L_HUD.noStroke();

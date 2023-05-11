@@ -1,7 +1,7 @@
 function gameReadySetup() {
   // RUNS ONCE THEN TURNS SETUP variable OFF
   if (SETUP) {
-    resizeCanvas(floor(windowWidth / GD - 3) * GD, floor(windowHeight / GD - 3) * GD);
+    resizeCanvas(floor(windowWidth / GD - 2) * GD, floor(windowHeight / GD - 2) * GD);
 
     let newWindowX = (windowWidth - width) / 2;
     let newWindowY = (windowHeight - height) / 2;
