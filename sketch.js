@@ -76,6 +76,13 @@ function menuSetup() {
   checkboxGear.position(115, menuPosY * 3);
   checkboxGear.style('color', LightPink);
 
+  let initScoreCheckbox = getItem('Matopeli_scoreCheckbox');
+  scoreTableToggle = initScoreCheckbox;
+  checkboxScoreTable = createCheckbox('  Score table visibility', initScoreCheckbox);
+  checkboxScoreTable.changed(gearCheckboxChanged);
+  checkboxScoreTable.position(115, menuPosY * 4);
+  checkboxScoreTable.style('color', LightPink);
+
 
   // INIT FROM MEMORY
   initGD = getItem('Matopeli_GD');
@@ -188,14 +195,16 @@ function draw() {
 }
 
 function _SHOWSCORES() {
-  if (!classicMode) {
-    poopScore.show();
-    appleScore.show();
-    aliveScore.show();
-    ghostScore.show();
-    takeOutsScore.show();
-  } else {
-    aliveScore.showClassic();
+  if (scoreTableToggle) {
+    if (!classicMode) {
+      poopScore.show();
+      appleScore.show();
+      aliveScore.show();
+      ghostScore.show();
+      takeOutsScore.show();
+    } else {
+      aliveScore.showClassic();
+    }
   }
 }
 
@@ -273,7 +282,7 @@ function _MENU() {
   fill(LightPink);
   text('Number of players/worms: ' + matoCountBT, width / 2, height / 2 - 28);
   textAlign(LEFT, TOP);
-  //text('Commit ProjectionTest', width / 2, 30);
+  text('width: ' + width + 'px, height: ' + height + 'px', width * 0.7, 30);
   textSize(TextSize * 1.7);
   textAlign(CENTER, CENTER);
   let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Oh no your tail turns into STONE!! Avoid STONE (and FLAMES!!) or you turn into a GHOST! (Only to revive in 7 seconds) Press LEFT to steer your worm left, RIGHT to steer right! L or R buttons to shift your GEARS to go slower or faster, respectively! B (or X) button to show and hide your name.. ...The game ends when there is too much scary ghosts at the same time for too long...! Good luck, love you!!!';
@@ -340,6 +349,16 @@ function gearCheckboxChanged() {
   } else {
     storeItem('Matopeli_gearsCheckbox', false);
     gearToggle = false;
+    // console.log('Unchecking!');
+  }
+
+  if (checkboxScoreTable.checked()) {
+    storeItem('Matopeli_scoreCheckbox', true);
+    scoreTableToggle = true;
+    // console.log('Checking!');
+  } else {
+    storeItem('Matopeli_scoreCheckbox', false);
+    scoreTableToggle = false;
     // console.log('Unchecking!');
   }
 }

@@ -154,6 +154,8 @@ let aliveVP = 5;
 let ghostVP = 2;
 let takeOutsVP = 1;
 
+let scoreTableToggle = true;
+
 // SPAWNRADIUS
 let spawnRadiusZeroX;
 let spawnRadiusZeroY;
@@ -205,6 +207,7 @@ let gearToggle = false;
 // MENU STUFF...
 let menuPosY;
 let checkboxGear;
+let checkboxScoreTable;
 
 // restart???
 let replayButton;
