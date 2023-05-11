@@ -539,27 +539,33 @@ function SCORES() {
 
   reverse(winnerArr);
 
-let _loopL = 3;
-if (FINISHED) {
+// let _loopL = 3;
+// if (FINISHED) {
   _loopL = winnerArr.length;
-}
+// }
 
   for (let i = 0; i < _loopL; i++) {
-    let _blockWidth = winnerArr[i].scoreItem * 2 * txtPixel + txtPixel * 2;
+    let _pointWidth = txtPixel * 8 / winnerArr[0].scoreItem
+    let _blockWidth = winnerArr[i].scoreItem * _pointWidth + txtPixel * 2;
     let _sizeY = txtPixel * 1.5;
     if (FINISHED) {
+      _pointWidth = txtPixel * 40 / winnerArr[0].scoreItem
+      _blockWidth = winnerArr[i].scoreItem * _pointWidth + txtPixel * 2;
       _sizeY = txtPixel * 3
     }
-    L_HUD.push()
-    L_HUD.translate(0,txtPixel * 3);
-    L_HUD.noStroke();
-    L_HUD.fill(winnerArr[i].color);
-    L_HUD.rect(0, i * (_sizeY * 1.3), _blockWidth, _sizeY);
-    L_HUD.fill(Black);
-    L_HUD.textAlign(LEFT, TOP);
-    L_HUD.textSize(_sizeY);
-    L_HUD.text(winnerArr[i].name + ', ' + winnerArr[i].scoreItem + ' points', _blockWidth + txtPixel, i * (_sizeY * 1.3));
-    L_HUD.pop();
+    
+    if (winnerArr[i].scoreItem != 0 || FINISHED) {
+      L_HUD.push()
+      L_HUD.translate(0,txtPixel * 3);
+      L_HUD.noStroke();
+      L_HUD.fill(winnerArr[i].color);
+      L_HUD.rect(0, i * (_sizeY * 1.3), _blockWidth, _sizeY);
+      L_HUD.fill(Black);
+      L_HUD.textAlign(LEFT, TOP);
+      L_HUD.textSize(_sizeY);
+      L_HUD.text(winnerArr[i].name + ', ' + winnerArr[i].scoreItem + 'pts', _blockWidth + txtPixel, i * (_sizeY * 1.3));
+      L_HUD.pop();
+    }
   }
 }
 
