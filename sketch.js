@@ -289,7 +289,7 @@ function _MENU() {
   textSize(TextSize * 1.7);
   textAlign(CENTER, CENTER);
   let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Oh no your tail turns into STONE!! Avoid STONE (and FLAMES!!) or you turn into a GHOST! (Only to revive in 7 seconds) Press LEFT to steer your worm left, RIGHT to steer right! L or R buttons to shift your GEARS to go slower or faster, respectively! B (or X) button to show and hide your name.. ...The game ends when there is too much scary ghosts at the same time for too long...! Good luck, love you!!!';
-  text(thisText, width / 2 - width / 2 / 2, height / 2 - 50 - cOff + 40, width / 2, height / 2);
+  text(thisText, width / 2 - width / 2 / 2, height / 2 - 50 - cOff + 60, width / 2, height / 2);
 
   let valS = slider.value();
   GD = valS;
