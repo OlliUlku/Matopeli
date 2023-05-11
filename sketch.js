@@ -202,7 +202,7 @@ function _SHOWSCORES() {
 
 function _IFZEROWORMS() {
   if (!classicMode) {
-    if (wormsCounter < MATOJA / 3) {
+    if (wormsCounter < MATOJA / 3 + 1) {
       finishCountdown--;
       if (finishCountdown <= 0) {
         FINISHED = true;
@@ -230,12 +230,12 @@ function _IFZEROWORMS() {
     L_HUD.fill(stressColor);
     L_HUD.rect(0, 0, width, height);
   }
-  if (wormsCounter < MATOJA / 2) {
+  if (wormsCounter < MATOJA / 3 + 1) {
     if (stressLevel < 300) {
       stressLevel++;
     }
   } else if (stressLevel > 0) {
-    stressLevel -= 1 / 10;
+    stressLevel -= 1 / 20;
   }
 
   let gameEndBar = map(finishCountdown, 0, finishCountdownINIT, 0, width);
