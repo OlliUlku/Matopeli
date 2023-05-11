@@ -148,11 +148,11 @@ let aliveScore;
 let ghostScore;
 let takeOutsScore;
 
-let poopVP = 3;
-let fruitVP = 4;
-let aliveVP = 5;
+let poopVP = 2;
+let fruitVP = 2;
+let aliveVP = 2;
 let ghostVP = 2;
-let takeOutsVP = 1;
+let takeOutsVP = 2;
 
 let scoreTableToggle = true;
 
@@ -211,3 +211,8 @@ let checkboxScoreTable;
 
 // restart???
 let replayButton;
+
+// ADJUSTS...
+
+let cOff = 100;
+let _tableWidth;

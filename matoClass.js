@@ -114,6 +114,14 @@ class mato {
     this.takeOutsRoyaltyOnce = true;
 
     this.VP = 0;
+    this.VPExtra = 0;
+
+    this.VPpoop = 0;
+    this.VPfruit = 0;
+    this.VPalive = 0;
+    this.VPghost = 0;
+    this.VPtakeOuts = 0;
+
 
     // TAIL SIZE
     this.tail = 2500;
@@ -234,10 +242,10 @@ class mato {
   pointFruitEaten() {
     this.tail += LENGTHADD / MATOJA;
     //this.fruitsEaten++;
-    this.VP++
+    this.VPExtra++;
     //this.appleRoyaltyOnce = true;
 
-    popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' collected a victory point!');
+    popUpTexts[popUpTexts.length] = new popUpText(this.pos.x, this.pos.y, this.name + ' collected a victory point! Extra points collected: ' + this.VPExtra);
   }
 
   grillAnother() {
@@ -578,23 +586,24 @@ class mato {
 
   addVP() {
     if (!this.stop) { //OLD
-
       if (this.poopRoyalty && !classicMode) {
-        this.VP += poopVP;
-      }
+        this.VPpoop = poopVP;
+      } else { this.VPpoop = 0; }
       if (this.appleRoyalty && !classicMode) {
-        this.VP += fruitVP;
-      }
+        this.VPfruit = fruitVP;
+      } else { this.VPfruit = 0; }
       if (this.aliveRoyalty) {
-        this.VP += aliveVP;
-      }
+        this.VPalive = aliveVP;
+      } else { this.VPalive = 0; }
       if (this.ghostRoyalty && !classicMode) {
-        this.VP += ghostVP;
-      }
+        this.VPghost = ghostVP;
+      } else { this.VPghost = 0; }
       if (this.takeOutsRoyalty && !classicMode) {
-        this.VP += takeOutsVP;
-      }
+        this.VPtakeOuts = takeOutsVP;
+      } else { this.VPtakeOuts = 0; }
     }
+
+    this.VP = this.VPExtra + this.VPpoop + this.VPfruit + this.VPalive + this.VPghost;
 
   }
 

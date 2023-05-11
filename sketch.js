@@ -41,19 +41,19 @@ function menuSetup() {
   // }
   let inp = createSlider(2, 25, 2, 1);
   inp.size(width / 3);
-  inp.center();
+  inp.position(width / 2 - width / 3 / 2, height / 2 - cOff - 10);
   inp.input(InputMatoCount);
   inp.changed(storeMenuData);
 
 
   let button = createButton('Start');
-  button.position(width / 2, height / 2 + 20);
+  button.position(width / 2, height / 2 + 25 - cOff);
   button.center('horizontal');
   button.mousePressed(StartButton);
 
   //OLDIE onscreenctrlstuff...
   let button2 = createButton('Start Classic mode');
-  button2.position(width / 2, height / 2 + 20 + 30);
+  button2.position(width / 2, height / 2 + 20 + 30 - cOff + 15);
   button2.center('horizontal');
   button2.mousePressed(StartButton2);
 
@@ -186,6 +186,9 @@ function draw() {
     _ONSCREENKEYS();
     _IFZEROWORMS();
     //_SHOWWORMSALIVE();
+    if (!classicMode) {
+      SCORES();
+    }
     _LAYERS();
     // _GAME_END_POINTS();
     _GAME_END();
@@ -280,13 +283,13 @@ function _MENU() {
   textSize(TextSize * 1.3);
   textAlign(CENTER, CENTER);
   fill(LightPink);
-  text('Number of players/worms: ' + matoCountBT, width / 2, height / 2 - 28);
+  text('Number of players/worms: ' + matoCountBT, width / 2, height / 2 - 28 - cOff);
   textAlign(LEFT, TOP);
-  text('width: ' + width + 'px, height: ' + height + 'px', width * 0.7, 30);
+  text('width: ' + width + 'px, height: ' + height + 'px', width * 0.8, 30);
   textSize(TextSize * 1.7);
   textAlign(CENTER, CENTER);
   let thisText = 'Hi!!! Please use gamepads, bluetooth or otherwise! Be a WORM with funny NAMES and COLORS! Oh no your tail turns into STONE!! Avoid STONE (and FLAMES!!) or you turn into a GHOST! (Only to revive in 7 seconds) Press LEFT to steer your worm left, RIGHT to steer right! L or R buttons to shift your GEARS to go slower or faster, respectively! B (or X) button to show and hide your name.. ...The game ends when there is too much scary ghosts at the same time for too long...! Good luck, love you!!!';
-  text(thisText, width / 2 - width / 2 / 2, height / 2 - 50, width / 2, height / 2);
+  text(thisText, width / 2 - width / 2 / 2, height / 2 - 50 - cOff + 40, width / 2, height / 2);
 
   let valS = slider.value();
   GD = valS;

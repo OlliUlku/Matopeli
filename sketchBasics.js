@@ -482,27 +482,7 @@ function _PANIC_MODE() {
 
 function _GAME_END() {
   if (FINISHED) {
-    _POINTS();
-
-    winnerArr = [];
-
-    for (let i = 0; i < madot.length; i++) {
-      winnerArr[i] = { name: madot[i].name, scoreItem: madot[i].VP, color: madot[i].colorINIT, Index: i };
-    }
-
-    winnerArr.sort((firstItem, secondItem) => firstItem.scoreItem - secondItem.scoreItem);
-
-    reverse(winnerArr);
-
-    for (let i = 0; i < winnerArr.length; i++) {
-      L_top.noStroke();
-      L_top.fill(winnerArr[i].color);
-      L_top.rect(0, i * (txtPixel * 3 * 1.3), winnerArr[i].scoreItem * 2 * txtPixel, txtPixel * 3);
-      L_top.fill(Black);
-      L_top.textAlign(LEFT, TOP);
-      L_top.textSize(txtPixel * 3);
-      L_top.text(winnerArr[i].name + ', ' + winnerArr[i].scoreItem + ' points', winnerArr[i].scoreItem * 2 * txtPixel, i * (txtPixel * 3 * 1.3));
-    }
+    SCORES();
 
     if (winnerArr[0].scoreItem != winnerArr[1].scoreItem) {
       WINNER = winnerArr[0].name;
@@ -545,6 +525,41 @@ function _GAME_END() {
     noLoop();
     // print('GAME END!!!');
 
+  }
+}
+
+function SCORES() {
+  _POINTS();
+  winnerArr = [];
+  for (let i = 0; i < madot.length; i++) {
+    winnerArr[i] = { name: madot[i].name, scoreItem: madot[i].VP, color: madot[i].colorINIT, Index: i };
+  }
+
+  winnerArr.sort((firstItem, secondItem) => firstItem.scoreItem - secondItem.scoreItem);
+
+  reverse(winnerArr);
+
+let _loopL = 3;
+if (FINISHED) {
+  _loopL = winnerArr.length;
+}
+
+  for (let i = 0; i < _loopL; i++) {
+    let _blockWidth = winnerArr[i].scoreItem * 2 * txtPixel + txtPixel * 2;
+    let _sizeY = txtPixel * 1.5;
+    if (FINISHED) {
+      _sizeY = txtPixel * 3
+    }
+    L_HUD.push()
+    L_HUD.translate(0,txtPixel * 3);
+    L_HUD.noStroke();
+    L_HUD.fill(winnerArr[i].color);
+    L_HUD.rect(0, i * (_sizeY * 1.3), _blockWidth, _sizeY);
+    L_HUD.fill(Black);
+    L_HUD.textAlign(LEFT, TOP);
+    L_HUD.textSize(_sizeY);
+    L_HUD.text(winnerArr[i].name + ', ' + winnerArr[i].scoreItem + ' points', _blockWidth + txtPixel, i * (_sizeY * 1.3));
+    L_HUD.pop();
   }
 }
 
