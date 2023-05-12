@@ -129,7 +129,7 @@ let costUG = 5;
 // IMAGES
 let img_panicMode;
 let img_kakkakruunu;
-let img_valtikka;
+let img_fruitsRoyalty;
 let img_align;
 let img_ghostRoyalty;
 let img_aliveRoyalty;

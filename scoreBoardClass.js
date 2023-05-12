@@ -108,7 +108,7 @@ class top_apple_eater_score {
         L_HUD.push();
         L_HUD.translate(this.x + txtPixel * 9, this.y - txtPixel * 1);
         L_HUD.rotate(-50);
-        L_HUD.image(img_valtikka, 0, 0, txtPixel * 14.5, txtPixel * 14.5);
+        L_HUD.image(img_fruitsRoyalty, 0, 0, txtPixel * 14.5, txtPixel * 14.5);
         L_HUD.pop();
         L_HUD.textSize(this.textSize);
         for (let i = 0; i < this.arr.length; i++) {

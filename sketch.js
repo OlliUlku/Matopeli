@@ -13,7 +13,7 @@ let GD = 8; // Grid division, base 8, max 24
 function preload() {
   // IMAGES
   img_kakkakruunu = loadImage('poopRoyalty2.png');
-  img_valtikka = loadImage('valtikka1.png');
+  img_fruitsRoyalty = loadImage('fruitsRoyalty.png');
   img_align = loadImage('align1.png');
   img_ghostRoyalty = loadImage('ghostRoyalty.png');
   img_aliveRoyalty = loadImage('aliveRoyalty.png');
