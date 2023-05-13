@@ -563,7 +563,8 @@ function SCORES() {
       L_HUD.fill(Black);
       L_HUD.textAlign(LEFT, TOP);
       L_HUD.textSize(_sizeY);
-      L_HUD.text(winnerArr[i].name + ': ' + winnerArr[i].scoreItem + 'pts', _blockWidth + txtPixel, i * (_sizeY * 1.3));
+      let matoIndex_ = winnerArr[i].Index;
+      L_HUD.text(winnerArr[i].name + ': ' + madot[matoIndex_].VPOnlyTrophies + '+' + madot[matoIndex_].VPExtra + 'pts', _blockWidth + txtPixel, i * (_sizeY * 1.3));
       L_HUD.pop();
     }
   }

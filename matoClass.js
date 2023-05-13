@@ -114,6 +114,7 @@ class mato {
 
     this.VP = 0;
     this.VPExtra = 0;
+    this.VPOnlyTrophies = 0;
 
     this.VPpoop = 0;
     this.VPfruit = 0;
@@ -603,6 +604,7 @@ class mato {
     }
 
     this.VP = this.VPExtra + this.VPpoop + this.VPfruit + this.VPalive + this.VPghost;
+    this.VPOnlyTrophies = this.VPpoop + this.VPfruit + this.VPalive + this.VPghost;
 
   }
 
