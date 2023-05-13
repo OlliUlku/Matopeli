@@ -539,24 +539,24 @@ function SCORES() {
 
   reverse(winnerArr);
 
-// let _loopL = 3;
-// if (FINISHED) {
+  // let _loopL = 3;
+  // if (FINISHED) {
   _loopL = winnerArr.length;
-// }
+  // }
 
   for (let i = 0; i < _loopL; i++) {
-    let _pointWidth = txtPixel * 8 / winnerArr[0].scoreItem
+    let _pointWidth = txtPixel * 8 / winnerArr[0].scoreItem;
     let _blockWidth = winnerArr[i].scoreItem * _pointWidth + txtPixel * 2;
     let _sizeY = txtPixel * 1.5;
     if (FINISHED) {
-      _pointWidth = txtPixel * 40 / winnerArr[0].scoreItem
+      _pointWidth = txtPixel * 40 / winnerArr[0].scoreItem;
       _blockWidth = winnerArr[i].scoreItem * _pointWidth + txtPixel * 2;
-      _sizeY = txtPixel * 3
+      _sizeY = txtPixel * 3;
     }
-    
+
     if (winnerArr[i].scoreItem != 0 || FINISHED) {
-      L_HUD.push()
-      L_HUD.translate(0,txtPixel * 3);
+      L_HUD.push();
+      L_HUD.translate(0, txtPixel * 3);
       L_HUD.noStroke();
       L_HUD.fill(winnerArr[i].color);
       L_HUD.rect(0, i * (_sizeY * 1.3), _blockWidth, _sizeY);
@@ -775,6 +775,7 @@ function removeStone(_x, _y, kakka, matoindex) {
       L_poop.rect(_x * GD, _y * GD, Pixel);
       array2d[_x][_y][1] = true; // set poop[eli 1] true
       madot[matoIND].poop++;
+      popUpTexts[popUpTexts.length] = new popUpText(_x * GD, _y * GD, 'poop', CacaoBrown, 80);
       if (!madot[matoIND].stop) {
         // print(madot[matoIND].name, 'pooped. Poopcount:', madot[matoIND].poop);
       }
@@ -831,5 +832,5 @@ function extinguish(x, y) {
 }
 
 function replayButtonPress() {
-  window.location.reload(); 
+  window.location.reload();
 }

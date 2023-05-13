@@ -20,7 +20,6 @@ class menuMato {
     }
     rect(this.pos.x, this.pos.y, this.size * 8);
 
-
     TextSize = 10;
     Pixel = this.size * 4;
     txtPixel = 5;
