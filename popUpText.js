@@ -20,7 +20,6 @@ class popUpText {
             this.colorStroke.setAlpha(alpha);
             L_HUD.stroke(this.colorStroke);
             L_HUD.strokeWeight(txtPixel * 0.4);
-
         }
         L_HUD.fill(this.color);
         L_HUD.textAlign(CENTER, CENTER);
